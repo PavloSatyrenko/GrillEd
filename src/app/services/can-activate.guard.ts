@@ -1,12 +1,18 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from './auth.service';
+import { User } from '../../classes/User';
 
-export const canActivateGuard: CanActivateFn = (route, state) => {
-    const authService = inject(AuthService);
-    const router = inject(Router);
+export const canActivateGuard: CanActivateFn = async (route, state) => {
+    const authService: AuthService = inject(AuthService);
+    const router: Router = inject(Router);
 
-    const user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")!) : null;
+    let user: User | null = authService.user;
+
+    if (!user) {
+        await authService.me();
+        user = authService.user;
+    }
 
     if (!user) {
         router.navigate(["/main"]);

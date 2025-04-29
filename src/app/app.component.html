@@ -5,14 +5,37 @@
             <img class="header__logo" src="/assets/logo.png" alt="Logo" />
         </a>
 
-        <div class="header__menu menu">
-            <button class="button button_with-icon button_theme_primary-line menu__button">
+        <div class="header__menu-wrapper menu-wrapper">
+            <button class="button button_with-icon button_theme_primary-line menu__button" (click)="toggleExploreMenu()">
                 Explore
                 <i class="fa-solid fa-chevron-down"></i>
             </button>
 
-            <div class="menu__overlay">
-                <nav class="menu__navigation navigation"></nav>
+            <div *ngIf="isExploreMenuVisible" #exploreMenu class="explore__menu menu">
+                <div class="menu__arrow"></div>
+
+                <div class="menu__list">
+                    <button class="menu__item">
+                        <span class="menu-item__text">Programming</span>
+                        <span class="menu-item__icon">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </span>
+                    </button>
+
+                    <button class="menu__item">
+                        <span class="menu-item__text">Medicine</span>
+                        <span class="menu-item__icon">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </span>
+                    </button>
+
+                    <button class="menu__item">
+                        <span class="menu-item__text">Building</span>
+                        <span class="menu-item__icon">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </span>
+                    </button>
+                </div>
             </div>
         </div>
 

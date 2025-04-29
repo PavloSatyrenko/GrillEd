@@ -34,17 +34,17 @@
                 </div>
 
                 <label class="input-wrapper">
-                    <input class="input" [(ngModel)]="teacher.workplace" type="text" name="workplace" #workplace="ngModel" placeholder="Workplace" />
+                    <input class="input" [(ngModel)]="user.teacher!.workplace" type="text" name="workplace" #workplace="ngModel" placeholder="Workplace" />
                 </label>
 
                 <label class="input-wrapper">
-                    <input class="input" [(ngModel)]="teacher.position" type="text" name="position" #position="ngModel" placeholder="Position" />
+                    <input class="input" [(ngModel)]="user.teacher!.position" type="text" name="position" #position="ngModel" placeholder="Position" />
                 </label>
 
                 <label class="teacher__description input-wrapper">
                     <textarea
                         class="input"
-                        [(ngModel)]="teacher.description"
+                        [(ngModel)]="user.teacher!.description"
                         name="description"
                         #description="ngModel"
                         placeholder="Description"

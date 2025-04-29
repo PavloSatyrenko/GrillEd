@@ -1,7 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { User } from "../../classes/User";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
+import { AuthService } from "../services/auth.service";
+import { Course } from "../../classes/Course";
+import { Router } from "@angular/router";
 
 @Component({
     selector: "app-home",
@@ -17,8 +20,49 @@ export class HomeComponent implements OnInit {
     filterValue: string = "";
     filters: string[] = [];
 
+    startedCourses!: Course[];
+
+    private authService: AuthService = inject(AuthService);
+    private router: Router = inject(Router);
+
     ngOnInit(): void {
-        this.user = JSON.parse(localStorage.getItem("user") || "null");
+        this.user = this.authService.user;
+
+        this.startedCourses = [{
+            id: "1",
+            author: {
+                id: "123",
+                name: "John",
+                surname: "Doe",
+                avatar: "https://via.placeholder.com/150"
+            },
+            category: {
+                id: "456",
+                name: "Programming"
+            },
+            name: "Sample Course",
+            about: "This is a sample course description.",
+            estimatedTime: 10,
+            rating: 4.5,
+            enrolledCount: 99.99,
+        }, {
+            id: "2",
+            author: {
+                id: "123",
+                name: "John",
+                surname: "Doe",
+                avatar: "https://via.placeholder.com/150"
+            },
+            category: {
+                id: "456",
+                name: "Programming"
+            },
+            name: "Sample Course",
+            about: "This is a sample course description.",
+            estimatedTime: 10,
+            rating: 4.5,
+            enrolledCount: 99.99,
+        }]
     }
 
     choosePanel(panelNumber: number): void {
@@ -32,5 +76,9 @@ export class HomeComponent implements OnInit {
             this.filters = ["All", "Java", "Python", "JavaScript", "C++", "C#", "PHP", "Ruby"];
             this.filterValue = "All";
         }
+    }
+
+    openCourse(course: Course): void {
+        this.router.navigate([`/course/${course.id}`]);
     }
 }

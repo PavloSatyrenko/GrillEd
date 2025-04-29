@@ -1,0 +1,139 @@
+<div class="course">
+    <div class="container course__container">
+        <div class="course__main">
+            <div class="course__information">
+                <div class="card">
+                    <h1 class="course__title">JavaScript</h1>
+
+                    <span class="course__author">by John Doe</span>
+
+                    <div class="course__skills">
+                        <div class="course__skills-text">Skills:</div>
+
+                        <span class="course__skill">JavaScript</span>
+                        <span class="course__skill">HTML</span>
+                        <span class="course__skill">CSS</span>
+                        <span class="course__skill">React</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2 class="course__subtitle">About</h2>
+
+                    <p class="course__description">
+                        Welcome to our course! In this course, you will learn about various topics that will help you in your career.
+                    </p>
+                </div>
+            </div>
+
+            <div class="course__modules">
+                <h1 class="modules__title">Course content</h1>
+
+                <div class="modules__list">
+                    <div *ngFor="let module of modules" class="module module_active" [ngClass]="{ module_active: module.isOpened }">
+                        <button class="module__header" (click)="toggleModule(module)">
+                            <h2 class="module__title">{{ module.name }}</h2>
+
+                            <div class="module__information">
+                                <div class="information__item">
+                                    <span class="information__icon"><i class="fa-solid fa-video"></i></span>
+                                    <span class="information__text">2 articles</span>
+                                </div>
+
+                                <div class="information__item">
+                                    <span class="information__icon"><i class="fa-solid fa-video"></i></span>
+                                    <span class="information__text">1 video</span>
+                                </div>
+
+                                <div class="information__item">
+                                    <span class="information__icon"><i class="fa-solid fa-video"></i></span>
+                                    <span class="information__text">1 test</span>
+                                </div>
+
+                                <div class="information__item">
+                                    <span class="information__icon"><i class="fa-solid fa-clock"></i></span>
+                                    <span class="information__text">{{ module.estimatedTime }}</span>
+                                </div>
+                            </div>
+
+                            <span class="module__arrow"><i class="fa-solid fa-chevron-down"></i></span>
+                        </button>
+
+                        <div class="module__content">
+                            <div class="module__lesson lesson">
+                                <span class="lesson__icon"><i class="fa-regular fa-file-lines"></i></span>
+                                <span class="lesson__title">Lesson</span>
+                                <span class="lesson__time">1h 20min</span>
+                            </div>
+
+                            <div class="module__lesson lesson">
+                                <span class="lesson__icon"><i class="fa-regular fa-circle-play"></i></span>
+                                <span class="lesson__title">Lesson</span>
+                                <span class="lesson__time">40min</span>
+                            </div>
+
+                            <div class="module__lesson lesson">
+                                <span class="lesson__icon"><i class="fa-regular fa-question-circle"></i></span>
+                                <span class="lesson__title">Lesson</span>
+                                <span class="lesson__time">2h 30min</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card course__aside aside">
+            <div class="course__image">
+                <!-- <img src="" alt="Course icon" /> -->
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+
+            <h3 class="aside__title">The course includes:</h3>
+
+            <div class="aside__features features">
+                <div class="feature">
+                    <span class="feature__icon"><i class="fa-solid fa-clock"></i></span>
+                    <span class="feature__name">{{ course!.estimatedTime }}</span>
+                </div>
+
+                <div class="feature">
+                    <span class="feature__icon"><i class="fa-solid fa-video"></i></span>
+                    <span class="feature__name">30 modules</span>
+                </div>
+
+                <div class="feature">
+                    <span class="feature__icon"><i class="fa-solid fa-video"></i></span>
+                    <span class="feature__name">50 lessons</span>
+                </div>
+
+                <div class="feature">
+                    <span class="feature__icon"><i class="fa-solid fa-video"></i></span>
+                    <span class="feature__name">30 articles</span>
+                </div>
+
+                <div class="feature">
+                    <span class="feature__icon"><i class="fa-solid fa-video"></i></span>
+                    <span class="feature__name">10 links</span>
+                </div>
+
+                <div class="feature">
+                    <span class="feature__icon"><i class="fa-solid fa-video"></i></span>
+                    <span class="feature__name">50 videos</span>
+                </div>
+
+                <div class="feature">
+                    <span class="feature__icon"><i class="fa-solid fa-video"></i></span>
+                    <span class="feature__name">100 tests</span>
+                </div>
+
+                <div class="feature">
+                    <span class="feature__icon"><i class="fa-solid fa-video"></i></span>
+                    <span class="feature__name">Certificate</span>
+                </div>
+            </div>
+
+            <button class="button button_theme_primary aside__button">Enroll</button>
+        </div>
+    </div>
+</div>

@@ -10,6 +10,7 @@ export const routes: Routes = [
     { path: "signup", loadComponent: () => import("./authorization/authorization.component").then(c => c.AuthorizationComponent) },
     { path: "signup/finish", loadComponent: () => import("./authorization/authorization.component").then(c => c.AuthorizationComponent) },
     { path: "profile", loadComponent: () => import("./profile/profile.component").then(c => c.ProfileComponent), canActivate: [canActivateGuard] },
+    { path: "course/:id", loadComponent: () => import("./course/course.component").then(c => c.CourseComponent) },
     { path: "", redirectTo: "home", pathMatch: "full" },
     { path: "**", redirectTo: "not-found", pathMatch: "full" }
 ];

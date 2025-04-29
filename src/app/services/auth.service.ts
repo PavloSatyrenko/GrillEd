@@ -27,13 +27,12 @@ export class AuthService {
             role: user.role
         };
 
-        const response = await firstValueFrom(this.http.post(`${this.api}/v1/auth/signUp`, data));
-        localStorage.setItem("user", JSON.stringify(this.user));
+        const response = await firstValueFrom(this.http.post(`${this.api}v1/auth/signUp`, data));
         return response;
     }
 
     verifyEmail(token: string): Promise<any> {
-        return firstValueFrom(this.http.post(`${this.api}/v1/auth/verifyEmail${token}`, {}));
+        return firstValueFrom(this.http.post(`${this.api}v1/auth/verifyEmail/${token}`, {}));
     }
 
     async login(user: User): Promise<any> {
@@ -45,12 +44,17 @@ export class AuthService {
             password: user.password
         };
 
-        const response = await firstValueFrom(this.http.post(`${this.api}/v1/auth/login`, data));
-        localStorage.setItem("user", JSON.stringify(this.user));
+        const response = await firstValueFrom(this.http.post(`${this.api}v1/auth/login`, data));
         return response;
     }
 
+    async me(): Promise<any> {
+        const responce = await firstValueFrom(this.http.get(`${this.api}v1/auth/me`));
+        this.user = responce as User;
+        return responce;
+    }
+
     refreshToken(): Observable<any> {
-        return this.http.get(`${this.api}/v1/auth/refresh`);
+        return this.http.get(`${this.api}v1/auth/refresh`);
     }
 }

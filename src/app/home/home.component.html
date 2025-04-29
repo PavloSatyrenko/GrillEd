@@ -10,49 +10,19 @@
         </div>
 
         <div class="courses">
-            <div class="card course">
+            <div *ngFor="let course of startedCourses" class="card course">
                 <div class="course__image">
                     <!-- <img src="" alt="Course icon" /> -->
                     <i class="fa-solid fa-graduation-cap"></i>
                 </div>
 
                 <div class="course__information">
-                    <span class="course__name">JavaScript</span>
-                    <span class="course__author">by John Doe</span>
+                    <span class="course__name">{{ course.name }}</span>
+                    <span class="course__author">by {{ course.author.name }} {{ course.author.surname }}</span>
                 </div>
 
                 <div class="course__right-side">
-                    <button class="button button_theme_primary course__button">Continue</button>
-                </div>
-            </div>
-
-            <div class="card course">
-                <div class="course__image">
-                    <i class="fa-solid fa-graduation-cap"></i>
-                </div>
-
-                <div class="course__information">
-                    <span class="course__name">JavaScript</span>
-                    <span class="course__author">by John Doe</span>
-                </div>
-
-                <div class="course__right-side">
-                    <button class="button button_theme_primary course__button">Continue</button>
-                </div>
-            </div>
-
-            <div class="card course">
-                <div class="course__image">
-                    <i class="fa-solid fa-graduation-cap"></i>
-                </div>
-
-                <div class="course__information">
-                    <span class="course__name">JavaScript</span>
-                    <span class="course__author">by John Doe</span>
-                </div>
-
-                <div class="course__right-side">
-                    <button class="button button_theme_primary course__button">Continue</button>
+                    <button class="button button_theme_primary course__button" (click)="openCourse(course)">Continue</button>
                 </div>
             </div>
         </div>
