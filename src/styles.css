@@ -1,1 +1,334 @@
-/* You can add global styles to this file, and also import other style files */
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+
+/* stylelint-disable custom-property-empty-line-before */
+:root {
+    --z-index-header: 1000;
+    --z-index-modal: 2000;
+
+    --header-height: 64px;
+    --footer-height: 144px;
+
+    --primary-color: #ff6a00;
+    --primary-hover-color: #d75a00;
+    --secondary-color: #3e721d;
+    --error-color: #fd2e2e;
+
+    --background-color: #f4f4f4;
+    --section-background-color: #ffffff;
+    --border-color: #cccccc;
+    --footer-background-color: #d2d2d2;
+
+    --disable-color: #f2f2f2;
+    --disable-text-color: #999999;
+
+    --primary-text-color: #10101b;
+    --secondary-text-color: #ffffff;
+
+    --input-background-color: #ffffff;
+    --input-background-hover-color: #f2f8ed;
+}
+/* stylelint-enable custom-property-empty-line-before */
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: "Open Sans", sans-serif;
+}
+
+body {
+    width: 100%;
+    height: 100dvh;
+    background-color: var(--background-color);
+}
+
+.container {
+    width: 100%;
+    max-width: 1400px;
+    padding: 0 32px;
+    margin: 0 auto;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    background-color: var(--section-background-color);
+    border-radius: 16px;
+}
+
+/* Buttons */
+
+.button {
+    display: flex;
+    flex-shrink: 0;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    height: 40px;
+    padding: 8px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--text-color);
+    cursor: pointer;
+    border: none;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.button:focus {
+    outline: none;
+}
+
+.button:disabled {
+    color: var(--disable-text-color);
+    cursor: default;
+    background-color: var(--disable-color);
+    border: 1px solid var(--disable-color);
+}
+
+.button_full-width {
+    width: 100%;
+}
+
+.button_with-icon {
+    padding: 8px 16px 8px 24px;
+}
+
+.button_icon-only {
+    width: 40px;
+    padding: 0;
+}
+
+.button_theme_primary {
+    color: var(--secondary-text-color);
+    background-color: var(--primary-color);
+}
+
+.button_theme_primary:hover:not(:disabled) {
+    background-color: var(--primary-hover-color);
+}
+
+.button_theme_primary-line {
+    color: var(--primary-color);
+    background-color: var(--secondary-text-color);
+    border: 1px solid var(--primary-color);
+}
+
+.button_theme_primary-line:hover:not(:disabled) {
+    color: var(--secondary-text-color);
+    background-color: var(--primary-color);
+}
+
+.button_theme_secondary-line {
+    color: var(--secondary-color);
+    background-color: var(--secondary-text-color);
+    border: 1px solid var(--secondary-color);
+}
+
+.button_theme_secondary-line:hover:not(:disabled) {
+    color: var(--secondary-text-color);
+    background-color: var(--secondary-color);
+}
+
+/* Inputs */
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    height: 40px;
+}
+
+.input-wrapper_with-label {
+    height: 60px;
+}
+
+.input-wrapper_with-details {
+    height: 60px;
+}
+
+.input-wrapper_with-label.input-wrapper_with-details {
+    height: 80px;
+}
+
+.input {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 8px 10px 8px 16px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--primary-text-color);
+    appearance: none;
+    accent-color: var(--secondary-color);
+    resize: none;
+    background-color: var(--input-background-color);
+    border: 1px solid var(--secondary-color);
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+select.input {
+    cursor: pointer;
+}
+
+.input::placeholder {
+    color: var(--secondary-color);
+    transition: all 0.3s;
+}
+
+.input-wrapper_error .input {
+    color: var(--error-color);
+    border: 1px solid var(--error-color);
+}
+
+.input-wrapper_error .input::placeholder {
+    color: var(--error-color);
+}
+
+.input-wrapper_with-icon .input {
+    padding-right: 46px;
+}
+
+.input-wrapper_type_select .input {
+    cursor: pointer;
+}
+
+.input:hover {
+    background-color: var(--input-background-hover-color);
+}
+
+.input:focus {
+    outline: none;
+}
+
+.input-icon {
+    display: none;
+}
+
+.input-wrapper_with-icon .input-icon {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    font: var(--fa-font-regular);
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--secondary-color);
+    pointer-events: none;
+    cursor: pointer;
+}
+
+.input-wrapper_with-icon.input-wrapper_with-label .input-icon {
+    top: 28px;
+}
+
+.input-wrapper_error .input-icon {
+    color: var(--error-color);
+}
+
+.input-label {
+    display: none;
+}
+
+.input-wrapper_with-label .input-label {
+    display: block;
+    padding: 0 8px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 16px;
+    color: var(--primary-text-color);
+    transition: all 0.3s ease;
+}
+
+.input-details {
+    display: none;
+}
+
+.input-wrapper_with-details .input-details {
+    display: block;
+    padding: 0 8px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    color: var(--primary-text-color);
+    transition: all 0.3s ease;
+}
+
+/* Modal */
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: var(--z-index-modal);
+    width: 100vw;
+    height: 100dvh;
+    padding: 32px;
+    background-color: #00000080;
+}
+
+.modal__container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: calc(100% - 32px);
+    max-width: 600px;
+    padding: 24px;
+    background-color: var(--section-background-color);
+    border-radius: 16px;
+    transform: translate(-50%, -50%);
+}
+
+.modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.modal__title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary-text-color);
+}
+
+.modal__close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 24px;
+    height: 24px;
+    font-size: 18px;
+    color: var(--primary-text-color);
+    cursor: pointer;
+    outline: none;
+    background-color: transparent;
+    border: none;
+    transition: 0.3s;
+}
+
+.modal__close:hover {
+    color: var(--secondary-color);
+}
+
+.modal__content {
+    margin-top: 24px;
+}
+
+.modal__footer {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 24px;
+}

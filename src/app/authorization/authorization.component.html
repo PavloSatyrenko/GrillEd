@@ -1,0 +1,320 @@
+<div class="authorization">
+    @if (pageType == PageTypeEnum.Finish) {
+    <div class="container finish__container">
+        <div class="card">
+            <h1 class="authorization__title">Account was successfully created!</h1>
+
+            @if (user.role == 'STUDENT') {
+            <h4 class="authorization__text">Choose the areas and skills you are interested in</h4>
+            <app-skill-picker
+                class="authorization__skills"
+                [initialSkills]="skills"
+                (selectedSkillsChange)="selectedSkills = $event"
+            ></app-skill-picker>
+            } @else if (user.role == 'TEACHER') {
+            <h4 class="authorization__text">Add some information to start creating courses</h4>
+
+            <div class="authorization__teacher">
+                <div class="teacher__avatar">
+                    <img *ngIf="!teacherPhotoPath" class="avatar__image" src="/assets/client-avatar.png" alt="Avatar" />
+                    <img *ngIf="teacherPhotoPath" class="avatar__image" [src]="teacherPhotoPath" alt="Avatar" />
+
+                    <label class="button button_full-width button_theme_secondary-line avatar__button">
+                        Add photo
+                        <input #teacherPhotoInput class="avatar__input" type="file" accept="image/*" (change)="onPhotoUpload($event.target)" />
+                    </label>
+
+                    <button
+                        class="button button_full-width button_theme_secondary-line avatar__button"
+                        [disabled]="!teacherPhotoPath"
+                        (click)="removePhoto()"
+                    >
+                        Remove photo
+                    </button>
+                </div>
+
+                <label class="input-wrapper">
+                    <input class="input" [(ngModel)]="teacher.workplace" type="text" name="workplace" #workplace="ngModel" placeholder="Workplace" />
+                </label>
+
+                <label class="input-wrapper">
+                    <input class="input" [(ngModel)]="teacher.position" type="text" name="position" #position="ngModel" placeholder="Position" />
+                </label>
+
+                <label class="teacher__description input-wrapper">
+                    <textarea
+                        class="input"
+                        [(ngModel)]="teacher.description"
+                        name="description"
+                        #description="ngModel"
+                        placeholder="Description"
+                    ></textarea>
+                </label>
+
+                <button class="button button_full-width button_theme_secondary-line" (click)="openCertificatePopup()">Add/edit certificates</button>
+
+                <button class="button button_full-width button_theme_secondary-line" (click)="openLinkPopup()">Add/edit links</button>
+            </div>
+            }
+
+            <div class="authorization__buttons">
+                <button class="button button_theme_primary-line" (click)="onFinishSkip()">Skip for now</button>
+                <button
+                    *ngIf="studentSkillStep == 2"
+                    class="button button_theme_primary-line authorization__button_previous"
+                    (click)="onFinishPrevious()"
+                >
+                    Previous
+                </button>
+                <button class="button button_theme_primary" (click)="onFinishContinue()">Continue</button>
+            </div>
+        </div>
+    </div>
+    } @else {
+    <div class="authorization__image"></div>
+    <div class="authorization__container">
+        @if (pageType == PageTypeEnum.Login) {
+        <h2 class="authorization__title">Welcome back!</h2>
+        <h4 class="authorization__text">Please enter your credentials to continue</h4>
+
+        <form class="authorization__form" #form="ngForm" (ngSubmit)="onSubmit(form)">
+            <label class="input-wrapper" [ngClass]="{ 'input-wrapper_error': email.invalid && !isFormValid }">
+                <input
+                    class="input"
+                    [(ngModel)]="user.email"
+                    type="email"
+                    name="email"
+                    #email="ngModel"
+                    required
+                    pattern="^[\w\.%+\-]+@[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,}$"
+                    placeholder="Email"
+                />
+            </label>
+
+            <label
+                class="input-wrapper input-wrapper_with-icon input-wrapper_type_password"
+                [ngClass]="{ 'input-wrapper_error': passwordModel.invalid && !isFormValid }"
+            >
+                <input
+                    #password
+                    class="input"
+                    [(ngModel)]="user.password"
+                    type="password"
+                    name="password"
+                    #passwordModel="ngModel"
+                    required
+                    placeholder="Password"
+                />
+                <span class="input-icon" (click)="changePasswordType(password)">
+                    @if (password.type === 'password') {
+                    <i class="fa-solid fa-eye"></i>
+                    } @else {
+                    <i class="fa-solid fa-eye-slash"></i>
+                    }
+                </span>
+            </label>
+
+            <div class="authorization__question">
+                <span class="question__text">Don't have an account yet? </span>
+                <a class="question__link" routerLink="/signup">Sign up</a>
+            </div>
+
+            <button class="button button_full-width button_theme_primary-line authorization__button" type="submit">Log in</button>
+        </form>
+        } @else if (pageType == PageTypeEnum.Signup) {
+        <h2 class="authorization__title">Sign up</h2>
+        <h4 class="authorization__text">Please enter your credentials to continue</h4>
+
+        <form class="authorization__form" #form="ngForm" method="POST" action="about:blank" autocomplete="off" (ngSubmit)="onSubmit(form)">
+            <label class="input-wrapper" [ngClass]="{ 'input-wrapper_error': name.invalid && !isFormValid }">
+                <input
+                    class="input"
+                    [(ngModel)]="user.name"
+                    type="name"
+                    name="name"
+                    #name="ngModel"
+                    required
+                    pattern="^(?!\s*$).+"
+                    placeholder="Name"
+                />
+            </label>
+
+            <label class="input-wrapper" [ngClass]="{ 'input-wrapper_error': surname.invalid && !isFormValid }">
+                <input
+                    class="input"
+                    [(ngModel)]="user.surname"
+                    type="surname"
+                    name="surname"
+                    #surname="ngModel"
+                    required
+                    pattern="^(?!\s*$).+"
+                    placeholder="Surname"
+                />
+            </label>
+
+            <label class="input-wrapper" [ngClass]="{ 'input-wrapper_error': email.invalid && !isFormValid }">
+                <input
+                    class="input"
+                    [(ngModel)]="user.email"
+                    type="email"
+                    name="email"
+                    #email="ngModel"
+                    required
+                    pattern="^[\w\.%+\-]+@[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,}$"
+                    placeholder="Email"
+                />
+            </label>
+
+            <label
+                class="input-wrapper input-wrapper_with-icon input-wrapper_type_password"
+                [ngClass]="{ 'input-wrapper_error': !isFormValid && (passwordModel.invalid || !arePasswordsEqual) }"
+            >
+                <input
+                    #password
+                    class="input"
+                    [(ngModel)]="user.password"
+                    type="password"
+                    name="password"
+                    #passwordModel="ngModel"
+                    autocomplete="new-password"
+                    required
+                    placeholder="Password"
+                />
+                <span class="input-icon" (click)="changePasswordType(password)">
+                    @if (password.type === 'password') {
+                    <i class="fa-solid fa-eye"></i>
+                    } @else {
+                    <i class="fa-solid fa-eye-slash"></i>
+                    }
+                </span>
+            </label>
+
+            <label
+                class="input-wrapper input-wrapper_with-icon input-wrapper_type_password"
+                [ngClass]="{ 'input-wrapper_error': !isFormValid && (confirmPasswordModel.invalid || !arePasswordsEqual) }"
+            >
+                <input
+                    #confirmPassword
+                    class="input"
+                    [(ngModel)]="user.confirmPassword"
+                    #confirmPasswordModel="ngModel"
+                    type="password"
+                    name="confirmPassword"
+                    autocomplete="new-password"
+                    required
+                    placeholder="Confirm password"
+                />
+                <span class="input-icon" (click)="changePasswordType(confirmPassword)">
+                    @if (confirmPassword.type === 'password') {
+                    <i class="fa-solid fa-eye"></i>
+                    } @else {
+                    <i class="fa-solid fa-eye-slash"></i>
+                    }
+                </span>
+            </label>
+
+            <label class="input-wrapper input-wrapper_with-icon">
+                <select class="input" [(ngModel)]="user.role" name="role" #role="ngModel" required>
+                    <option class="option" value="STUDENT">I am a Student</option>
+                    <option class="option" value="TEACHER">I am a Teacher</option>
+                </select>
+                <span class="input-icon"><i class="fa-solid fa-chevron-down"></i></span>
+            </label>
+
+            <div class="authorization__question">
+                <span class="question__text">Already have an account? </span>
+                <a class="question__link" routerLink="/login">Log in</a>
+            </div>
+
+            <button class="button button_full-width button_theme_primary-line authorization__button" type="submit">Sign up</button>
+        </form>
+        }
+    </div>
+    }
+</div>
+
+<div class="modal" *ngIf="isCertificatePopupVisible">
+    <div class="modal__container">
+        <div class="modal__header">
+            <h2 class="modal__title">Certificates</h2>
+
+            <button class="modal__close" (click)="closeCertificatePopup()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="modal__content">
+            <label class="button button_full-width button_theme_secondary-line certificates__button">
+                Add certificate
+                <input
+                    #certificateInput
+                    class="certificate__input"
+                    type="file"
+                    accept="image/*, .pdf"
+                    (change)="onCertificateUpload($event.target)"
+                />
+            </label>
+
+            <div *ngIf="certificates.length" class="certificates">
+                <div *ngFor="let certificate of certificates" class="certificate">
+                    <button class="remove-button" (click)="removeCertificate(certificate)">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+
+                    <span class="certificate__name">{{ certificate }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal__footer">
+            <button class="button button_theme_primary-line" (click)="closeCertificatePopup()">Cancel</button>
+            <button class="button button_theme_primary" (click)="saveCertificates()">Save</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" *ngIf="isLinkPopupVisible">
+    <div class="modal__container">
+        <div class="modal__header">
+            <h2 class="modal__title">Links</h2>
+
+            <button class="modal__close" (click)="closeLinkPopup()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="modal__content">
+            <button class="button button_full-width button_theme_secondary-line links__button" (click)="addLink()">Add link</button>
+
+            <div *ngIf="links.length" class="links">
+                <div *ngFor="let link of links" class="link">
+                    <label class="input-wrapper" [ngClass]="{ 'input-wrapper_error': !isLinkFormValid && name.invalid }">
+                        <input
+                            class="input"
+                            [(ngModel)]="link.name"
+                            type="text"
+                            name="name"
+                            #name="ngModel"
+                            autocomplete="off"
+                            required
+                            placeholder="Source"
+                        />
+                    </label>
+
+                    <label class="input-wrapper" [ngClass]="{ 'input-wrapper_error': !isLinkFormValid && url.invalid }">
+                        <input class="input" [(ngModel)]="link.url" type="text" name="url" #url="ngModel" required placeholder="URL" />
+                    </label>
+
+                    <button class="remove-button" (click)="removeLink(link)">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal__footer">
+            <button class="button button_theme_primary-line" (click)="closeLinkPopup()">Cancel</button>
+            <button class="button button_theme_primary" (click)="saveLinks()">Save</button>
+        </div>
+    </div>
+</div>

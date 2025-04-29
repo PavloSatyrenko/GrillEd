@@ -1,0 +1,32 @@
+<div class="skills">
+    <div class="skills__wrapper">
+        <label class="skills__search input-wrapper input-wrapper_with-icon">
+            <input type="text" class="input" placeholder="Search..." (input)="filterSkills($event.target)" />
+            <span class="input-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+        </label>
+
+        <div class="skills__list">
+            <button
+                *ngFor="let skill of skills"
+                class="list__skill skill"
+                [ngClass]="{ skill_selected: isSkillSelected(skill) }"
+                (click)="toggleSkill(skill)"
+            >
+                {{ skill.name }}
+            </button>
+        </div>
+    </div>
+
+    <div class="skills__selected">
+        <h3 class="selected__title">Selected skills</h3>
+
+        <div *ngIf="selectedSkills.length" class="selected__list">
+            <div *ngFor="let skill of selectedSkills" class="selected__skill">
+                <span class="selected__text">{{ skill.name }}</span>
+                <button class="selected__delete" (click)="toggleSkill(skill)">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

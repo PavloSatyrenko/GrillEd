@@ -1,0 +1,378 @@
+<div class="home">
+    <div class="container home__container">
+        <div class="card greetings">
+            <div class="greetings__image"></div>
+
+            <div class="greetings__text">
+                <h1 class="greetings__title">Hello {{ user!.name }}!</h1>
+                <span class="greetings__subtitle">Nice to see you again</span>
+            </div>
+        </div>
+
+        <div class="courses">
+            <div class="card course">
+                <div class="course__image">
+                    <!-- <img src="" alt="Course icon" /> -->
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+
+                <div class="course__information">
+                    <span class="course__name">JavaScript</span>
+                    <span class="course__author">by John Doe</span>
+                </div>
+
+                <div class="course__right-side">
+                    <button class="button button_theme_primary course__button">Continue</button>
+                </div>
+            </div>
+
+            <div class="card course">
+                <div class="course__image">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+
+                <div class="course__information">
+                    <span class="course__name">JavaScript</span>
+                    <span class="course__author">by John Doe</span>
+                </div>
+
+                <div class="course__right-side">
+                    <button class="button button_theme_primary course__button">Continue</button>
+                </div>
+            </div>
+
+            <div class="card course">
+                <div class="course__image">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+
+                <div class="course__information">
+                    <span class="course__name">JavaScript</span>
+                    <span class="course__author">by John Doe</span>
+                </div>
+
+                <div class="course__right-side">
+                    <button class="button button_theme_primary course__button">Continue</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="statistics">
+            <div class="statistics__item card">
+                <span class="statistic__icon"><i class="fa-solid fa-image"></i></span>
+
+                <div class="statistic__feature">
+                    <span class="feature__name">Started courses:</span>
+                    <span class="feature__value">1111</span>
+                </div>
+            </div>
+
+            <div class="statistics__item card">
+                <span class="statistic__icon"><i class="fa-solid fa-image"></i></span>
+
+                <div class="statistic__feature">
+                    <span class="feature__name">Completed courses:</span>
+                    <span class="feature__value">2222</span>
+                </div>
+            </div>
+
+            <div class="statistics__item card">
+                <span class="statistic__icon"><i class="fa-solid fa-image"></i></span>
+
+                <div class="statistic__feature">
+                    <span class="feature__name">In progress:</span>
+                    <span class="feature__value">3</span>
+                </div>
+            </div>
+
+            <div class="statistics__item card">
+                <span class="statistic__icon"><i class="fa-solid fa-image"></i></span>
+
+                <div class="statistic__feature">
+                    <span class="feature__name">Hours spent:</span>
+                    <span class="feature__value">31232</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="panels">
+            <h1 class="panels__title">Choose the course:</h1>
+
+            <div class="panels__card card">
+                <div class="panels__header">
+                    <div class="panels__buttons">
+                        <button class="panels__button" [ngClass]="{ panels__button_active: panelNumber == 1 }" (click)="choosePanel(1)">
+                            Popular
+                        </button>
+                        <button class="panels__button" [ngClass]="{ panels__button_active: panelNumber == 2 }" (click)="choosePanel(2)">
+                            Newest
+                        </button>
+                        <button class="panels__button" [ngClass]="{ panels__button_active: panelNumber == 3 }" (click)="choosePanel(3)">
+                            By areas
+                        </button>
+                        <button class="panels__button" [ngClass]="{ panels__button_active: panelNumber == 4 }" (click)="choosePanel(4)">
+                            By skills
+                        </button>
+                    </div>
+
+                    <div *ngIf="panelNumber == 3 || panelNumber == 4" class="panels__filter">
+                        <label class="input-wrapper input-wrapper_with-icon panels__input-wrapper">
+                            <select class="input" [(ngModel)]="filterValue">
+                                <option *ngFor="let filter of filters" [value]="filter" class="option">{{ filter }}</option>
+                            </select>
+                            <span class="input-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="panels__list">
+                    <div *ngIf="panelNumber == 1" class="panel">
+                        <div class="courses">
+                            <div class="card course">
+                                <div class="course__image">
+                                    <!-- <img src="" alt="Course icon" /> -->
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </div>
+
+                                <div class="course__information">
+                                    <span class="course__name">JavaScript</span>
+                                    <span class="course__author">by John Doe</span>
+                                </div>
+
+                                <div class="course__right-side">
+                                    <button class="button button_theme_primary course__button">View course</button>
+                                </div>
+                            </div>
+
+                            <div class="card course">
+                                <div class="course__image">
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </div>
+
+                                <div class="course__information">
+                                    <span class="course__name">JavaScript</span>
+                                    <span class="course__author">by John Doe</span>
+                                </div>
+
+                                <div class="course__right-side">
+                                    <button class="button button_theme_primary course__button">View course</button>
+                                </div>
+                            </div>
+
+                            <div class="card course">
+                                <div class="course__image">
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </div>
+
+                                <div class="course__information">
+                                    <span class="course__name">JavaScript</span>
+                                    <span class="course__author">by John Doe</span>
+                                </div>
+
+                                <div class="course__right-side">
+                                    <button class="button button_theme_primary course__button">View course</button>
+                                </div>
+                            </div>
+
+                            <div class="card course">
+                                <div class="course__image">
+                                    <!-- <img src="" alt="Course icon" /> -->
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </div>
+
+                                <div class="course__information">
+                                    <span class="course__name">JavaScript</span>
+                                    <span class="course__author">by John Doe</span>
+                                </div>
+
+                                <div class="course__right-side">
+                                    <button class="button button_theme_primary course__button">View course</button>
+                                </div>
+                            </div>
+
+                            <div class="card course">
+                                <div class="course__image">
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </div>
+
+                                <div class="course__information">
+                                    <span class="course__name">JavaScript</span>
+                                    <span class="course__author">by John Doe</span>
+                                </div>
+
+                                <div class="course__right-side">
+                                    <button class="button button_theme_primary course__button">View course</button>
+                                </div>
+                            </div>
+
+                            <div class="card course">
+                                <div class="course__image">
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </div>
+
+                                <div class="course__information">
+                                    <span class="course__name">JavaScript</span>
+                                    <span class="course__author">by John Doe</span>
+                                </div>
+
+                                <div class="course__right-side">
+                                    <button class="button button_theme_primary course__button">View course</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="panelNumber == 2" class="panel">
+                        <div class="courses">
+                            <div class="card course">
+                                <div class="course__image">
+                                    <!-- <img src="" alt="Course icon" /> -->
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </div>
+
+                                <div class="course__information">
+                                    <span class="course__name">JavaScript</span>
+                                    <span class="course__author">by John Doe</span>
+                                </div>
+
+                                <div class="course__right-side">
+                                    <button class="button button_theme_primary course__button">View course</button>
+                                </div>
+                            </div>
+
+                            <div class="card course">
+                                <div class="course__image">
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </div>
+
+                                <div class="course__information">
+                                    <span class="course__name">JavaScript</span>
+                                    <span class="course__author">by John Doe</span>
+                                </div>
+
+                                <div class="course__right-side">
+                                    <button class="button button_theme_primary course__button">View course</button>
+                                </div>
+                            </div>
+
+                            <div class="card course">
+                                <div class="course__image">
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </div>
+
+                                <div class="course__information">
+                                    <span class="course__name">JavaScript</span>
+                                    <span class="course__author">by John Doe</span>
+                                </div>
+
+                                <div class="course__right-side">
+                                    <button class="button button_theme_primary course__button">View course</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="panelNumber == 3" class="panel">
+                        <div class="courses">
+                            <div class="card course">
+                                <div class="course__image">
+                                    <!-- <img src="" alt="Course icon" /> -->
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </div>
+
+                                <div class="course__information">
+                                    <span class="course__name">JavaScript</span>
+                                    <span class="course__author">by John Doe</span>
+                                </div>
+
+                                <div class="course__right-side">
+                                    <button class="button button_theme_primary course__button">View course</button>
+                                </div>
+                            </div>
+
+                            <div class="card course">
+                                <div class="course__image">
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </div>
+
+                                <div class="course__information">
+                                    <span class="course__name">JavaScript</span>
+                                    <span class="course__author">by John Doe</span>
+                                </div>
+
+                                <div class="course__right-side">
+                                    <button class="button button_theme_primary course__button">View course</button>
+                                </div>
+                            </div>
+
+                            <div class="card course">
+                                <div class="course__image">
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </div>
+
+                                <div class="course__information">
+                                    <span class="course__name">JavaScript</span>
+                                    <span class="course__author">by John Doe</span>
+                                </div>
+
+                                <div class="course__right-side">
+                                    <button class="button button_theme_primary course__button">View course</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="panelNumber == 4" class="panel">
+                        <div class="courses">
+                            <div class="card course">
+                                <div class="course__image">
+                                    <!-- <img src="" alt="Course icon" /> -->
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </div>
+
+                                <div class="course__information">
+                                    <span class="course__name">JavaScript</span>
+                                    <span class="course__author">by John Doe</span>
+                                </div>
+
+                                <div class="course__right-side">
+                                    <button class="button button_theme_primary course__button">View course</button>
+                                </div>
+                            </div>
+
+                            <div class="card course">
+                                <div class="course__image">
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </div>
+
+                                <div class="course__information">
+                                    <span class="course__name">JavaScript</span>
+                                    <span class="course__author">by John Doe</span>
+                                </div>
+
+                                <div class="course__right-side">
+                                    <button class="button button_theme_primary course__button">View course</button>
+                                </div>
+                            </div>
+
+                            <div class="card course">
+                                <div class="course__image">
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </div>
+
+                                <div class="course__information">
+                                    <span class="course__name">JavaScript</span>
+                                    <span class="course__author">by John Doe</span>
+                                </div>
+
+                                <div class="course__right-side">
+                                    <button class="button button_theme_primary course__button">View course</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
