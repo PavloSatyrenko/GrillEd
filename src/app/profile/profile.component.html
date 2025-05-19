@@ -57,7 +57,7 @@
                         name="email"
                         #email="ngModel"
                         required
-                        pattern="^[\w\.%+\-]+@[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,}$"
+                        pattern="^(?!.*\.\.)([a-zA-Z0-9_%+\-]+(?:\.[a-zA-Z0-9_%+\-]+)*)@[a-zA-Z0-9\-]+(?:\.[a-zA-Z0-9\-]+)*\.[a-zA-Z]{2,}$"
                         placeholder="Email"
                     />
                 </label>
@@ -312,7 +312,7 @@
         </div>
 
         <div class="modal__footer">
-            <button class="button button_theme_primary-line" (click)="closeSkillsPopup()">Close</button>
+            <button class="button button_theme_primary-line" (click)="closeSkillsPopup()">Cancel</button>
             <button *ngIf="studentSkillStep == 2" class="button button_theme_primary-line skills__button_previous" (click)="goToPreviousSkillStep()">
                 Previous
             </button>

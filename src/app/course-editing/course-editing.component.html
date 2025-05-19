@@ -1,0 +1,336 @@
+<div class="course">
+    <div class="container course__container">
+        <div class="card main__card">
+            <h1 class="course__title">Basic information</h1>
+
+            <div class="course__row">
+                <label class="input-wrapper input-wrapper_with-label">
+                    <span class="input-label">Course name:</span>
+                    <input class="input" [(ngModel)]="course.name" name="name" />
+                </label>
+
+                <label class="input-wrapper input-wrapper_with-label input-wrapper_with-icon">
+                    <span class="input-label">Course level:</span>
+                    <select class="input" [(ngModel)]="course.level" name="level">
+                        <option class="option" value="BEGINNER">Beginner</option>
+                        <option class="option" value="INTERMEDIATE">Intermediate</option>
+                        <option class="option" value="EXPERT">Expert</option>
+                    </select>
+                    <span class="input-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                </label>
+            </div>
+
+            <div class="course__row course__row_high">
+                <label class="input-wrapper input-wrapper_with-label course__description">
+                    <span class="input-label">Description:</span>
+                    <textarea class="input" [(ngModel)]="course.about" name="about"></textarea>
+                </label>
+
+                <div class="course__image-wrapper">
+                    <div class="course__image">
+                        <i *ngIf="!coursePhotoPath" class="fa-solid fa-graduation-cap"></i>
+                        <img *ngIf="coursePhotoPath" [src]="coursePhotoPath" alt="Course image" />
+                    </div>
+
+                    <label class="button button_full-width button_theme_secondary-line course__image-button">
+                        Add photo
+                        <input #coursePhotoInput class="course__image-input" type="file" accept="image/*" (change)="onPhotoUpload($event.target)" />
+                    </label>
+
+                    <button
+                        class="button button_full-width button_theme_secondary-line course__image-button"
+                        [disabled]="!coursePhotoPath"
+                        (click)="removePhoto()"
+                    >
+                        Remove photo
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="course__content">
+            <div class="course__modules modules">
+                <div class="modules__header">
+                    <h1 class="course__title">Content</h1>
+                    <button class="button button_theme_primary" (click)="addModule()">Add module</button>
+                </div>
+
+                <div class="modules__list">
+                    <div *ngFor="let module of course.modules" class="module module_active" [ngClass]="{ module_active: module.isOpened }">
+                        <button class="module__header" (click)="toggleModule(module)">
+                            <span *ngIf="!module.isOpened" class="module__arrow"><i class="fa-solid fa-chevron-down"></i></span>
+                            <span *ngIf="module.isOpened" class="module__arrow"><i class="fa-solid fa-chevron-up"></i></span>
+
+                            <h2 *ngIf="!module.isEditing" class="module__title">{{ module.name }}</h2>
+                            <label
+                                *ngIf="module.isEditing"
+                                class="input-wrapper module__name"
+                                [ngClass]="{ 'input-wrapper_error': !moduleName.trim() && isModuleNameErrorVisible }"
+                                (click)="$event.stopPropagation()"
+                            >
+                                <input class="input" [(ngModel)]="moduleName" name="module" />
+                            </label>
+
+                            <div class="module__buttons">
+                                <button
+                                    *ngIf="!module.isEditing"
+                                    class="button button_theme_primary-line module__button"
+                                    [disabled]="isEditModuleButtonDisabled()"
+                                    (click)="editModule($event, module)"
+                                >
+                                    Edit
+                                </button>
+
+                                <button
+                                    *ngIf="module.isEditing"
+                                    class="button button_theme_primary-line module__button"
+                                    (click)="cancelModuleEditing($event, module)"
+                                >
+                                    Cancel
+                                </button>
+
+                                <button
+                                    *ngIf="module.isEditing"
+                                    class="button button_theme_primary module__button"
+                                    (click)="saveModule($event, module)"
+                                >
+                                    Save
+                                </button>
+
+                                <button
+                                    class="button button_theme_primary-line button_icon-only module__button"
+                                    (click)="removeModule($event, module)"
+                                >
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </button>
+
+                        <div *ngIf="module.isOpened" class="module__content">
+                            <div class="module__add-lesson">
+                                <label
+                                    class="input-wrapper input-wrapper_with-label add-lesson__name"
+                                    [ngClass]="{ 'input-wrapper_error': !module.newLessonName?.trim() && module.isLessonNameErrorVisible }"
+                                >
+                                    <span class="input-label">Lesson name:</span>
+                                    <input class="input" [(ngModel)]="module.newLessonName" name="lesson" />
+                                </label>
+
+                                <label class="input-wrapper input-wrapper_with-label input-wrapper_with-icon add-lesson__type">
+                                    <span class="input-label">Lesson type:</span>
+                                    <select class="input" [(ngModel)]="module.newLessonType" name="type">
+                                        <option class="option" value="ARTICLE">Article</option>
+                                        <option class="option" value="VIDEO">Video</option>
+                                        <option class="option" value="TEST">Test</option>
+                                    </select>
+                                    <span class="input-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                                </label>
+
+                                <button class="button button_theme_primary" (click)="addLesson(module)">Add</button>
+                            </div>
+
+                            <div *ngIf="module.lessons.length" class="module__lessons">
+                                <div *ngFor="let lesson of module.lessons" class="module__lesson lesson">
+                                    <span *ngIf="lesson.type == 'ARTICLE'" class="lesson__icon"><i class="fa-regular fa-file-lines"></i></span>
+                                    <span *ngIf="lesson.type == 'VIDEO'" class="lesson__icon"><i class="fa-regular fa-circle-play"></i></span>
+                                    <span *ngIf="lesson.type == 'TEST'" class="lesson__icon"><i class="fa-regular fa-question-circle"></i></span>
+                                    <span class="lesson__title">{{ lesson.name }}</span>
+
+                                    <div class="lesson__buttons">
+                                        <button class="button button_theme_primary-line lesson__button" (click)="editLesson(lesson)">Edit</button>
+                                        <button
+                                            class="button button_theme_primary-line button_icon-only lesson__button"
+                                            (click)="removeLesson(lesson, module)"
+                                        >
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div *ngIf="!module.lessons.length" class="module__empty">
+                                <span class="empty__text">No lessons in this module</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card course__skills skills">
+                <div class="course__title">Skills</div>
+
+                <div class="skills__filter">
+                    <label class="input-wrapper input-wrapper_with-icon skills__filter-input">
+                        <input class="input" type="text" placeholder="Search..." (input)="filterSkills($event.target)" />
+                        <span class="input-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    </label>
+                </div>
+
+                <div class="skills__list">
+                    <label *ngFor="let skill of skills" class="checkbox-wrapper skill">
+                        <input class="checkbox" type="checkbox" />
+                        <span class="checkbox-label">{{ skill.name }}</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="course__buttons">
+            <button class="button button_theme_primary-line course__button">Cancel</button>
+            <button class="button button_theme_primary course__button">Save</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal edit" *ngIf="isLessonPopupVisible">
+    <div class="modal__container">
+        <div class="modal__header">
+            <h2 class="modal__title">Edit lesson</h2>
+
+            <button class="modal__close" (click)="closeLessonPopup()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="modal__content">
+            <div class="edit__header">
+                <label
+                    class="input-wrapper input-wrapper_with-label"
+                    [ngClass]="{ 'input-wrapper_error': !lesson.name.trim() && isLessonNameErrorVisible }"
+                >
+                    <span class="input-label">Lesson name:</span>
+                    <input class="input" [(ngModel)]="lesson.name" name="lesson" />
+                </label>
+
+                <label class="input-wrapper input-wrapper_with-label input-wrapper_with-icon">
+                    <span class="input-label">Lesson type:</span>
+                    <select class="input" [(ngModel)]="lesson.type" name="type">
+                        <option class="option" value="ARTICLE">Article</option>
+                        <option class="option" value="VIDEO">Video</option>
+                        <option class="option" value="TEST">Test</option>
+                    </select>
+                    <span class="input-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                </label>
+            </div>
+
+            <div class="edit__content">
+                @if (lesson.type == "ARTICLE") {
+                <div class="input-wrapper input-wrapper_with-label edit__editor">
+                    <span class="input-label">Article text:</span>
+                    <quill-editor
+                        [(ngModel)]="markdown"
+                        theme="snow"
+                        [modules]="quillModules"
+                        (onEditorCreated)="onEditorCreated($event)"
+                    ></quill-editor>
+                </div>
+                } @else if (lesson.type == "VIDEO") {
+                <div class="edit__video-wrapper">
+                    <div class="edit__video">
+                        <div class="video__preview">
+                            <i *ngIf="!lessonVideoPreviewPath" class="fa-solid fa-video"></i>
+                            <img *ngIf="lessonVideoPreviewPath" [src]="lessonVideoPreviewPath" alt="Lesson video preview" />
+                        </div>
+                    </div>
+
+                    <label class="button button_full-width button_theme_secondary-line video__button">
+                        Upload video
+                        <input class="video__input" type="file" accept="video/*" (change)="onVideoUpload($event.target)" />
+                    </label>
+                </div>
+                } @else if (lesson.type == "TEST") {
+                <div class="edit__test">
+                    <div *ngFor="let question of lesson.questions" class="test__question">
+                        <div class="question__header">
+                            <label
+                                class="input-wrapper input-wrapper_with-label"
+                                [ngClass]="{ 'input-wrapper_error': !question.text.trim() && isLessonSaveErrorVisible }"
+                            >
+                                <span class="input-label">Question:</span>
+                                <input class="input" [(ngModel)]="question.text" name="question" placeholder="Question" />
+                            </label>
+
+                            <label class="input-wrapper input-wrapper_with-label input-wrapper_with-icon question__type">
+                                <span class="input-label">Question type:</span>
+                                <select class="input" [value]="question.type" name="type" (change)="setQuestionType(question, $event)">
+                                    <option class="option" value="CHOICE">One answer</option>
+                                    <option class="option" value="MULTICHOICE">Multichoice</option>
+                                </select>
+                                <span class="input-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                            </label>
+
+                            <button class="button button_theme_secondary-line button_icon-only" (click)="removeQuestion(question)">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+
+                        <div class="question__answers">
+                            <div *ngFor="let answer of question.answers" class="question__answer">
+                                <div class="answer__body">
+                                    <label *ngIf="question.type == 'CHOICE'" class="radio-wrapper">
+                                        <input class="radio" [checked]="answer.correct" type="radio" (change)="setCorrectAnswer(question, answer)" />
+                                    </label>
+
+                                    <label
+                                        *ngIf="question.type == 'MULTICHOICE'"
+                                        class="checkbox-wrapper"
+                                        [ngClass]="{ 'checkbox-wrapper_error': isAllAnswersIncorrect(question) && isLessonSaveErrorVisible }"
+                                    >
+                                        <input
+                                            class="checkbox"
+                                            type="checkbox"
+                                            [checked]="answer.correct"
+                                            (change)="setCorrectAnswer(question, answer)"
+                                        />
+                                    </label>
+
+                                    <label
+                                        class="input-wrapper answer__input"
+                                        [ngClass]="{ 'input-wrapper_error': !answer.text.trim() && isLessonSaveErrorVisible }"
+                                    >
+                                        <input
+                                            class="input"
+                                            [(ngModel)]="answer.text"
+                                            name="answer"
+                                            placeholder="Answer"
+                                            (change)="setCorrectAnswer(question, answer)"
+                                        />
+                                    </label>
+
+                                    <button class="button button_theme_secondary-line button_icon-only" (click)="toggleAnswerCommentary(answer)">
+                                        <i *ngIf="!answer.isCommentaryVisible" class="fa-solid fa-plus"></i>
+                                        <i *ngIf="answer.isCommentaryVisible" class="fa-solid fa-minus"></i>
+                                    </button>
+
+                                    <button class="button button_theme_secondary-line button_icon-only" (click)="removeAnswer(question, answer)">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </div>
+
+                                <label *ngIf="answer.isCommentaryVisible" class="input-wrapper answer__commentary">
+                                    <input class="input" [(ngModel)]="answer.commentary" name="commentary" placeholder="Commentary" />
+                                </label>
+                            </div>
+                        </div>
+
+                        <button class="button button_theme_secondary-line button_with-icon button_full-width" (click)="addAnswer(question)">
+                            <i class="fa-solid fa-plus"></i>
+                            Add answer
+                        </button>
+                    </div>
+
+                    <button class="button button_theme_primary-line button_with-icon button_full-width" (click)="addQuestion()">
+                        <i class="fa-solid fa-plus"></i>
+                        Add question
+                    </button>
+                </div>
+                }
+            </div>
+        </div>
+
+        <div class="modal__footer">
+            <button class="button button_theme_primary-line" (click)="closeLessonPopup()">Cancel</button>
+            <button class="button button_theme_primary" [disabled]="isSaveLessonButtonDisabled()" (click)="saveLesson()">Save</button>
+        </div>
+    </div>
+</div>

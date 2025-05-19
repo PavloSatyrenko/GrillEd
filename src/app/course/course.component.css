@@ -73,11 +73,38 @@
     margin-top: 32px;
 }
 
+.modules__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .modules__title {
     margin-left: 8px;
     font-size: 32px;
     font-weight: 700;
     color: var(--primary-text-color);
+}
+
+.modules__information {
+    display: flex;
+    align-items: center;
+}
+
+.modules__information .information__item {
+    padding: 0 16px;
+}
+
+.modules__information .information__item:last-child {
+    border: none;
+}
+
+.modules__information .information__icon {
+    font-size: 16px;
+}
+
+.modules__information .information__text {
+    font-size: 16px;
 }
 
 .modules__list {
@@ -214,6 +241,10 @@
     overflow: hidden;
     background-color: var(--border-color);
     border-radius: 8px;
+}
+
+.course__image i {
+    font-size: 64px;
 }
 
 .course__image img {

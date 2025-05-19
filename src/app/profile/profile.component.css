@@ -155,6 +155,10 @@
     border-radius: 8px;
 }
 
+.course__image i {
+    font-size: 64px;
+}
+
 .course__image img {
     width: 100%;
     height: 100%;

@@ -29,6 +29,11 @@ export class AppComponent implements OnInit {
     private authService: AuthService = inject(AuthService);
 
     ngOnInit(): void {
+        this.authService.me().then((user: User) => {
+            this.user = user;
+            this.isUserAuthorized = !!user;
+        });
+
         this.router.events.pipe(
             filter((e: Event | RouterEvent): e is RouterEvent => e instanceof RouterEvent)
         ).subscribe((event: RouterEvent) => {

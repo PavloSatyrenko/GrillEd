@@ -1,0 +1,441 @@
+.course {
+    padding-top: 48px;
+}
+
+.course__container {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.main__card {
+    gap: 24px;
+}
+
+.course__title {
+    margin-left: 8px;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--primary-text-color);
+}
+
+.course__row {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 24px;
+}
+
+.course__row_high {
+    height: 100%;
+}
+
+.course__description {
+    height: 100%;
+}
+
+.course__image-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.course__image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 164px;
+    overflow: hidden;
+    background-color: var(--border-color);
+    border-radius: 8px;
+}
+
+.course__image i {
+    font-size: 64px;
+}
+
+.course__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.course__image-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+}
+
+.course__content {
+    display: grid;
+    grid-template-columns: calc(100% - 348px) 324px;
+    gap: 24px;
+    width: 100%;
+}
+
+.course__modules {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.modules__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.modules__list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-right: 4px;
+    overflow: auto;
+}
+
+.module {
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    height: 72px;
+    overflow: hidden;
+    background-color: var(--section-background-color);
+    border-radius: 16px;
+}
+
+.module_active {
+    height: fit-content;
+}
+
+.module__header {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    width: 100%;
+    height: 72px;
+    padding: 20px 24px;
+    cursor: pointer;
+    outline: none;
+    background-color: transparent;
+    border: none;
+    border-radius: 16px;
+}
+
+.module__arrow {
+    font-size: 24px;
+    color: var(--secondary-color);
+}
+
+.module__title {
+    padding-left: 9px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary-text-color);
+    white-space: nowrap;
+}
+
+.module__name {
+    width: 100%;
+}
+
+.module__name .input {
+    padding: 8px;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.module__buttons {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.module__content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 0 24px 24px 32px;
+    background-color: var(--section-background-color);
+    border-radius: 16px;
+}
+
+.module__add-lesson {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+}
+
+.add-lesson__name {
+    width: 100%;
+}
+
+.add-lesson__type {
+    flex-shrink: 0;
+    width: 148px;
+}
+
+.module__lessons {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.module__lesson {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.lesson__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    font-size: 22px;
+    color: var(--secondary-color);
+}
+
+.lesson__title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--primary-text-color);
+    white-space: nowrap;
+}
+
+.lesson__time {
+    margin-left: auto;
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--primary-text-color);
+}
+
+.lesson__buttons {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.empty__text {
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--primary-text-color);
+}
+
+.skills {
+    gap: 16px;
+    height: 456px;
+}
+
+.skills__filter {
+    padding-right: 4px;
+}
+
+.skills__list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-right: 4px;
+    overflow: auto;
+}
+
+.skill {
+    padding: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+}
+
+.course__buttons {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.course__button {
+    width: 200px;
+}
+
+.edit .modal__container {
+    max-width: 1400px;
+}
+
+.edit .modal__content {
+    display: flex;
+    flex-direction: column;
+}
+
+.edit__header {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 24px;
+    align-items: center;
+}
+
+.edit__content {
+    flex: 1 1 auto;
+    padding-right: 4px;
+    margin-top: 24px;
+    overflow: auto;
+}
+
+.edit__editor {
+    height: unset;
+}
+
+::ng-deep .edit__editor .ql-toolbar {
+    background-color: var(--section-background-color);
+    border: 1px solid var(--secondary-color);
+    border-radius: 8px 8px 0 0;
+}
+
+::ng-deep .edit__editor .ql-container {
+    height: 366px;
+    font-size: 16px;
+    background-color: var(--section-background-color);
+    border: 1px solid var(--secondary-color);
+    border-radius: 0 0 8px 8px;
+}
+
+::ng-deep .edit__editor .ql-container:hover {
+    background-color: var(--input-background-hover-color);
+    transition: 0.3s;
+}
+
+::ng-deep .edit__editor .ql-stroke,
+::ng-deep .edit__editor .ql-fill,
+::ng-deep .edit__editor .ql-picker-label,
+::ng-deep .edit__editor .ql-picker-item {
+    transition: 0.2s;
+}
+
+::ng-deep .edit__editor .ql-picker-label,
+::ng-deep .edit__editor .ql-picker-item {
+    color: var(--primary-text-color);
+}
+
+::ng-deep .edit__editor .ql-stroke {
+    stroke: var(--primary-text-color);
+}
+
+::ng-deep .edit__editor .ql-fill {
+    fill: var(--primary-text-color);
+}
+
+::ng-deep .edit__editor .ql-picker-label.ql-active,
+::ng-deep .edit__editor .ql-picker:not(.ql-expanded) .ql-picker-label:hover,
+::ng-deep .edit__editor .ql-picker-item.ql-selected,
+::ng-deep .edit__editor .ql-picker-item:hover {
+    color: var(--primary-color) !important;
+}
+
+::ng-deep .edit__editor .ql-active .ql-stroke,
+::ng-deep .edit__editor button:hover .ql-stroke,
+::ng-deep .edit__editor .ql-picker:not(.ql-expanded):hover .ql-stroke {
+    stroke: var(--primary-color) !important;
+}
+
+::ng-deep .edit__editor .ql-active .ql-fill,
+::ng-deep .edit__editor button:hover .ql-fill,
+::ng-deep .edit__editor .ql-picker:not(.ql-expanded):hover .ql-fill {
+    fill: var(--primary-color) !important;
+}
+
+.edit__video-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.edit__video {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 332px;
+}
+
+.video__preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background-color: var(--border-color);
+    border-radius: 8px;
+}
+
+.edit__video i {
+    font-size: 64px;
+}
+
+.edit__video img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.video__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+}
+
+.edit__test {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.test__question {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.question__header {
+    display: grid;
+    grid-template-columns: 1fr 248px 40px;
+    gap: 8px;
+    align-items: flex-end;
+}
+
+.question__type {
+    margin-left: 16px;
+}
+
+.question__answers {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.question__answer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.answer__body {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.answer__input {
+    width: 100%;
+}
+
+.answer__commentary {
+    width: calc(100% - 168px);
+    margin-left: 72px;
+}

@@ -38,7 +38,7 @@ export class AuthorizationComponent implements OnInit {
 
     @ViewChild("teacherPhotoInput") teacherPhotoInput!: ElementRef<HTMLInputElement>;
     teacherPhotoPath: SafeResourceUrl | null = null;
-    isSizeValid: boolean = true;
+    // isSizeValid: boolean = true;
 
     isCertificatePopupVisible: boolean = false;
     initialCertificates: string[] = [];
@@ -80,10 +80,12 @@ export class AuthorizationComponent implements OnInit {
 
             this.activatedRoute.queryParams.subscribe((params: Params) => {
                 this.authService.verifyEmail(params["token"]).then(() => {
+                    console.log("Email verified successfully.");
                     this.authService.me().then(() => {
+                        console.log(this.authService.user);
                         this.user = this.authService.user!;
 
-                        if (this.user.role.toLowerCase() == "student") {
+                        if (this.user.role == "STUDENT") {
                             this.skills = [
                                 { id: "3dfc9ec3-2ef7-4e8a-ae2c-91f409ff003f", name: "JavaScript" },
                                 { id: "b1ad9122-fdf9-455b-a9c7-f1191183ce63", name: "Python" },
@@ -188,11 +190,11 @@ export class AuthorizationComponent implements OnInit {
             const file: File | undefined = event.files?.[0];
 
             if (file) {
-                if (file.size > 2 * 1024 * 1024) {
-                    this.removePhoto();
-                    this.isSizeValid = false;
-                    return;
-                }
+                // if (file.size > 2 * 1024 * 1024) {
+                //     this.removePhoto();
+                //     this.isSizeValid = false;
+                //     return;
+                // }
 
                 this.teacherPhotoPath = this.domSanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(file));
             }

@@ -21,7 +21,7 @@ export class ProfileComponent implements OnInit {
 
     @ViewChild("profilePhotoInput") profilePhotoInput!: ElementRef<HTMLInputElement>;
     profilePhotoPath: SafeResourceUrl | null = null;
-    isSizeValid: boolean = true;
+    // isSizeValid: boolean = true;
 
     isSkillsPopupVisible: boolean = false;
     studentSkillStep: number = 1;
@@ -42,11 +42,11 @@ export class ProfileComponent implements OnInit {
             const file: File | undefined = event.files?.[0];
 
             if (file) {
-                if (file.size > 2 * 1024 * 1024) {
-                    this.removePhoto();
-                    this.isSizeValid = false;
-                    return;
-                }
+                // if (file.size > 2 * 1024 * 1024) {
+                //     this.removePhoto();
+                //     this.isSizeValid = false;
+                //     return;
+                // }
 
                 this.profilePhotoPath = this.domSanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(file));
             }

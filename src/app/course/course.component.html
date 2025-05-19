@@ -27,10 +27,24 @@
             </div>
 
             <div class="course__modules">
-                <h1 class="modules__title">Course content</h1>
+                <div class="modules__header">
+                    <h1 class="modules__title">Course content</h1>
+
+                    <div class="modules__information">
+                        <div class="information__item">
+                            <span class="information__icon"><i class="fa-solid fa-book-open-reader"></i></span>
+                            <span class="information__text">{{ course!.modules.length }} modules</span>
+                        </div>
+
+                        <div class="information__item">
+                            <span class="information__icon"><i class="fa-solid fa-clock"></i></span>
+                            <span class="information__text">{{ course!.estimatedTime }}</span>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="modules__list">
-                    <div *ngFor="let module of modules" class="module module_active" [ngClass]="{ module_active: module.isOpened }">
+                    <div *ngFor="let module of course!.modules" class="module module_active" [ngClass]="{ module_active: module.isOpened }">
                         <button class="module__header" (click)="toggleModule(module)">
                             <h2 class="module__title">{{ module.name }}</h2>
 
@@ -56,26 +70,17 @@
                                 </div>
                             </div>
 
-                            <span class="module__arrow"><i class="fa-solid fa-chevron-down"></i></span>
+                            <span *ngIf="!module.isOpened" class="module__arrow"><i class="fa-solid fa-chevron-down"></i></span>
+                            <span *ngIf="module.isOpened" class="module__arrow"><i class="fa-solid fa-chevron-up"></i></span>
                         </button>
 
                         <div class="module__content">
-                            <div class="module__lesson lesson">
-                                <span class="lesson__icon"><i class="fa-regular fa-file-lines"></i></span>
-                                <span class="lesson__title">Lesson</span>
-                                <span class="lesson__time">1h 20min</span>
-                            </div>
-
-                            <div class="module__lesson lesson">
-                                <span class="lesson__icon"><i class="fa-regular fa-circle-play"></i></span>
-                                <span class="lesson__title">Lesson</span>
-                                <span class="lesson__time">40min</span>
-                            </div>
-
-                            <div class="module__lesson lesson">
-                                <span class="lesson__icon"><i class="fa-regular fa-question-circle"></i></span>
-                                <span class="lesson__title">Lesson</span>
-                                <span class="lesson__time">2h 30min</span>
+                            <div *ngFor="let lesson of module.lessons" class="module__lesson lesson">
+                                <span *ngIf="lesson.type == 'ARTICLE'" class="lesson__icon"><i class="fa-regular fa-file-lines"></i></span>
+                                <span *ngIf="lesson.type == 'VIDEO'" class="lesson__icon"><i class="fa-regular fa-circle-play"></i></span>
+                                <span *ngIf="lesson.type == 'TEST'" class="lesson__icon"><i class="fa-regular fa-question-circle"></i></span>
+                                <span class="lesson__title">{{ lesson.name }}</span>
+                                <span class="lesson__time">{{ lesson.estimatedTime }}</span>
                             </div>
                         </div>
                     </div>
@@ -93,13 +98,8 @@
 
             <div class="aside__features features">
                 <div class="feature">
-                    <span class="feature__icon"><i class="fa-solid fa-clock"></i></span>
-                    <span class="feature__name">{{ course!.estimatedTime }}</span>
-                </div>
-
-                <div class="feature">
                     <span class="feature__icon"><i class="fa-solid fa-video"></i></span>
-                    <span class="feature__name">30 modules</span>
+                    <span class="feature__name">{{ course!.modules.length }} modules</span>
                 </div>
 
                 <div class="feature">

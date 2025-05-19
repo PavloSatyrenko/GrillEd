@@ -48,13 +48,13 @@ export class AuthService {
         return response;
     }
 
-    async me(): Promise<any> {
-        const responce = await firstValueFrom(this.http.get(`${this.api}v1/auth/me`));
+    async me(): Promise<User> {
+        const responce = await firstValueFrom(this.http.get<User>(`${this.api}v1/auth/me`));
         this.user = responce as User;
         return responce;
     }
 
     refreshToken(): Observable<any> {
-        return this.http.get(`${this.api}v1/auth/refresh`);
+        return this.http.get(`${this.api}v1/auth/refresh`, { withCredentials: true });
     }
 }

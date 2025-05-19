@@ -63,7 +63,7 @@
                 </div>
 
                 <div class="menu__list">
-                    <button class="menu__item" routerLink="/profile">
+                    <button class="menu__item" [routerLink]="'/profile/' + user!.role.toLowerCase()">
                         <span class="menu-item__icon">
                             <i class="fa-solid fa-user"></i>
                         </span>
