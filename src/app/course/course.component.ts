@@ -3,6 +3,8 @@ import { Component, inject, OnInit } from "@angular/core";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { Course } from "../../classes/Course";
 import { Module } from "../../classes/Module";
+import { CoursesService } from "../services/courses.service";
+import { SkillsService } from "../services/skills.service";
 
 @Component({
     selector: "app-course",
@@ -17,6 +19,8 @@ export class CourseComponent implements OnInit {
     course: Course | null = null;
 
     private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
+    private coursesService: CoursesService = inject(CoursesService);
+    private skillsService: SkillsService = inject(SkillsService);
 
     ngOnInit(): void {
         this.activatedRoute.paramMap.subscribe((params: ParamMap) => {
@@ -121,5 +125,9 @@ export class CourseComponent implements OnInit {
 
     toggleModule(module: Module): void {
         module.isOpened = !module.isOpened;
+    }
+
+    enroll(): void {
+        this.coursesService.enrollCourse(this.courseId);
     }
 }

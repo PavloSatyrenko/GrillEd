@@ -226,9 +226,9 @@ export class TeacherComponent implements OnInit {
                 about: this.courseAbout,
                 categoryId: this.selectedCategory!.id,
                 level: this.courseLevel
-            }).then((responce: Course) => {
+            }).then((response: Course) => {
                 this.isCreateCoursePopupVisible = false;
-                this.router.navigate(["course", responce.id, "edit"]);
+                this.router.navigate(["course", response.id, "edit"]);
             });
         }
     }

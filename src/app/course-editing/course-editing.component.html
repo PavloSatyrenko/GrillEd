@@ -156,28 +156,30 @@
                 </div>
             </div>
 
-            <div class="card course__skills skills">
-                <div class="course__title">Skills</div>
+            <div class="card course__categories categories">
+                <div class="course__title">Category</div>
 
-                <div class="skills__filter">
-                    <label class="input-wrapper input-wrapper_with-icon skills__filter-input">
-                        <input class="input" type="text" placeholder="Search..." (input)="filterSkills($event.target)" />
+                <div class="categories__filter">
+                    <label class="input-wrapper input-wrapper_with-icon categories__filter-input">
+                        <input class="input" type="text" placeholder="Search..." (input)="filterCategories($event.target)" />
                         <span class="input-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
                     </label>
                 </div>
 
-                <div class="skills__list">
-                    <label *ngFor="let skill of skills" class="checkbox-wrapper skill">
-                        <input class="checkbox" type="checkbox" />
-                        <span class="checkbox-label">{{ skill.name }}</span>
+                <div class="categories__list">
+                    <label *ngFor="let category of categories" class="radio-wrapper category">
+                        <input class="radio" [checked]="selectedCategory == category" type="radio" (change)="selectCategory(category)" />
+                        <span class="radio-label">{{ category.name }}</span>
                     </label>
                 </div>
+
+                <button class="button button_theme_primary button_full-width" (click)="openSkillsPopup()">Choose skills</button>
             </div>
         </div>
 
         <div class="course__buttons">
             <button class="button button_theme_primary-line course__button">Cancel</button>
-            <button class="button button_theme_primary course__button">Save</button>
+            <button class="button button_theme_primary course__button" (click)="saveCourse()">Save</button>
         </div>
     </div>
 </div>
@@ -200,6 +202,14 @@
                 >
                     <span class="input-label">Lesson name:</span>
                     <input class="input" [(ngModel)]="lesson.name" name="lesson" />
+                </label>
+
+                <label
+                    class="input-wrapper input-wrapper_with-label"
+                    [ngClass]="{ 'input-wrapper_error': !lesson.name.trim() && isLessonNameErrorVisible }"
+                >
+                    <span class="input-label">Time to complete:</span>
+                    <input class="input" [(ngModel)]="lesson.estimatedTime" name="lesson" />
                 </label>
 
                 <label class="input-wrapper input-wrapper_with-label input-wrapper_with-icon">
@@ -240,7 +250,7 @@
                 </div>
                 } @else if (lesson.type == "TEST") {
                 <div class="edit__test">
-                    <div *ngFor="let question of lesson.questions" class="test__question">
+                    <div *ngFor="let question of lesson.questions" class="test__question card">
                         <div class="question__header">
                             <label
                                 class="input-wrapper input-wrapper_with-label"
@@ -331,6 +341,27 @@
         <div class="modal__footer">
             <button class="button button_theme_primary-line" (click)="closeLessonPopup()">Cancel</button>
             <button class="button button_theme_primary" [disabled]="isSaveLessonButtonDisabled()" (click)="saveLesson()">Save</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal skills" *ngIf="isSkillsPopupVisible">
+    <div class="modal__container">
+        <div class="modal__header">
+            <h2 class="modal__title">Choose the areas and skills you are interested in</h2>
+
+            <button class="modal__close" (click)="closeSkillsPopup()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="modal__content">
+            <app-skill-picker class="modal__skills" [initialSkills]="skills" (selectedSkillsChange)="selectedSkills = $event"></app-skill-picker>
+        </div>
+
+        <div class="modal__footer">
+            <button class="button button_theme_primary-line" (click)="closeSkillsPopup()">Cancel</button>
+            <button class="button button_theme_primary" (click)="saveSkills()">Save</button>
         </div>
     </div>
 </div>

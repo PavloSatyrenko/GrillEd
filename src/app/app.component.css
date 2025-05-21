@@ -26,7 +26,7 @@
 
 .explore__menu {
     left: 0;
-    width: 800px;
+    width: 400px;
 }
 
 .explore__menu .menu__arrow {
@@ -139,6 +139,10 @@
 
 .menu__item:hover {
     background-color: var(--input-background-hover-color);
+}
+
+.explore__menu .menu__item {
+    justify-content: space-between;
 }
 
 .header__authorization {

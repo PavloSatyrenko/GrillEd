@@ -229,24 +229,25 @@
     color: var(--primary-text-color);
 }
 
-.skills {
+.categories {
     gap: 16px;
-    height: 456px;
+    height: 512px;
 }
 
-.skills__filter {
+.categories__filter {
     padding-right: 4px;
 }
 
-.skills__list {
+.categories__list {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    height: 293px;
     padding-right: 4px;
     overflow: auto;
 }
 
-.skill {
+.category {
     padding: 8px;
     border: 1px solid var(--border-color);
     border-radius: 12px;
@@ -274,8 +275,8 @@
 
 .edit__header {
     display: grid;
-    grid-template-columns: 1fr 300px;
-    gap: 24px;
+    grid-template-columns: 1fr 150px 200px;
+    gap: 16px;
     align-items: center;
 }
 
@@ -400,6 +401,7 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+    border: 1px solid var(--border-color);
 }
 
 .question__header {
@@ -438,4 +440,8 @@
 .answer__commentary {
     width: calc(100% - 168px);
     margin-left: 72px;
+}
+
+.skills .modal__container {
+    max-width: 1400px;
 }

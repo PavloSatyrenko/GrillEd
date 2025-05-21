@@ -4,6 +4,8 @@ import { NavigationEnd, Router, RouterEvent, Event, RouterModule } from "@angula
 import { filter } from "rxjs/operators";
 import { User } from "../classes/User";
 import { AuthService } from "./services/auth.service";
+import { Skill } from "../classes/Skill";
+import { SkillsService } from "./services/skills.service";
 
 @Component({
     selector: "app-root",
@@ -22,11 +24,14 @@ export class AppComponent implements OnInit {
 
     isExploreMenuVisible: boolean = false;
 
+    categories: Skill[] = [];
+
     @ViewChild("userMenu", { static: false }) userMenu!: ElementRef<HTMLElement>;
     @ViewChild("exploreMenu", { static: false }) exploreMenu!: ElementRef<HTMLElement>;
 
     private router: Router = inject(Router);
     private authService: AuthService = inject(AuthService);
+    private skillsService: SkillsService = inject(SkillsService);
 
     ngOnInit(): void {
         this.authService.me().then((user: User) => {
@@ -50,8 +55,15 @@ export class AppComponent implements OnInit {
                 this.isUserAuthorized = !!this.user;
 
                 this.isUserMenuVisible = false;
+                this.isExploreMenuVisible = false;
             }
         });
+
+        this.skillsService.getRootSkills()
+            .then((response: { categories: Skill[] }) => {
+                this.categories = response.categories;
+            });
+
     }
 
     @HostListener("document:click", ["$event"])

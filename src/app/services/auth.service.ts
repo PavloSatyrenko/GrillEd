@@ -50,9 +50,9 @@ export class AuthService {
 
     async me(): Promise<User> {
         return firstValueFrom(this.http.get<User>(`${this.api}v1/auth/me`))
-            .then((responce: User) => {
-                this.user = responce;
-                return responce;
+            .then((response: User) => {
+                this.user = response;
+                return response;
             }).catch(error => {
                 this.user = null;
                 throw error;

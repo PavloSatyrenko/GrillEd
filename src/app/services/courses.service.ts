@@ -24,7 +24,7 @@ export class CoursesService {
     }
 
     createModule(courseId: string, moduleName: string): Promise<any> {
-        return firstValueFrom(this.http.post(`${this.api}v1/courses${courseId}/modules`, { name: moduleName }));
+        return firstValueFrom(this.http.post(`${this.api}v1/courses/${courseId}/modules`, { name: moduleName }));
     }
 
     deleteModule(courseId: string, moduleId: string): Promise<any> {

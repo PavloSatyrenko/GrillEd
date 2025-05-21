@@ -15,22 +15,21 @@
                 <div class="menu__arrow"></div>
 
                 <div class="menu__list">
-                    <button class="menu__item">
-                        <span class="menu-item__text">Programming</span>
+                    <button
+                        *ngFor="let category of categories | slice : 0 : 10"
+                        class="menu__item"
+                        (click)="toggleExploreMenu()"
+                        routerLink="/search"
+                        [queryParams]="{ category: category.id }"
+                    >
+                        <span class="menu-item__text">{{ category.name }}</span>
                         <span class="menu-item__icon">
                             <i class="fa-solid fa-arrow-right"></i>
                         </span>
                     </button>
 
-                    <button class="menu__item">
-                        <span class="menu-item__text">Medicine</span>
-                        <span class="menu-item__icon">
-                            <i class="fa-solid fa-arrow-right"></i>
-                        </span>
-                    </button>
-
-                    <button class="menu__item">
-                        <span class="menu-item__text">Building</span>
+                    <button class="button button_theme_secondary-line button_full-width" (click)="toggleExploreMenu()" routerLink="/search">
+                        <span class="menu-item__text">See all</span>
                         <span class="menu-item__icon">
                             <i class="fa-solid fa-arrow-right"></i>
                         </span>
