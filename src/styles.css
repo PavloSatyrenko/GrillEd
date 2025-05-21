@@ -359,6 +359,10 @@ select.input {
     transition: 0.3s;
 }
 
+.radio-wrapper_error .radio {
+    border-color: var(--error-color);
+}
+
 .radio:hover {
     background-color: var(--input-background-hover-color);
 }

@@ -12,6 +12,8 @@ import { Lesson } from "../../classes/Lesson";
 import { Answer } from "../../classes/Answer";
 import { Question } from "../../classes/Question";
 import Quill from "quill";
+import { CoursesService } from "../services/courses.service";
+import { ActivatedRoute, ParamMap } from "@angular/router";
 
 @Component({
     selector: "app-course-editing",
@@ -23,6 +25,7 @@ import Quill from "quill";
 export class CourseEditingComponent implements OnInit {
     user!: User;
 
+    courseId: string = "";
     course: Course = new Course();
 
     @ViewChild("coursePhotoInput") coursePhotoInput!: ElementRef<HTMLInputElement>;
@@ -57,102 +60,128 @@ export class CourseEditingComponent implements OnInit {
 
     lessonVideoPreviewPath: string | null = null;
 
+    private domSanitizer: DomSanitizer = inject(DomSanitizer);
+    private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
     private authService: AuthService = inject(AuthService);
-    private domSanitizer = inject(DomSanitizer);
+    private coursesService: CoursesService = inject(CoursesService);
 
     ngOnInit(): void {
         this.user = this.authService.user!;
 
-        this.course.author = {
-            id: this.user.id,
-            name: this.user.name,
-            surname: this.user.surname,
-            avatar: this.user.avatar
-        };
+        this.activatedRoute.paramMap.subscribe((params: ParamMap) => {
+            this.courseId = params.get("id")!;
 
-        this.course.modules = [{
-            id: "1",
-            name: "Module 1",
-            number: 1,
-            estimatedTime: 5,
-            lessons: [{
-                id: "1",
-                name: "Lesson 1",
-                number: 1,
-                type: "VIDEO",
-                estimatedTime: 2
-            }, {
-                id: "2",
-                name: "Lesson 2",
-                number: 2,
-                type: "ARTICLE",
-                estimatedTime: 3
-            }, {
-                id: "3",
-                name: "Lesson 3",
-                number: 3,
-                type: "TEST",
-                questions: [{
-                    id: "d8eb023e-8272-4b6a-b21a-1d77628a6e84",
-                    lesson_id: "3",
-                    text: "Question 1",
-                    type: "CHOICE",
-                    answers: [{
-                        id: "1",
-                        question_id: "1",
-                        text: "Answer 1",
-                        commentary: "Commentary 1",
-                        correct: false
-                    }, {
-                        id: "2",
-                        question_id: "1",
-                        text: "Answer 2",
-                        correct: true
-                    }]
-                }, {
-                    id: "2",
-                    lesson_id: "3",
-                    text: "Question 2",
-                    type: "MULTICHOICE",
-                    answers: [{
-                        id: "3",
-                        question_id: "2",
-                        text: "Answer 1",
-                        correct: false
-                    }, {
-                        id: "4",
-                        question_id: "2",
-                        text: "Answer 2",
-                        correct: true
-                    }, {
-                        id: "5",
-                        question_id: "2",
-                        text: "Answer 3",
-                        commentary: "Commentary 3",
-                        correct: true
-                    }]
-                }],
-                estimatedTime: 5
-            }]
-        }, {
-            id: "2",
-            name: "Module 2",
-            number: 2,
-            estimatedTime: 20,
-            lessons: [{
-                id: "1",
-                name: "Lesson 1",
-                number: 1,
-                type: "VIDEO",
-                estimatedTime: 2
-            }, {
-                id: "2",
-                name: "Lesson 2",
-                number: 2,
-                type: "ARTICLE",
-                estimatedTime: 3
-            }]
-        }];
+            this.coursesService.getCourse(this.courseId).then((course: Course) => {
+                this.course = course;
+
+                this.course.modules.forEach((module: Module) => {
+                    module.isOpened = false;
+                    module.isEditing = false;
+                    module.newLessonName = "";
+                    module.newLessonType = "ARTICLE";
+                    module.isLessonNameErrorVisible = false;
+
+                    module.lessons.forEach((lesson: Lesson) => {
+                        lesson.questions?.forEach((question: Question) => {
+                            question.answers.forEach((answer: Answer) => {
+                                answer.isCommentaryVisible = !!answer.commentary;
+                            });
+                        });
+                    });
+                });
+            });
+        });
+        
+        // this.course.author = {
+        //     id: this.user.id,
+        //     name: this.user.name,
+        //     surname: this.user.surname,
+        //     avatar: this.user.avatar
+        // };
+
+        // this.course.modules = [{
+        //     id: "1",
+        //     name: "Module 1",
+        //     number: 1,
+        //     estimatedTime: 5,
+        //     lessons: [{
+        //         id: "1",
+        //         name: "Lesson 1",
+        //         number: 1,
+        //         type: "VIDEO",
+        //         estimatedTime: 2
+        //     }, {
+        //         id: "2",
+        //         name: "Lesson 2",
+        //         number: 2,
+        //         type: "ARTICLE",
+        //         estimatedTime: 3
+        //     }, {
+        //         id: "3",
+        //         name: "Lesson 3",
+        //         number: 3,
+        //         type: "TEST",
+        //         questions: [{
+        //             id: "d8eb023e-8272-4b6a-b21a-1d77628a6e84",
+        //             lesson_id: "3",
+        //             text: "Question 1",
+        //             type: "CHOICE",
+        //             answers: [{
+        //                 id: "1",
+        //                 question_id: "1",
+        //                 text: "Answer 1",
+        //                 commentary: "Commentary 1",
+        //                 correct: false
+        //             }, {
+        //                 id: "2",
+        //                 question_id: "1",
+        //                 text: "Answer 2",
+        //                 correct: true
+        //             }]
+        //         }, {
+        //             id: "2",
+        //             lesson_id: "3",
+        //             text: "Question 2",
+        //             type: "MULTICHOICE",
+        //             answers: [{
+        //                 id: "3",
+        //                 question_id: "2",
+        //                 text: "Answer 1",
+        //                 correct: false
+        //             }, {
+        //                 id: "4",
+        //                 question_id: "2",
+        //                 text: "Answer 2",
+        //                 correct: true
+        //             }, {
+        //                 id: "5",
+        //                 question_id: "2",
+        //                 text: "Answer 3",
+        //                 commentary: "Commentary 3",
+        //                 correct: true
+        //             }]
+        //         }],
+        //         estimatedTime: 5
+        //     }]
+        // }, {
+        //     id: "2",
+        //     name: "Module 2",
+        //     number: 2,
+        //     estimatedTime: 20,
+        //     lessons: [{
+        //         id: "1",
+        //         name: "Lesson 1",
+        //         number: 1,
+        //         type: "VIDEO",
+        //         estimatedTime: 2
+        //     }, {
+        //         id: "2",
+        //         name: "Lesson 2",
+        //         number: 2,
+        //         type: "ARTICLE",
+        //         estimatedTime: 3
+        //     }]
+        // }];
 
         this.initialSkills = [
             { id: "3dfc9ec3-2ef7-4e8a-ae2c-91f409ff003f", name: "JavaScript" },

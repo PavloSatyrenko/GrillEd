@@ -1,0 +1,397 @@
+<div class="profile">
+    <div class="container">
+        <div class="pofile__card card">
+            <div class="profile__avatar">
+                <img *ngIf="!profilePhotoPath" class="avatar__image" src="/assets/client-avatar.png" alt="Avatar" />
+                <img *ngIf="profilePhotoPath" class="avatar__image" [src]="profilePhotoPath" alt="Avatar" />
+
+                <label class="button button_full-width button_theme_secondary-line avatar__button">
+                    Add photo
+                    <input #profilePhotoInput class="avatar__input" type="file" accept="image/*" (change)="onPhotoUpload($event.target)" />
+                </label>
+
+                <button
+                    class="button button_full-width button_theme_secondary-line avatar__button"
+                    [disabled]="!profilePhotoPath"
+                    (click)="removePhoto()"
+                >
+                    Remove photo
+                </button>
+
+                <button class="button button_full-width button_theme_secondary-line" (click)="openCertificatePopup()">Add/edit certificates</button>
+
+                <button class="button button_full-width button_theme_secondary-line" (click)="openLinkPopup()">Add/edit links</button>
+            </div>
+
+            <form class="profile__form" #form="ngForm" method="POST" action="about:blank" autocomplete="off" (ngSubmit)="onSubmit(form)">
+                <label class="input-wrapper input-wrapper_with-label" [ngClass]="{ 'input-wrapper_error': name.invalid && !isFormValid }">
+                    <span class="input-label">Name:</span>
+                    <input
+                        class="input"
+                        [(ngModel)]="user!.name"
+                        type="name"
+                        name="name"
+                        #name="ngModel"
+                        required
+                        pattern="^(?!\s*$).+"
+                        placeholder="Name"
+                    />
+                </label>
+
+                <label class="input-wrapper input-wrapper_with-label" [ngClass]="{ 'input-wrapper_error': surname.invalid && !isFormValid }">
+                    <span class="input-label">Surname:</span>
+                    <input
+                        class="input"
+                        [(ngModel)]="user!.surname"
+                        type="surname"
+                        name="surname"
+                        #surname="ngModel"
+                        required
+                        pattern="^(?!\s*$).+"
+                        placeholder="Surname"
+                    />
+                </label>
+
+                <label class="input-wrapper input-wrapper_with-label" [ngClass]="{ 'input-wrapper_error': email.invalid && !isFormValid }">
+                    <span class="input-label">Email:</span>
+                    <input
+                        class="input"
+                        [(ngModel)]="user!.email"
+                        type="email"
+                        name="email"
+                        #email="ngModel"
+                        required
+                        pattern="^(?!.*\.\.)([a-zA-Z0-9_%+\-]+(?:\.[a-zA-Z0-9_%+\-]+)*)@[a-zA-Z0-9\-]+(?:\.[a-zA-Z0-9\-]+)*\.[a-zA-Z]{2,}$"
+                        placeholder="Email"
+                    />
+                </label>
+
+                <label class="input-wrapper input-wrapper_with-label">
+                    <span class="input-label">Workplace:</span>
+                    <input
+                        class="input"
+                        [(ngModel)]="user!.teacher!.workplace"
+                        type="text"
+                        name="workplace"
+                        #workplace="ngModel"
+                        placeholder="Workplace"
+                    />
+                </label>
+
+                <label class="input-wrapper input-wrapper_with-label">
+                    <span class="input-label">Position:</span>
+                    <input
+                        class="input"
+                        [(ngModel)]="user!.teacher!.position"
+                        type="text"
+                        name="position"
+                        #position="ngModel"
+                        placeholder="Position"
+                    />
+                </label>
+
+                <label class="profile__description input-wrapper input-wrapper_with-label">
+                    <span class="input-label">Description:</span>
+                    <textarea
+                        class="input"
+                        [(ngModel)]="user!.teacher!.description"
+                        name="description"
+                        #description="ngModel"
+                        placeholder="Description"
+                    ></textarea>
+                </label>
+            </form>
+
+            <button class="button button_full-width button_theme_primary-line profile__button" type="submit">Save</button>
+        </div>
+
+        <div class="statistics">
+            <div class="statistics__item card">
+                <span class="statistic__icon"><i class="fa-solid fa-image"></i></span>
+
+                <div class="statistic__feature">
+                    <span class="feature__name">Created courses:</span>
+                    <span class="feature__value">1111</span>
+                </div>
+            </div>
+
+            <div class="statistics__item card">
+                <span class="statistic__icon"><i class="fa-solid fa-image"></i></span>
+
+                <div class="statistic__feature">
+                    <span class="feature__name">Total enrolled students:</span>
+                    <span class="feature__value">2222</span>
+                </div>
+            </div>
+
+            <div class="statistics__item card">
+                <span class="statistic__icon"><i class="fa-solid fa-image"></i></span>
+
+                <div class="statistic__feature">
+                    <span class="feature__name">Active enrolled students:</span>
+                    <span class="feature__value">3</span>
+                </div>
+            </div>
+
+            <div class="statistics__item card">
+                <span class="statistic__icon"><i class="fa-solid fa-image"></i></span>
+
+                <div class="statistic__feature">
+                    <span class="feature__name">Students' hours spent:</span>
+                    <span class="feature__value">31232</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="panels">
+            <div class="panels__header">
+                <h1 class="panels__title">My courses:</h1>
+
+                <button class="button button_theme_primary" (click)="openCreateCoursePopup()">Create course</button>
+            </div>
+
+            <div class="panels__card card">
+                <div class="panels__header">
+                    <div class="panels__buttons">
+                        <button class="panels__button" [ngClass]="{ panels__button_active: panelNumber == 1 }" (click)="choosePanel(1)">
+                            Published
+                        </button>
+
+                        <button class="panels__button" [ngClass]="{ panels__button_active: panelNumber == 2 }" (click)="choosePanel(2)">
+                            Drafts
+                        </button>
+
+                        <button class="panels__button" [ngClass]="{ panels__button_active: panelNumber == 3 }" (click)="choosePanel(3)">
+                            Archived
+                        </button>
+                    </div>
+                </div>
+
+                <div class="panels__list">
+                    <div *ngIf="panelNumber == 1" class="panel">
+                        <div class="courses">
+                            <div class="card course">
+                                <div class="course__image">
+                                    <!-- <img src="" alt="Course icon" /> -->
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </div>
+
+                                <span class="course__name">JavaScript</span>
+
+                                <div class="course__information">
+                                    <span class="course__students">Active students: <span class="course__value">3</span></span>
+                                    <span class="course__students">Total students: <span class="course__value">2222</span></span>
+                                    <span class="course__rating"><i class="fa-solid fa-star"></i> <span class="course__value"> 4.5</span></span>
+                                </div>
+
+                                <button class="button button_theme_primary button_full-width course__button">View course</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="panelNumber == 2" class="panel">
+                        <div class="courses">
+                            <div class="card course">
+                                <div class="course__image">
+                                    <!-- <img src="" alt="Course icon" /> -->
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </div>
+
+                                <span class="course__name">JavaScript</span>
+
+                                <div class="course__information">
+                                    <span class="course__students">Active students: <span class="course__value">3</span></span>
+                                    <span class="course__students">Total students: <span class="course__value">2222</span></span>
+                                    <span class="course__rating"><i class="fa-solid fa-star"></i> <span class="course__value"> 4.5</span></span>
+                                </div>
+
+                                <button class="button button_theme_primary button_full-width course__button">View course</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="panelNumber == 3" class="panel">
+                        <div class="courses">
+                            <div class="card course">
+                                <div class="course__image">
+                                    <!-- <img src="" alt="Course icon" /> -->
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                </div>
+
+                                <span class="course__name">JavaScript</span>
+
+                                <div class="course__information">
+                                    <span class="course__students">Active students: <span class="course__value">3</span></span>
+                                    <span class="course__students">Total students: <span class="course__value">2222</span></span>
+                                    <span class="course__rating"><i class="fa-solid fa-star"></i> <span class="course__value"> 4.5</span></span>
+                                </div>
+
+                                <button class="button button_theme_primary button_full-width course__button">View course</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" *ngIf="isCertificatePopupVisible">
+    <div class="modal__container">
+        <div class="modal__header">
+            <h2 class="modal__title">Certificates</h2>
+
+            <button class="modal__close" (click)="closeCertificatePopup()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="modal__content">
+            <label class="button button_full-width button_theme_secondary-line certificates__button">
+                Add certificate
+                <input
+                    #certificateInput
+                    class="certificate__input"
+                    type="file"
+                    accept="image/*, .pdf"
+                    (change)="onCertificateUpload($event.target)"
+                />
+            </label>
+
+            <div *ngIf="certificates.length" class="certificates">
+                <div *ngFor="let certificate of certificates" class="certificate">
+                    <button class="remove-button" (click)="removeCertificate(certificate)">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+
+                    <span class="certificate__name">{{ certificate }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal__footer">
+            <button class="button button_theme_primary-line" (click)="closeCertificatePopup()">Cancel</button>
+            <button class="button button_theme_primary" (click)="saveCertificates()">Save</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" *ngIf="isLinkPopupVisible">
+    <div class="modal__container">
+        <div class="modal__header">
+            <h2 class="modal__title">Links</h2>
+
+            <button class="modal__close" (click)="closeLinkPopup()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="modal__content">
+            <button class="button button_full-width button_theme_secondary-line links__button" (click)="addLink()">Add link</button>
+
+            <div *ngIf="links.length" class="links">
+                <div *ngFor="let link of links" class="link">
+                    <label class="input-wrapper" [ngClass]="{ 'input-wrapper_error': !isLinkFormValid && name.invalid }">
+                        <input
+                            class="input"
+                            [(ngModel)]="link.name"
+                            type="text"
+                            name="name"
+                            #name="ngModel"
+                            autocomplete="off"
+                            required
+                            placeholder="Source"
+                        />
+                    </label>
+
+                    <label class="input-wrapper" [ngClass]="{ 'input-wrapper_error': !isLinkFormValid && url.invalid }">
+                        <input class="input" [(ngModel)]="link.url" type="text" name="url" #url="ngModel" required placeholder="URL" />
+                    </label>
+
+                    <button class="remove-button" (click)="removeLink(link)">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal__footer">
+            <button class="button button_theme_primary-line" (click)="closeLinkPopup()">Cancel</button>
+            <button class="button button_theme_primary" (click)="saveLinks()">Save</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal new-course" *ngIf="isCreateCoursePopupVisible">
+    <div class="modal__container">
+        <div class="modal__header">
+            <h2 class="modal__title">New course</h2>
+
+            <button class="modal__close" (click)="closeCreateCoursePopup()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="modal__content">
+            <div class="new-course__form">
+                <label
+                    class="input-wrapper input-wrapper_with-label"
+                    [ngClass]="{ 'input-wrapper_error': !isCourseFormValid && courseNameModel.invalid }"
+                >
+                    <span class="input-label">Course name:</span>
+                    <input
+                        class="input"
+                        [(ngModel)]="courseName"
+                        type="text"
+                        name="courseName"
+                        #courseNameModel="ngModel"
+                        required
+                        placeholder="Course name"
+                    />
+                </label>
+
+                <label class="input-wrapper input-wrapper_with-label input-wrapper_with-icon">
+                    <span class="input-label">Course level:</span>
+                    <select class="input" [(ngModel)]="courseLevel" name="level">
+                        <option class="option" value="BEGINNER">Beginner</option>
+                        <option class="option" value="INTERMEDIATE">Intermediate</option>
+                        <option class="option" value="EXPERT">Expert</option>
+                    </select>
+                    <span class="input-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                </label>
+
+                <label class="input-wrapper input-wrapper_with-label new-course__description">
+                    <span class="input-label">Description:</span>
+                    <textarea class="input" [(ngModel)]="courseAbout" name="courseAbout" placeholder="Description"></textarea>
+                </label>
+
+                <div class="card categories">
+                    <div class="categories__title">Category</div>
+
+                    <div class="categories__filter">
+                        <label class="input-wrapper input-wrapper_with-icon categories__filter-input">
+                            <input class="input" type="text" placeholder="Search..." (input)="filterCategories($event.target)" />
+                            <span class="input-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+                        </label>
+                    </div>
+
+                    <div class="categories__list">
+                        <label
+                            *ngFor="let category of categories"
+                            class="radio-wrapper category"
+                            [ngClass]="{ 'radio-wrapper_error': !isCourseFormValid && !selectedCategory }"
+                        >
+                            <input class="radio" [checked]="selectedCategory == category" type="radio" (change)="selectCategory(category)" />
+                            <span class="radio-label">{{ category.name }}</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal__footer">
+            <button class="button button_theme_primary-line" (click)="closeCreateCoursePopup()">Cancel</button>
+            <button class="button button_theme_primary" (click)="createCourse()">Create</button>
+        </div>
+    </div>
+</div>

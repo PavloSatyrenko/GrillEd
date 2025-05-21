@@ -207,11 +207,12 @@ export class AuthorizationComponent implements OnInit {
     }
 
     openCertificatePopup(): void {
+        this.initialCertificates = this.certificates.slice();
         this.isCertificatePopupVisible = true;
     }
 
     closeCertificatePopup(): void {
-        this.certificates = this.initialCertificates.slice();
+        this.certificates = this.initialCertificates;
         this.isCertificatePopupVisible = false;
     }
 
@@ -236,16 +237,16 @@ export class AuthorizationComponent implements OnInit {
     }
 
     saveCertificates(): void {
-        this.initialCertificates = this.certificates.slice();
         this.isCertificatePopupVisible = false;
     }
 
     openLinkPopup(): void {
+        this.initialLinks = JSON.parse(JSON.stringify(this.links));
         this.isLinkPopupVisible = true;
     }
 
     closeLinkPopup(): void {
-        this.links = this.initialLinks.slice();
+        this.links = this.initialLinks;
         this.isLinkPopupVisible = false;
     }
 
@@ -261,7 +262,6 @@ export class AuthorizationComponent implements OnInit {
         this.isLinkFormValid = this.links.every((link: Link) => link.name.trim() && link.url.trim());
 
         if (this.isLinkFormValid) {
-            this.initialLinks = this.links.slice();
             this.isLinkPopupVisible = false;
         }
     }

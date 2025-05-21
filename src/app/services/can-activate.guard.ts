@@ -10,15 +10,16 @@ export const canActivateGuard: CanActivateFn = async (route, state) => {
     let user: User | null = authService.user;
 
     if (!user) {
-        await authService.me();
-        user = authService.user;
+        const result: User | null = await authService.me().catch(() => null);
+
+        if (result) {
+            user = authService.user;
+        }
+        else {
+            router.navigate(["/main"]);
+            return false;
+        }
     }
 
-    if (!user) {
-        router.navigate(["/main"]);
-        return false;
-    }
-    else {
-        return true;
-    }
+    return true;
 };

@@ -1,4 +1,5 @@
 import { Question } from "./Question";
+import { Link } from "./Link";
 
 export class Lesson {
     id!: string;
@@ -6,5 +7,8 @@ export class Lesson {
     number!: number;
     type: "VIDEO" | "ARTICLE" | "TEST" = "ARTICLE";
     estimatedTime!: number;
+    links?: Link[];
     questions?: Question[];
+    articleLink?: string;
+    videoLink?: string;
 }
