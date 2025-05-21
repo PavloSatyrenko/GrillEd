@@ -110,7 +110,11 @@
                             <div class="module__add-lesson">
                                 <label
                                     class="input-wrapper input-wrapper_with-label add-lesson__name"
-                                    [ngClass]="{ 'input-wrapper_error': !module.newLessonName?.trim() && module.isLessonNameErrorVisible }"
+                                    [ngClass]="{
+                                        'input-wrapper_error':
+                                            (!module.newLessonName?.trim() || (module.newLessonName?.trim())!.length < 5) &&
+                                            module.isLessonNameErrorVisible
+                                    }"
                                 >
                                     <span class="input-label">Lesson name:</span>
                                     <input class="input" [(ngModel)]="module.newLessonName" name="lesson" />
@@ -137,7 +141,9 @@
                                     <span class="lesson__title">{{ lesson.name }}</span>
 
                                     <div class="lesson__buttons">
-                                        <button class="button button_theme_primary-line lesson__button" (click)="editLesson(lesson)">Edit</button>
+                                        <button class="button button_theme_primary-line lesson__button" (click)="editLesson(lesson, module)">
+                                            Edit
+                                        </button>
                                         <button
                                             class="button button_theme_primary-line button_icon-only lesson__button"
                                             (click)="removeLesson(lesson, module)"
@@ -197,22 +203,23 @@
         <div class="modal__content">
             <div class="edit__header">
                 <label
-                    class="input-wrapper input-wrapper_with-label"
-                    [ngClass]="{ 'input-wrapper_error': !lesson.name.trim() && isLessonNameErrorVisible }"
+                    class="input-wrapper input-wrapper_with-label header__name"
+                    [ngClass]="{ 'input-wrapper_error': (!lesson.name.trim() || lesson.name.trim().length < 5) && isLessonNameErrorVisible }"
                 >
                     <span class="input-label">Lesson name:</span>
                     <input class="input" [(ngModel)]="lesson.name" name="lesson" />
                 </label>
 
                 <label
-                    class="input-wrapper input-wrapper_with-label"
-                    [ngClass]="{ 'input-wrapper_error': !lesson.name.trim() && isLessonNameErrorVisible }"
+                    *ngIf="lesson.type == 'ARTICLE'"
+                    class="input-wrapper input-wrapper_with-label header__option"
+                    [ngClass]="{ 'input-wrapper_error': (!lesson.estimatedTime || !+lesson.estimatedTime) && isLessonNameErrorVisible }"
                 >
                     <span class="input-label">Time to complete:</span>
                     <input class="input" [(ngModel)]="lesson.estimatedTime" name="lesson" />
                 </label>
 
-                <label class="input-wrapper input-wrapper_with-label input-wrapper_with-icon">
+                <label class="input-wrapper input-wrapper_with-label input-wrapper_with-icon header__option">
                     <span class="input-label">Lesson type:</span>
                     <select class="input" [(ngModel)]="lesson.type" name="type">
                         <option class="option" value="ARTICLE">Article</option>
@@ -238,8 +245,8 @@
                 <div class="edit__video-wrapper">
                     <div class="edit__video">
                         <div class="video__preview">
-                            <i *ngIf="!lessonVideoPreviewPath" class="fa-solid fa-video"></i>
-                            <img *ngIf="lessonVideoPreviewPath" [src]="lessonVideoPreviewPath" alt="Lesson video preview" />
+                            <i *ngIf="!lesson.lessonVideoPreviewPath" class="fa-solid fa-video"></i>
+                            <img *ngIf="lesson.lessonVideoPreviewPath" [src]="lesson.lessonVideoPreviewPath" alt="Lesson video preview" />
                         </div>
                     </div>
 

@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { firstValueFrom } from "rxjs";
 import { Module } from "../../classes/Module";
@@ -35,8 +35,30 @@ export class CoursesService {
         return firstValueFrom(this.http.post(`${this.api}v1/courses/${courseId}/modules/${moduleId}/lessons`, { lesson }));
     }
 
-    uploadLessonVideo(courseId: string, lessonId: string, file: File): Promise<any> {
-        return firstValueFrom(this.http.post(`${this.api}v1/courses/${courseId}/lessons/${lessonId}/video`, file));
+    getLesson(courseId: string, lessonId: string): Promise<any> {
+        return firstValueFrom(this.http.get(`${this.api}v1/courses/${courseId}/lessons/${lessonId}`));
+    }
+
+    deleteLesson(courseId: string, lessonId: string): Promise<any> {
+        return firstValueFrom(this.http.delete(`${this.api}v1/courses/${courseId}/lessons/${lessonId}`));
+    }
+
+    uploadLessonVideo(courseId: string, lessonId: string, formData: FormData): Promise<any> {
+        return firstValueFrom(this.http.patch(`${this.api}v1/courses/${courseId}/lessons/${lessonId}/video`, formData));
+    }
+
+    getLessonVideo(videoLink: string): Promise<any> {
+        // const headers = new HttpHeaders();
+        // return firstValueFrom(this.http.get(videoLink, { headers }));
+
+        return fetch(videoLink);
+    }
+
+    getLessonArticle(articleLink: string): Promise<any> {
+        // const headers = new HttpHeaders();
+        // return firstValueFrom(this.http.get(articleLink, { headers }));
+
+        return fetch(articleLink);
     }
 
     enrollCourse(courseId: string): Promise<any> {

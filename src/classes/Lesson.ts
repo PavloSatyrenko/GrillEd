@@ -9,6 +9,8 @@ export class Lesson {
     estimatedTime!: number;
     links?: Link[];
     questions?: Question[];
+    article?: string;
     articleLink?: string;
     videoLink?: string;
+    lessonVideoPreviewPath?: string;
 }

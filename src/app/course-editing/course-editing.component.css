@@ -274,10 +274,17 @@
 }
 
 .edit__header {
-    display: grid;
-    grid-template-columns: 1fr 150px 200px;
+    display: flex;
     gap: 16px;
     align-items: center;
+}
+
+.header__name {
+    flex-grow: 1;
+}
+
+.header__option {
+    width: 200px;
 }
 
 .edit__content {
