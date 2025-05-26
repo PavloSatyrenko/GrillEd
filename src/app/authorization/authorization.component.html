@@ -8,7 +8,6 @@
             <h4 class="authorization__text">Choose the areas and skills you are interested in</h4>
             <app-skill-picker
                 class="authorization__skills"
-                [initialSkills]="skills"
                 (selectedSkillsChange)="selectedSkills = $event"
             ></app-skill-picker>
             } @else if (user.role == 'TEACHER') {

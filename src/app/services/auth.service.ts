@@ -59,6 +59,16 @@ export class AuthService {
             });
     }
 
+    async logout(): Promise<any> {
+        return firstValueFrom(this.http.post(`${this.api}v1/auth/logout`, {})).then(() => {
+            this.user = null;
+            return null;
+        }).catch(error => {
+            this.user = null;
+            throw error;
+        });
+    }
+
     refreshToken(): Observable<any> {
         return this.http.get(`${this.api}v1/auth/refresh`, { withCredentials: true });
     }

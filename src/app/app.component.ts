@@ -59,7 +59,7 @@ export class AppComponent implements OnInit {
             }
         });
 
-        this.skillsService.getRootSkills()
+        this.skillsService.getRootCategories()
             .then((response: { categories: Skill[] }) => {
                 this.categories = response.categories;
             });
@@ -90,11 +90,12 @@ export class AppComponent implements OnInit {
     }
 
     logout(): void {
-        this.user = null;
-        this.authService.user = null;
-        this.isUserAuthorized = false;
-        this.isUserMenuVisible = false;
+        this.authService.logout().then(() => {
+            this.user = null;
+            this.isUserAuthorized = false;
+            this.isUserMenuVisible = false;
 
-        this.router.navigate(["/main"]);
+            this.router.navigate(["/main"]);
+        });
     }
 }

@@ -8,6 +8,30 @@
     gap: 32px;
 }
 
+.search__settings {
+    gap: 24px;
+}
+
+.settings__option {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.option__title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--primary-text-color);
+}
+
+.option__list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 276px;
+    overflow: auto;
+}
+
 .courses {
     display: flex;
     flex-wrap: wrap;

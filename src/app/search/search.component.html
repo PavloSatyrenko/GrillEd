@@ -4,38 +4,54 @@
             <div class="settings__option">
                 <h3 class="option__title">Categories:</h3>
 
-                <label *ngFor="let category of categories" class="checkbox-wrapper">
-                    <input class="checkbox" type="checkbox" />
-                    <span class="checkbox-label">{{ category.name }}</span>
+                <label class="option__search input-wrapper input-wrapper_with-icon">
+                    <input type="text" class="input" placeholder="Search..." (input)="filterCategories($event.target)" />
+                    <span class="input-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
                 </label>
+
+                <div class="option__list">
+                    <label *ngFor="let category of categories" class="checkbox-wrapper">
+                        <input class="checkbox" type="checkbox" [checked]="isCategorySelected(category)" (change)="toggleCategory(category)" />
+                        <span class="checkbox-label">{{ category.name }}</span>
+                    </label>
+                </div>
             </div>
 
             <div class="settings__option">
                 <h3 class="option__title">Skills:</h3>
 
-                <label *ngFor="let category of categories" class="checkbox-wrapper">
-                    <input class="checkbox" type="checkbox" />
-                    <span class="checkbox-label">{{ category.name }}</span>
+                <label class="option__search input-wrapper input-wrapper_with-icon">
+                    <input type="text" class="input" placeholder="Search..." (input)="filterSkills($event.target)" />
+                    <span class="input-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
                 </label>
+
+                <div #skillsList class="option__list" (scroll)="onSkillsScroll()">
+                    <label *ngFor="let skill of skills" class="checkbox-wrapper">
+                        <input class="checkbox" type="checkbox" [checked]="isSkillSelected(skill)" (change)="toggleSkill(skill)" />
+                        <span class="checkbox-label">{{ skill.name }}</span>
+                    </label>
+                </div>
             </div>
 
             <div class="settings__option">
                 <h3 class="option__title">Level:</h3>
 
-                <label class="checkbox-wrapper">
-                    <input class="checkbox" type="checkbox" />
-                    <span class="checkbox-label">Beginner</span>
-                </label>
+                <div class="option__list">
+                    <label class="checkbox-wrapper">
+                        <input class="checkbox" type="checkbox" />
+                        <span class="checkbox-label">Beginner</span>
+                    </label>
 
-                <label class="checkbox-wrapper">
-                    <input class="checkbox" type="checkbox" />
-                    <span class="checkbox-label">Intermediate</span>
-                </label>
+                    <label class="checkbox-wrapper">
+                        <input class="checkbox" type="checkbox" />
+                        <span class="checkbox-label">Intermediate</span>
+                    </label>
 
-                <label class="checkbox-wrapper">
-                    <input class="checkbox" type="checkbox" />
-                    <span class="checkbox-label">Expert</span>
-                </label>
+                    <label class="checkbox-wrapper">
+                        <input class="checkbox" type="checkbox" />
+                        <span class="checkbox-label">Expert</span>
+                    </label>
+                </div>
             </div>
         </div>
 

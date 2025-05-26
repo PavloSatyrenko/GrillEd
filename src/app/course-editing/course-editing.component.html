@@ -52,12 +52,12 @@
             <div class="course__modules modules">
                 <div class="modules__header">
                     <h1 class="course__title">Content</h1>
-                    <button class="button button_theme_primary" (click)="addModule()">Add module</button>
+                    <button class="button button_theme_primary" [disabled]="isAddModuleButtonDisabled()" (click)="addModule()">Add module</button>
                 </div>
 
                 <div class="modules__list">
                     <div *ngFor="let module of course.modules" class="module module_active" [ngClass]="{ module_active: module.isOpened }">
-                        <button class="module__header" (click)="toggleModule(module)">
+                        <div class="module__header" (click)="toggleModule(module)">
                             <span *ngIf="!module.isOpened" class="module__arrow"><i class="fa-solid fa-chevron-down"></i></span>
                             <span *ngIf="module.isOpened" class="module__arrow"><i class="fa-solid fa-chevron-up"></i></span>
 
@@ -65,10 +65,12 @@
                             <label
                                 *ngIf="module.isEditing"
                                 class="input-wrapper module__name"
-                                [ngClass]="{ 'input-wrapper_error': !moduleName.trim() && isModuleNameErrorVisible }"
+                                [ngClass]="{
+                                    'input-wrapper_error': (!moduleName.trim() || moduleName.trim().length < 5) && isModuleNameErrorVisible
+                                }"
                                 (click)="$event.stopPropagation()"
                             >
-                                <input class="input" [(ngModel)]="moduleName" name="module" />
+                                <input #moduleNameInput class="input" [(ngModel)]="moduleName" name="module" />
                             </label>
 
                             <div class="module__buttons">
@@ -99,12 +101,13 @@
 
                                 <button
                                     class="button button_theme_primary-line button_icon-only module__button"
+                                    [disabled]="module.isNewModule"
                                     (click)="removeModule($event, module)"
                                 >
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
                             </div>
-                        </button>
+                        </div>
 
                         <div *ngIf="module.isOpened" class="module__content">
                             <div class="module__add-lesson">
@@ -174,7 +177,7 @@
 
                 <div class="categories__list">
                     <label *ngFor="let category of categories" class="radio-wrapper category">
-                        <input class="radio" [checked]="selectedCategory == category" type="radio" (change)="selectCategory(category)" />
+                        <input class="radio" [checked]="selectedCategory.id == category.id" type="radio" (change)="selectCategory(category)" />
                         <span class="radio-label">{{ category.name }}</span>
                     </label>
                 </div>
@@ -305,13 +308,7 @@
                                         class="input-wrapper answer__input"
                                         [ngClass]="{ 'input-wrapper_error': !answer.text.trim() && isLessonSaveErrorVisible }"
                                     >
-                                        <input
-                                            class="input"
-                                            [(ngModel)]="answer.text"
-                                            name="answer"
-                                            placeholder="Answer"
-                                            (change)="setCorrectAnswer(question, answer)"
-                                        />
+                                        <input class="input" [(ngModel)]="answer.text" name="answer" placeholder="Answer" />
                                     </label>
 
                                     <button class="button button_theme_secondary-line button_icon-only" (click)="toggleAnswerCommentary(answer)">
@@ -363,7 +360,11 @@
         </div>
 
         <div class="modal__content">
-            <app-skill-picker class="modal__skills" [initialSkills]="skills" (selectedSkillsChange)="selectedSkills = $event"></app-skill-picker>
+            <app-skill-picker
+                class="modal__skills"
+                [selectedSkills]="selectedSkills"
+                (selectedSkillsChange)="selectedSkills = $event"
+            ></app-skill-picker>
         </div>
 
         <div class="modal__footer">

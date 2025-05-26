@@ -3,9 +3,9 @@
         <div class="course__main">
             <div class="course__information">
                 <div class="card">
-                    <h1 class="course__title">JavaScript</h1>
+                    <h1 class="course__title">{{ course!.name }}</h1>
 
-                    <span class="course__author">by John Doe</span>
+                    <span class="course__author">by {{ course!.author!.name }} {{ course!.author!.surname }}</span>
 
                     <div class="course__skills">
                         <div class="course__skills-text">Skills:</div>
@@ -20,9 +20,7 @@
                 <div class="card">
                     <h2 class="course__subtitle">About</h2>
 
-                    <p class="course__description">
-                        Welcome to our course! In this course, you will learn about various topics that will help you in your career.
-                    </p>
+                    <p class="course__description">{{ course!.about }}</p>
                 </div>
             </div>
 
@@ -33,12 +31,14 @@
                     <div class="modules__information">
                         <div class="information__item">
                             <span class="information__icon"><i class="fa-solid fa-book-open-reader"></i></span>
-                            <span class="information__text">{{ course!.modules.length }} modules</span>
+                            <span class="information__text">
+                                {{ course!.modules.length }} module<span *ngIf="course!.modules.length > 1">s</span>
+                            </span>
                         </div>
 
                         <div class="information__item">
                             <span class="information__icon"><i class="fa-solid fa-clock"></i></span>
-                            <span class="information__text">{{ course!.estimatedTime }}</span>
+                            <span class="information__text">{{ getTimeString(course!.estimatedTime) }}</span>
                         </div>
                     </div>
                 </div>
@@ -49,24 +49,33 @@
                             <h2 class="module__title">{{ module.name }}</h2>
 
                             <div class="module__information">
-                                <div class="information__item">
-                                    <span class="information__icon"><i class="fa-solid fa-video"></i></span>
-                                    <span class="information__text">2 articles</span>
+                                <div *ngIf="getModuleLessonAmount(module, 'ARTICLE')" class="information__item">
+                                    <span class="information__icon"><i class="fa-solid fa-file-lines"></i></span>
+                                    <span class="information__text">
+                                        {{ getModuleLessonAmount(module, "ARTICLE") }}
+                                        article<span *ngIf="getModuleLessonAmount(module, 'ARTICLE') > 1">s</span>
+                                    </span>
                                 </div>
 
-                                <div class="information__item">
-                                    <span class="information__icon"><i class="fa-solid fa-video"></i></span>
-                                    <span class="information__text">1 video</span>
+                                <div *ngIf="getModuleLessonAmount(module, 'VIDEO')" class="information__item">
+                                    <span class="information__icon"><i class="fa-solid fa-circle-play"></i></span>
+                                    <span class="information__text">
+                                        {{ getModuleLessonAmount(module, "VIDEO") }}
+                                        video<span *ngIf="getModuleLessonAmount(module, 'VIDEO') > 1">s</span>
+                                    </span>
                                 </div>
 
-                                <div class="information__item">
-                                    <span class="information__icon"><i class="fa-solid fa-video"></i></span>
-                                    <span class="information__text">1 test</span>
+                                <div *ngIf="getModuleLessonAmount(module, 'TEST')" class="information__item">
+                                    <span class="information__icon"><i class="fa-solid fa-question-circle"></i></span>
+                                    <span class="information__text">
+                                        {{ getModuleLessonAmount(module, "TEST") }}
+                                        test<span *ngIf="getModuleLessonAmount(module, 'TEST') > 1">s</span>
+                                    </span>
                                 </div>
 
                                 <div class="information__item">
                                     <span class="information__icon"><i class="fa-solid fa-clock"></i></span>
-                                    <span class="information__text">{{ module.estimatedTime }}</span>
+                                    <span class="information__text">{{ getTimeString(module.estimatedTime) }}</span>
                                 </div>
                             </div>
 
@@ -80,7 +89,7 @@
                                 <span *ngIf="lesson.type == 'VIDEO'" class="lesson__icon"><i class="fa-regular fa-circle-play"></i></span>
                                 <span *ngIf="lesson.type == 'TEST'" class="lesson__icon"><i class="fa-regular fa-question-circle"></i></span>
                                 <span class="lesson__title">{{ lesson.name }}</span>
-                                <span class="lesson__time">{{ lesson.estimatedTime }}</span>
+                                <span class="lesson__time">{{ getTimeString(lesson.estimatedTime) }}</span>
                             </div>
                         </div>
                     </div>
@@ -99,32 +108,36 @@
             <div class="aside__features features">
                 <div class="feature">
                     <span class="feature__icon"><i class="fa-solid fa-video"></i></span>
-                    <span class="feature__name">{{ course!.modules.length }} modules</span>
+                    <span class="feature__name">{{ course!.modules.length }} module<span *ngIf="course!.modules.length > 1">s</span></span>
                 </div>
 
                 <div class="feature">
                     <span class="feature__icon"><i class="fa-solid fa-video"></i></span>
-                    <span class="feature__name">50 lessons</span>
+                    <span class="feature__name">{{ getTotalLessonAmount() }} lesson<span *ngIf="getTotalLessonAmount() > 1">s</span></span>
                 </div>
 
-                <div class="feature">
+                <div *ngIf="getTotalLessonAmount('ARTICLE')" class="feature">
                     <span class="feature__icon"><i class="fa-solid fa-video"></i></span>
-                    <span class="feature__name">30 articles</span>
+                    <span class="feature__name">
+                        {{ getTotalLessonAmount("ARTICLE") }}
+                        article<span *ngIf="getTotalLessonAmount('ARTICLE') > 1">s</span>
+                    </span>
                 </div>
 
-                <div class="feature">
+                <div *ngIf="getTotalLessonAmount('VIDEO')" class="feature">
                     <span class="feature__icon"><i class="fa-solid fa-video"></i></span>
-                    <span class="feature__name">10 links</span>
+                    <span class="feature__name">
+                        {{ getTotalLessonAmount("VIDEO") }}
+                        video<span *ngIf="getTotalLessonAmount('VIDEO') > 1">s</span>
+                    </span>
                 </div>
 
-                <div class="feature">
+                <div *ngIf="getTotalLessonAmount('TEST')" class="feature">
                     <span class="feature__icon"><i class="fa-solid fa-video"></i></span>
-                    <span class="feature__name">50 videos</span>
-                </div>
-
-                <div class="feature">
-                    <span class="feature__icon"><i class="fa-solid fa-video"></i></span>
-                    <span class="feature__name">100 tests</span>
+                    <span class="feature__name">
+                        {{ getTotalLessonAmount("TEST") }}
+                        test<span *ngIf="getTotalLessonAmount('TEST') > 1">s</span>
+                    </span>
                 </div>
 
                 <div class="feature">

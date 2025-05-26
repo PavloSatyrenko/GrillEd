@@ -139,7 +139,7 @@
                                 </div>
 
                                 <div class="progress">
-                                    <img class="progress__image" src="/assets/shampur.png" alt="Progress image" />
+                                    <img class="progress__image" src="/assets/animation/frame2.png" alt="Progress image" />
 
                                     <span class="progress__value">85%</span>
                                 </div>
@@ -158,7 +158,7 @@
                                 </div>
 
                                 <div class="progress">
-                                    <img class="progress__image" src="/assets/shampur.png" alt="Progress image" />
+                                    <img class="progress__image" src="/assets/animation/frame10.png" alt="Progress image" />
 
                                     <span class="progress__value">85%</span>
                                 </div>
@@ -177,7 +177,7 @@
                                 </div>
 
                                 <div class="progress">
-                                    <img class="progress__image" src="/assets/shampur.png" alt="Progress image" />
+                                    <img class="progress__image" src="/assets/animation/frame1.png" alt="Progress image" />
 
                                     <span class="progress__value">85%</span>
                                 </div>
@@ -197,7 +197,7 @@
                                 </div>
 
                                 <div class="progress">
-                                    <img class="progress__image" src="/assets/shampur.png" alt="Progress image" />
+                                    <img class="progress__image" src="/assets/animation/frame4.png" alt="Progress image" />
 
                                     <span class="progress__value">85%</span>
                                 </div>
@@ -216,7 +216,7 @@
                                 </div>
 
                                 <div class="progress">
-                                    <img class="progress__image" src="/assets/shampur.png" alt="Progress image" />
+                                    <img class="progress__image" src="/assets/animation/frame8.png" alt="Progress image" />
 
                                     <span class="progress__value">85%</span>
                                 </div>
@@ -235,7 +235,7 @@
                                 </div>
 
                                 <div class="progress">
-                                    <img class="progress__image" src="/assets/shampur.png" alt="Progress image" />
+                                    <img class="progress__image" src="/assets/animation/frame6.png" alt="Progress image" />
 
                                     <span class="progress__value">85%</span>
                                 </div>
@@ -308,7 +308,11 @@
         </div>
 
         <div class="modal__content">
-            <app-skill-picker class="modal__skills" [initialSkills]="skills" (selectedSkillsChange)="selectedSkills = $event"></app-skill-picker>
+            <app-skill-picker
+                class="modal__skills"
+                [selectedSkills]="selectedSkills"
+                (selectedSkillsChange)="selectedSkills = $event"
+            ></app-skill-picker>
         </div>
 
         <div class="modal__footer">

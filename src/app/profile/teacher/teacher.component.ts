@@ -58,7 +58,7 @@ export class TeacherComponent implements OnInit {
     ngOnInit(): void {
         this.user = this.authService.user;
 
-        this.skillsService.getRootSkills().then((response: { categories: Skill[] }) => {
+        this.skillsService.getRootCategories().then((response: { categories: Skill[] }) => {
             this.initialCategories = response.categories;
 
             this.categories = this.initialCategories;

@@ -192,12 +192,13 @@
 
 .progress__image {
     position: absolute;
-    top: -50px;
-    left: 80px;
-    height: 200px;
+    top: -48px;
+    left: -40px;
+    height: 160px;
+    pointer-events: none;
     user-select: none;
     object-fit: cover;
-    transform: rotateZ(60deg);
+    transform: rotateZ(-20deg);
 }
 
 .progress__value {

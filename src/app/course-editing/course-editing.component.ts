@@ -13,7 +13,7 @@ import { Answer } from "../../classes/Answer";
 import { Question } from "../../classes/Question";
 import Quill from "quill";
 import { CoursesService } from "../services/courses.service";
-import { ActivatedRoute, ParamMap } from "@angular/router";
+import { ActivatedRoute, ParamMap, Router } from "@angular/router";
 import { SkillPickerComponent } from "../skill-picker/skill-picker.component";
 import { SkillsService } from "../services/skills.service";
 
@@ -36,15 +36,17 @@ export class CourseEditingComponent implements OnInit {
 
     initialCategories: Skill[] = [];
     categories: Skill[] = [];
-    selectedCategory: Skill | null = null;
+    selectedCategory!: Skill;
 
     moduleName: string = "";
     isModuleNameErrorVisible: boolean = false;
 
+    @ViewChild("moduleNameInput") moduleNameInput!: ElementRef<HTMLInputElement>;
+
     isLessonPopupVisible: boolean = false;
+    initialModule: Module = new Module();
     initialLesson: Lesson = new Lesson();
     lesson: Lesson = new Lesson();
-    initialModule: Module = new Module();
     isLessonCreated: boolean = false;
     isLessonNameErrorVisible: boolean = false;
     isLessonSaveErrorVisible: boolean = false;
@@ -67,11 +69,11 @@ export class CourseEditingComponent implements OnInit {
     video: File | null = null;
 
     isSkillsPopupVisible: boolean = false;
-    skills: Skill[] = [];
     selectedSkills: Skill[] = [];
 
     private domSanitizer: DomSanitizer = inject(DomSanitizer);
     private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
+    private router: Router = inject(Router);
     private authService: AuthService = inject(AuthService);
     private coursesService: CoursesService = inject(CoursesService);
     private skillsService: SkillsService = inject(SkillsService);
@@ -101,70 +103,20 @@ export class CourseEditingComponent implements OnInit {
                     });
                 });
 
-                console.log(this.course);
-            });
-        });
+                this.selectedCategory = this.course.category;
 
-        this.skillsService.getRootSkills().then((response: { categories: Skill[] }) => {
+                console.log(this.course);
+            }).catch((error: any) => {
+                console.error("Error fetching course:", error);
+                this.router.navigate(["/home"]);
+            });
+        })
+
+        this.skillsService.getRootCategories().then((response: { categories: Skill[] }) => {
             this.initialCategories = response.categories;
 
             this.categories = this.initialCategories;
         });
-
-        this.skills = [
-            { id: "3dfc9ec3-2ef7-4e8a-ae2c-91f409ff003f", name: "JavaScript" },
-            { id: "b1ad9122-fdf9-455b-a9c7-f1191183ce63", name: "Python" },
-            { id: "a4d11ec2-b5b1-42dc-bd6c-ded6fbbd7d98", name: "Java" },
-            { id: "f8f0a003-b7bb-4447-8690-40df401d5c9f", name: "C#" },
-            { id: "1d154a0c-1970-43f6-a7c3-e6fa11dd1582", name: "C++" },
-            { id: "d6117717-d105-4933-8fd9-fb845bb5a2e1", name: "Ruby" },
-            { id: "0e028a59-6830-45d2-b4b1-9e07d25372c4", name: "PHP" },
-            { id: "40aaee74-6bcb-4219-84ec-3650a7c96b7b", name: "Swift" },
-            { id: "80b3795d-99ad-4fef-ae14-9fa72926079d", name: "Go" },
-            { id: "98fe6d70-34e7-4e47-9cc3-84e021ae8d6a", name: "Kotlin" },
-            { id: "36bc01fc-d3ff-404e-bc93-cdc6a8e6a0f6", name: "TypeScript" },
-            { id: "68d92b0b-58eb-4b71-95b4-cf70e27825df", name: "Rust" },
-            { id: "0cb20b06-01f0-444e-83b7-75f2d00dc5b1", name: "Dart" },
-            { id: "8f01f5ae-bc77-4b6b-91ee-8024f3b4015c", name: "Scala" },
-            { id: "2ae32ff5-123b-4ae8-90e1-fc107649d8cd", name: "Haskell" },
-            { id: "cbbf29e3-f2c0-41c0-bbde-6e1a22e48df8", name: "Elixir" },
-            { id: "f69b785c-3937-4403-b80d-b4b77b107373", name: "Clojure" },
-            { id: "e94c7dc5-e6bc-4059-a949-503e8eea48f5", name: "Shell" },
-            { id: "e3a95c12-fb87-4f8b-bcdc-099c18969c07", name: "HTML" },
-            { id: "b5ab222c-50dc-4931-9e97-c390a7e38929", name: "CSS" },
-            { id: "fe636d2f-4f69-4643-9b89-f06ae6b105e1", name: "SQL" },
-            { id: "81ad5e38-3143-4a8d-8bb1-08d7f0fbe34b", name: "NoSQL" },
-            { id: "b0b5ad97-0c4b-48e6-a8a1-476f507fe279", name: "GraphQL" },
-            { id: "92f4c7cb-cd76-4623-a7b1-9b4f85a73804", name: "Firebase" },
-            { id: "3c0bbf24-bbab-4f47-b6b7-0e5d9c720650", name: "AWS" },
-            { id: "f37f289b-df8b-4f93-b9e7-4f1656b5e6b4", name: "Azure" },
-            { id: "18bbdf0a-d6f4-4d25-844a-f15528580f88", name: "Google Cloud" },
-            { id: "6b30182c-4bb2-4308-b57f-c7aa327b540e", name: "Docker" },
-            { id: "73e49a6f-17b6-48e1-bbf6-15b9f9d3872c", name: "Kubernetes" },
-            { id: "aaedce70-cab6-4520-a3d3-ff75a28919bb", name: "Terraform" },
-            { id: "b38a2326-efc6-429f-b4f2-d2f3016cfb6b", name: "Ansible" },
-            { id: "61a99f53-7a70-470e-a8f4-2d5adcfba9d2", name: "Chef" },
-            { id: "6259dc94-7c2f-4306-8419-29b26f999726", name: "Puppet" },
-            { id: "0fc18893-3731-44b7-b4a1-83c4e3b5b107", name: "Jenkins" },
-            { id: "2a37417f-c5d0-41ee-838a-56aa116205f7", name: "Git" },
-            { id: "9e4740c3-2624-470f-9d8a-f5b7a5d3b251", name: "SVN" },
-            { id: "70e6b0cc-f2e3-426f-bb8d-55fe12ae61d8", name: "Mercurial" },
-            { id: "d1e7f85f-3b7c-4b53-a6d0-263c07a7c6c8", name: "Bitbucket" },
-            { id: "17b79d6e-25ce-43ce-bd36-92e6fda36c09", name: "GitHub" },
-            { id: "ad510b2c-fdfa-4bc1-97e9-635e1c90f1a2", name: "GitLab" },
-            { id: "ba43cb64-b53f-4435-90cb-eab3a83dbb39", name: "Jira" },
-            { id: "5bcbf8e1-c24d-4f40-a7c7-064aad69ae32", name: "Trello" },
-            { id: "71fd3a34-9e0c-4fc4-8989-dcfbe95ff9d8", name: "Slack" },
-            { id: "0e3ff158-b83f-4bb3-b430-837e37e93a63", name: "Zoom" },
-            { id: "d1ff894e-98b7-4e89-a3a7-c00b6c1d9313", name: "Microsoft Teams" },
-            { id: "a3d8f2c2-7be4-44cf-b27a-9e2bb16484d2", name: "Discord" },
-            { id: "f0d524a7-6e95-45a3-92d4-64c3e3e9e07b", name: "Skype" },
-            { id: "3f6348f7-d9dc-4b56-90f2-9f661b5b3e6e", name: "WhatsApp" },
-            { id: "cce15a7d-4f1e-45fc-bbc3-91e8324f2a4e", name: "Telegram" },
-            { id: "d3aeae61-9a10-404f-bf3c-7de85e18f00a", name: "Signal" },
-            { id: "8ae5980e-62cf-4ae1-9233-09e71c3dfcd8", name: "Viber" },
-            { id: "a618c0db-8a1a-4c25-9f64-6794e5417335", name: "WeChat" }
-        ];
     }
 
     onPhotoUpload(event: EventTarget | null): void {
@@ -189,10 +141,31 @@ export class CourseEditingComponent implements OnInit {
     }
 
     addModule(): void {
-        this.coursesService.createModule(this.courseId, "New module").then((response: Module) => {
-            this.course.modules.push(response);
-            this.editModule(new MouseEvent(""), response);
-        });
+        const newModule: Module = {
+            id: "",
+            name: "New module",
+            number: 0,
+            estimatedTime: 1,
+            lessons: [],
+            isOpened: false,
+            isEditing: true,
+            isNewModule: true,
+            newLessonName: "",
+            newLessonType: "ARTICLE",
+            isLessonNameErrorVisible: false
+        }
+
+        this.course.modules.push(newModule);
+        this.moduleName = newModule.name;
+
+        setTimeout(() => {
+            this.moduleNameInput.nativeElement.focus();
+            this.moduleNameInput.nativeElement.select();
+        }, 0);
+    }
+
+    isAddModuleButtonDisabled(): boolean {
+        return this.course.modules.some((module: Module) => module.isEditing);
     }
 
     toggleModule(module: Module): void {
@@ -208,10 +181,17 @@ export class CourseEditingComponent implements OnInit {
 
         this.moduleName = module.name;
         module.isEditing = true;
+
+        setTimeout(() => {
+            this.moduleNameInput.nativeElement.focus();
+            this.moduleNameInput.nativeElement.select();
+        }, 0);
     }
 
     removeModule(event: MouseEvent, module: Module): void {
         event.stopPropagation();
+
+        console.log(module)
 
         this.coursesService.deleteModule(this.courseId, module.id).then(() => {
             const index: number = this.course.modules.indexOf(module);
@@ -230,12 +210,20 @@ export class CourseEditingComponent implements OnInit {
         event.stopPropagation();
 
         module.isEditing = false;
+
+        if (module.isNewModule) {
+            const index: number = this.course.modules.indexOf(module);
+
+            if (index != -1) {
+                this.course.modules.splice(index, 1);
+            }
+        }
     }
 
     saveModule(event: MouseEvent, module: Module): void {
         event.stopPropagation();
 
-        if (!this.moduleName.trim()) {
+        if (!this.moduleName.trim() || this.moduleName.trim().length < 5) {
             this.isModuleNameErrorVisible = true;
             return;
         }
@@ -245,6 +233,14 @@ export class CourseEditingComponent implements OnInit {
         module.name = this.moduleName.trim();
 
         module.isEditing = false;
+
+        if (module.isNewModule) {
+            this.coursesService.createModule(this.courseId, module.name).then((response: Module) => {
+                module.isNewModule = false;
+                module.id = response.id;
+                module.number = response.number;
+            });
+        }
     }
 
     addLesson(module: Module): void {
@@ -260,11 +256,14 @@ export class CourseEditingComponent implements OnInit {
             name: module.newLessonName.trim(),
             number: module.lessons.length + 1,
             type: module.newLessonType!,
-            estimatedTime: 0
+            estimatedTime: 1
         }
 
         this.isLessonCreated = true;
-        this.editLesson(newLesson, module, this.isLessonCreated);
+        this.initialModule = module;
+        this.lesson = JSON.parse(JSON.stringify(newLesson));
+        this.isLessonPopupVisible = true;
+        document.body.style.overflow = "hidden";
 
         module.newLessonName = "";
         module.newLessonType = "ARTICLE";
@@ -280,81 +279,74 @@ export class CourseEditingComponent implements OnInit {
         });
     }
 
-    editLesson(lesson: Lesson, module: Module, isLessonCreated?: boolean): void {
+    editLesson(lesson: Lesson, module: Module): void {
         this.initialLesson = lesson;
-        this.initialModule = module;
+        this.markdown = "";
 
-        this.isLessonCreated = isLessonCreated || false;
+        this.coursesService.getLesson(this.courseId, lesson.id).then((response: Lesson) => {
+            this.lesson = response;
 
-        if (!this.isLessonCreated) {
-            this.coursesService.getLesson(this.courseId, lesson.id).then((response: Lesson) => {
-                this.lesson = response;
+            if (this.lesson.type == "ARTICLE") {
+                if (this.lesson.articleLink) {
+                    this.coursesService.getLessonArticle(this.lesson.articleLink).then(async (response: any) => {
+                        const reader: ReadableStreamDefaultReader = (response.body as ReadableStream).getReader();
+                        const chunks: Uint8Array[] = [];
 
-                if (this.lesson.type == "ARTICLE") {
-                    if (this.lesson.articleLink) {
-                        this.coursesService.getLessonArticle(this.lesson.articleLink).then(async (response: any) => {
-                            const reader: ReadableStreamDefaultReader = (response.body as ReadableStream).getReader();
-                            const chunks: Uint8Array[] = [];
-
-                            let readResult: ReadableStreamReadResult<any> = await reader.read();
-                            while (!readResult.done) {
-                                if (readResult.value) {
-                                    chunks.push(readResult.value);
-                                }
-
-                                readResult = await reader.read();
+                        let readResult: ReadableStreamReadResult<any> = await reader.read();
+                        while (!readResult.done) {
+                            if (readResult.value) {
+                                chunks.push(readResult.value);
                             }
 
-                            const blob: Blob = new Blob(chunks, { type: "text/html" });
-                            this.markdown = await blob.text();
+                            readResult = await reader.read();
+                        }
 
-                            this.isLessonPopupVisible = true;
-                            document.body.style.overflow = "hidden";
-                        });
-                    }
-                }
-                else if (this.lesson.type == "VIDEO") {
-                    if (this.lesson.videoLink) {
-                        this.coursesService.getLessonVideo(this.lesson.videoLink).then(async (response: any) => {
-                            const reader: ReadableStreamDefaultReader = (response.body as ReadableStream).getReader();
-                            const chunks: Uint8Array[] = [];
+                        const blob: Blob = new Blob(chunks, { type: "text/html" });
+                        this.markdown = await blob.text();
 
-                            let readResult: ReadableStreamReadResult<any> = await reader.read();
-                            while (!readResult.done) {
-                                if (readResult.value) {
-                                    chunks.push(readResult.value);
-                                }
-
-                                readResult = await reader.read();
-                            }
-
-                            this.isLessonPopupVisible = true;
-                            document.body.style.overflow = "hidden";
-
-                            const blob: Blob = new Blob(chunks, { type: "video/mp4" });
-                            this.setVideoPreviewPath(blob);
-                        });
-                    }
-                }
-                else if (lesson.type == "TEST") {
-                    this.lesson.questions = lesson.questions || [];
-
-                    this.lesson.questions.forEach((question: Question) => {
-                        question.answers.forEach((answer: Answer) => {
-                            answer.isCommentaryVisible = !!answer.commentary;
-                        });
+                        this.isLessonPopupVisible = true;
+                        document.body.style.overflow = "hidden";
                     });
-
-                    this.isLessonPopupVisible = true;
-                    document.body.style.overflow = "hidden";
                 }
-            });
-        }
-        else {
-            this.lesson = JSON.parse(JSON.stringify(this.initialLesson));
-            this.isLessonPopupVisible = true;
-            document.body.style.overflow = "hidden";
-        }
+            }
+            else if (this.lesson.type == "VIDEO") {
+                if (this.lesson.videoLink) {
+                    this.coursesService.getLessonVideo(this.lesson.videoLink).then(async (response: any) => {
+                        const reader: ReadableStreamDefaultReader = (response.body as ReadableStream).getReader();
+                        const chunks: Uint8Array[] = [];
+
+                        let readResult: ReadableStreamReadResult<any> = await reader.read();
+                        while (!readResult.done) {
+                            if (readResult.value) {
+                                chunks.push(readResult.value);
+                            }
+
+                            readResult = await reader.read();
+                        }
+
+                        const blob: Blob = new Blob(chunks, { type: "video/mp4" });
+                        this.setVideoPreviewPath(blob);
+
+                        this.isLessonPopupVisible = true;
+                        document.body.style.overflow = "hidden";
+                    });
+                }
+            }
+            else if (lesson.type == "TEST") {
+                this.lesson.questions = lesson.questions || [];
+
+                this.lesson.questions.forEach((question: Question) => {
+                    question.answers.forEach((answer: Answer) => {
+                        answer.isCommentaryVisible = !!answer.commentary;
+                    });
+                });
+
+                this.isLessonSaveErrorVisible = false;
+
+                this.isLessonPopupVisible = true;
+                document.body.style.overflow = "hidden";
+            }
+        });
     }
 
     onEditorCreated(quill: Quill): void {
@@ -555,7 +547,7 @@ export class CourseEditingComponent implements OnInit {
                 return;
             }
 
-            if (this.lesson.questions!.map((question: Question) => question.answers.every((answer: Answer) => !answer.correct)).includes(true)) {
+            if (this.lesson.questions!.some((question: Question) => this.isAllAnswersIncorrect(question))) {
                 this.isLessonSaveErrorVisible = true;
                 return;
             }
@@ -564,30 +556,52 @@ export class CourseEditingComponent implements OnInit {
         }
 
         if (this.isLessonCreated) {
-            this.coursesService.createLesson(this.courseId, this.initialModule.id, this.initialLesson).then((response: Lesson) => {
-                if (this.lesson.type == "VIDEO") {
-                    const formData: FormData = new FormData();
-                    formData.append("video", this.video!);
+            this.coursesService.createLesson(this.courseId, this.initialModule.id, this.initialLesson)
+                .then((response: Lesson) => {
+                    if (this.lesson.type == "VIDEO") {
+                        const formData: FormData = new FormData();
+                        formData.append("video", this.video!);
 
-                    this.coursesService.uploadLessonVideo(this.courseId, response.id, formData).then((response: Lesson) => {
-                        this.initialLesson.videoLink = response.videoLink;
+                        this.coursesService.uploadLessonVideo(this.courseId, response.id, formData)
+                            .then((response: Lesson) => {
+                                this.initialModule.lessons.push(response);
+
+                                this.isLessonPopupVisible = false;
+                                document.body.style.overflow = "";
+                            });
+                    }
+                    else {
                         this.initialModule.lessons.push(response);
 
                         this.isLessonPopupVisible = false;
                         document.body.style.overflow = "";
-                    });
-                }
-                else {
-                    this.initialModule.lessons.push(response);
-
-                    this.isLessonPopupVisible = false;
-                    document.body.style.overflow = "";
-                }
-            });
+                    }
+                });
         }
         else {
-            this.isLessonPopupVisible = false;
-            document.body.style.overflow = "";
+            this.coursesService.updateLesson(this.courseId, this.initialLesson.id, this.initialLesson)
+                .then((response: Lesson) => {
+                    if (this.lesson.type == "VIDEO") {
+                        const formData: FormData = new FormData();
+                        formData.append("video", this.video!);
+
+                        this.coursesService.uploadLessonVideo(this.courseId, response.id, formData).then((response: Lesson) => {
+                            this.initialModule.lessons[this.initialModule.lessons.map((lesson: Lesson) => lesson.id).indexOf(response.id)] = response;
+
+                            this.isLessonPopupVisible = false;
+                            document.body.style.overflow = "";
+                        });
+                    }
+                    else if (this.lesson.type == "ARTICLE") {
+                        this.coursesService.updateLessonArticle(this.courseId, response.id, this.initialLesson.article!)
+                            .then((response: Lesson) => {
+                                this.initialModule.lessons[this.initialModule.lessons.map((lesson: Lesson) => lesson.id).indexOf(response.id)] = response;
+
+                                this.isLessonPopupVisible = false;
+                                document.body.style.overflow = "";
+                            });
+                    }
+                });
         }
     }
 

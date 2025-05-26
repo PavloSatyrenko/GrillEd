@@ -7,16 +7,20 @@ import { firstValueFrom } from "rxjs";
 })
 export class SkillsService {
 
-    constructor() { }
-
     private http: HttpClient = inject(HttpClient);
     private readonly api = "https://apidev.khokhotva.me/";
 
-    getRootSkills(): Promise<any> {
+    getRootCategories(): Promise<any> {
         return firstValueFrom(this.http.get(`${this.api}v1/courseCategories`));
     }
 
-    getSkills(categoryId: string): Promise<any> {
+    getCategoriesById(categoryId: string): Promise<any> {
         return firstValueFrom(this.http.get(`${this.api}v1/courseCategories/${categoryId}`));
+    }
+
+    getSkills(page: number = 1, search: string = "", pageSize: number = 20): Promise<any> {
+        return firstValueFrom(this.http.get(`${this.api}v1/skills`, {
+            params: { page, pageSize, search }
+        }));
     }
 }

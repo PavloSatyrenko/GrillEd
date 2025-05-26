@@ -10,8 +10,6 @@ import { Lesson } from "../../classes/Lesson";
 })
 export class CoursesService {
 
-    constructor() { }
-
     private http: HttpClient = inject(HttpClient);
     private readonly api = "https://apidev.khokhotva.me/";
 
@@ -43,21 +41,30 @@ export class CoursesService {
         return firstValueFrom(this.http.delete(`${this.api}v1/courses/${courseId}/lessons/${lessonId}`));
     }
 
+    updateLesson(courseId: string, lessonId: string, lesson: Lesson): Promise<any> {
+        return firstValueFrom(this.http.patch(`${this.api}v1/courses/${courseId}/lessons/${lessonId}`,
+            {
+                name: lesson.name,
+                estimatedTime: lesson.estimatedTime,
+                type: lesson.type,
+                order: lesson.number
+            }
+        ));
+    }
+
     uploadLessonVideo(courseId: string, lessonId: string, formData: FormData): Promise<any> {
         return firstValueFrom(this.http.patch(`${this.api}v1/courses/${courseId}/lessons/${lessonId}/video`, formData));
     }
 
-    getLessonVideo(videoLink: string): Promise<any> {
-        // const headers = new HttpHeaders();
-        // return firstValueFrom(this.http.get(videoLink, { headers }));
+    updateLessonArticle(courseId: string, lessonId: string, text: string): Promise<any> {
+        return firstValueFrom(this.http.patch(`${this.api}v1/courses/${courseId}/lessons/${lessonId}/article`, { text }));
+    }
 
+    getLessonVideo(videoLink: string): Promise<any> {
         return fetch(videoLink);
     }
 
     getLessonArticle(articleLink: string): Promise<any> {
-        // const headers = new HttpHeaders();
-        // return firstValueFrom(this.http.get(articleLink, { headers }));
-
         return fetch(articleLink);
     }
 

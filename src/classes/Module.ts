@@ -8,6 +8,7 @@ export class Module {
     lessons: Lesson[] = [];
     isOpened?: boolean = false;
     isEditing?: boolean = false;
+    isNewModule?: boolean = false;
     newLessonName?: string = "";
     newLessonType?: "VIDEO" | "ARTICLE" | "TEST" = "ARTICLE";
     isLessonNameErrorVisible?: boolean = false;

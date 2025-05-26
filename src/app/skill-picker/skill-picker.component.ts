@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, ElementRef, EventEmitter, HostListener, inject, Input, OnInit, Output, ViewChild } from "@angular/core";
 import { Skill } from "../../classes/Skill";
+import { SkillsService } from "../services/skills.service";
 
 @Component({
     selector: "app-skill-picker",
@@ -10,31 +11,75 @@ import { Skill } from "../../classes/Skill";
     styleUrl: "./skill-picker.component.css"
 })
 export class SkillPickerComponent implements OnInit {
-    @Input() initialSkills!: Skill[];
     skills!: Skill[];
 
-    selectedSkills: Skill[] = [];
+    page: number = 1;
+    totalPages: number = 1;
+    filterValue: string = "";
+
+    @Input() selectedSkills: Skill[] = [];
     @Output() selectedSkillsChange: EventEmitter<Skill[]> = new EventEmitter<Skill[]>();
 
+    @ViewChild("skillsList") skillsList!: ElementRef<HTMLDivElement>;
+
+    scrollTimeout: ReturnType<typeof setTimeout> | null = null;
+    filterTimeout: ReturnType<typeof setTimeout> | null = null;
+
+    private skillsService: SkillsService = inject(SkillsService);
+
     ngOnInit(): void {
-        this.skills = this.initialSkills;
+        this.skillsService.getSkills(1, "")
+            .then((response: { data: Skill[], pagination: any }) => {
+                this.skills = response.data;
+                this.totalPages = response.pagination.total.pages;
+                setTimeout(() => {
+                    this.onSkillsScroll();
+                }, 0);
+            });
+    }
+
+    onSkillsScroll(): void {
+        if (this.page < this.totalPages) {
+            const threshold: number = 75;
+
+            if (this.skillsList && this.skillsList.nativeElement) {
+                const scrollTop: number = this.skillsList.nativeElement.scrollTop;
+                const scrollHeight: number = this.skillsList.nativeElement.scrollHeight;
+                const clientHeight: number = this.skillsList.nativeElement.clientHeight;
+
+                if (scrollHeight - scrollTop - clientHeight <= threshold) {
+                    if (this.scrollTimeout) {
+                        clearTimeout(this.scrollTimeout);
+                    }
+
+                    this.scrollTimeout = setTimeout(() => {
+                        this.skillsService.getSkills(++this.page, this.filterValue)
+                            .then((response: { data: Skill[], pagination: any }) => {
+                                this.skills.push(...response.data);
+                                this.totalPages = response.pagination.total.pages;
+                                setTimeout(() => {
+                                    this.onSkillsScroll();
+                                }, 0);
+                            });
+                    }, 100);
+                }
+            }
+        }
     }
 
     toggleSkill(skill: Skill): void {
-        const index: number = this.selectedSkills.indexOf(skill);
-
-        if (index == -1) {
+        if (!this.isSkillSelected(skill)) {
             this.selectedSkills.push(skill);
         }
         else {
-            this.selectedSkills.splice(index, 1);
+            this.selectedSkills = this.selectedSkills.filter((selectedSkill: Skill) => selectedSkill.id != skill.id);
         }
 
         this.selectedSkillsChange.emit(this.selectedSkills);
     }
 
     isSkillSelected(skill: Skill): boolean {
-        return this.selectedSkills.indexOf(skill) != -1;
+        return this.selectedSkills.some((selectedSkill: Skill) => selectedSkill.id == skill.id);
     }
 
     filterSkills(target: EventTarget | null): void {
@@ -42,13 +87,23 @@ export class SkillPickerComponent implements OnInit {
             return;
         }
 
-        const filter: string = target.value.toLowerCase();
+        this.filterValue = target.value;
 
-        if (filter) {
-            this.skills = this.initialSkills.filter((skill: Skill) => skill.name.toLowerCase().includes(filter));
+        if (this.filterTimeout) {
+            clearTimeout(this.filterTimeout);
         }
-        else {
-            this.skills = this.initialSkills;
-        }
+
+        this.page = 1;
+
+        this.filterTimeout = setTimeout(() => {
+            this.skillsService.getSkills(this.page, this.filterValue)
+                .then((response: { data: Skill[], pagination: any }) => {
+                    this.skills = response.data;
+                    this.totalPages = response.pagination.total.pages;
+                    setTimeout(() => {
+                        this.onSkillsScroll();
+                    }, 0);
+                });
+        }, 300);
     }
 }
