@@ -43,7 +43,7 @@ export class HomeComponent implements OnInit {
         }
 
         if (this.user!.role == "STUDENT") {
-            this.coursesService.getStudentCourses({}).then((response: { data: Course[] }) => {
+            this.coursesService.getStudentCourses({}).then((response: { data: Course[], pagination: any }) => {
                 console.log(response.data);
                 this.startedCourses = response.data;
             });

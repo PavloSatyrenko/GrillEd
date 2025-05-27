@@ -51,12 +51,15 @@ export class StudentComponent implements OnInit {
     ngOnInit(): void {
         this.user = this.authService.user;
 
-        this.coursesService.getAllCourses({}).then((response: { data: Course[], pagination: any }) => {
+        this.coursesService.getStudentCourses({}).then((response: { data: Course[], pagination: any }) => {
             this.courses = response.data;
 
             this.courses.forEach((course: Course) => {
                 if (course.progress) {
+                    course.progress = +course.progress.toFixed(1);
+
                     course.animationFrame = Math.ceil(course.progress! / 10);
+
                     if (course.animationFrame == 0) {
                         course.animationFrame = 1;
                     }
