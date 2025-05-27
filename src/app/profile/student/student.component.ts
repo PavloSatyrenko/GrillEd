@@ -10,11 +10,12 @@ import { CoursesService } from '../../services/courses.service';
 import { Course } from '../../../classes/Course';
 import { ProfileService } from '../../services/profile.service';
 import { SkillsService } from '../../services/skills.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
     selector: "app-student",
     standalone: true,
-    imports: [CommonModule, FormsModule, SkillPickerComponent],
+    imports: [CommonModule, FormsModule, SkillPickerComponent, RouterModule],
     templateUrl: "./student.component.html",
     styleUrl: "./student.component.css"
 })
@@ -40,7 +41,8 @@ export class StudentComponent implements OnInit {
 
     panelNumber: number = 1;
 
-    courses: Course[] = [];
+    activeCourses: Course[] = [];
+    completedCourses: Course[] = [];
 
     private domSanitizer = inject(DomSanitizer);
     private authService: AuthService = inject(AuthService);
@@ -52,9 +54,9 @@ export class StudentComponent implements OnInit {
         this.user = this.authService.user;
 
         this.coursesService.getStudentCourses({}).then((response: { data: Course[], pagination: any }) => {
-            this.courses = response.data;
+            this.activeCourses = response.data;
 
-            this.courses.forEach((course: Course) => {
+            this.activeCourses.forEach((course: Course) => {
                 if (course.progress) {
                     course.progress = +course.progress.toFixed(1);
 
@@ -68,6 +70,10 @@ export class StudentComponent implements OnInit {
                     course.animationFrame = 1;
                 }
             });
+        });
+
+        this.coursesService.getStudentCourses({ status: ["ARCHIVED"] }).then((response: { data: Course[], pagination: any }) => {
+            this.completedCourses = response.data;
         });
 
         this.skillsService.getRootCategories()
