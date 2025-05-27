@@ -1,18 +1,21 @@
 import { Component, ElementRef, inject, OnInit, ViewChild } from "@angular/core";
-import { ActivatedRoute, Params } from "@angular/router";
+import { ActivatedRoute, Params, RouterModule } from "@angular/router";
 import { CoursesService } from "../services/courses.service";
 import { SkillsService } from "../services/skills.service";
 import { Skill } from "../../classes/Skill";
 import { CommonModule } from "@angular/common";
+import { Course } from "../../classes/Course";
 
 @Component({
     selector: "app-search",
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, RouterModule],
     templateUrl: "./search.component.html",
     styleUrl: "./search.component.css"
 })
 export class SearchComponent implements OnInit {
+    courses: Course[] = [];
+
     initialCategories: Skill[] = [];
     categories: Skill[] = [];
     selectedCategories: Skill[] = [];
@@ -44,6 +47,15 @@ export class SearchComponent implements OnInit {
 
                     if (categoryId) {
                         this.selectedCategories = this.initialCategories.filter((tempCategory: Skill) => tempCategory.id == categoryId);
+
+                        this.coursesService.getAllCourses({ categoryId: [this.selectedCategories[0].id] }).then((response: { data: Course[], pagination: any }) => {
+                            this.courses = response.data;
+                        });
+                    }
+                    else {
+                        this.coursesService.getAllCourses({}).then((response: { data: Course[], pagination: any }) => {
+                            this.courses = response.data;
+                        });
                     }
                 });
             });

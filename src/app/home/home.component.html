@@ -12,8 +12,8 @@
         <div class="courses">
             <div *ngFor="let course of startedCourses" class="card course">
                 <div class="course__image">
-                    <!-- <img src="" alt="Course icon" /> -->
-                    <i class="fa-solid fa-graduation-cap"></i>
+                    <img *ngIf="course.avatarLink" [src]="course.avatarLink" alt="Course icon" />
+                    <i *ngIf="!course.avatarLink" class="fa-solid fa-graduation-cap"></i>
                 </div>
 
                 <div class="course__information">
@@ -71,24 +71,33 @@
             <div class="panels__card card">
                 <div class="panels__header">
                     <div class="panels__buttons">
-                        <button class="panels__button" [ngClass]="{ panels__button_active: panelNumber == 1 }" (click)="choosePanel(1)">
+                        <!-- <button class="panels__button" [ngClass]="{ panels__button_active: panelNumber == 1 }" (click)="choosePanel(1)">
                             Popular
                         </button>
                         <button class="panels__button" [ngClass]="{ panels__button_active: panelNumber == 2 }" (click)="choosePanel(2)">
                             Newest
-                        </button>
+                        </button> -->
                         <button class="panels__button" [ngClass]="{ panels__button_active: panelNumber == 3 }" (click)="choosePanel(3)">
-                            By areas
+                            By categories
                         </button>
                         <button class="panels__button" [ngClass]="{ panels__button_active: panelNumber == 4 }" (click)="choosePanel(4)">
                             By skills
                         </button>
                     </div>
 
-                    <div *ngIf="panelNumber == 3 || panelNumber == 4" class="panels__filter">
+                    <div *ngIf="panelNumber == 3" class="panels__filter">
                         <label class="input-wrapper input-wrapper_with-icon panels__input-wrapper">
                             <select class="input" [(ngModel)]="filterValue">
-                                <option *ngFor="let filter of filters" [value]="filter" class="option">{{ filter }}</option>
+                                <option *ngFor="let filter of categoryFilters" [value]="filter.id" class="option">{{ filter.name }}</option>
+                            </select>
+                            <span class="input-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                        </label>
+                    </div>
+
+                    <div *ngIf="panelNumber == 4" class="panels__filter">
+                        <label class="input-wrapper input-wrapper_with-icon panels__input-wrapper">
+                            <select class="input" [(ngModel)]="filterValue">
+                                <option *ngFor="let filter of skillFilters" [value]="filter.id" class="option">{{ filter.name }}</option>
                             </select>
                             <span class="input-icon"><i class="fa-solid fa-chevron-down"></i></span>
                         </label>
@@ -96,12 +105,12 @@
                 </div>
 
                 <div class="panels__list">
-                    <div *ngIf="panelNumber == 1" class="panel">
+                    <!-- <div *ngIf="panelNumber == 1" class="panel">
                         <div class="courses">
                             <div class="card course">
                                 <div class="course__image">
-                                    <!-- <img src="" alt="Course icon" /> -->
-                                    <i class="fa-solid fa-graduation-cap"></i>
+                                    <img *ngIf="course.avatarLink" src="course.avatarLink" alt="Course icon" />
+                                    <i *ngIf="!course.avatarLink" class="fa-solid fa-graduation-cap"></i>
                                 </div>
 
                                 <div class="course__information">
@@ -146,8 +155,8 @@
 
                             <div class="card course">
                                 <div class="course__image">
-                                    <!-- <img src="" alt="Course icon" /> -->
-                                    <i class="fa-solid fa-graduation-cap"></i>
+                                    <img *ngIf="course.avatarLink" src="course.avatarLink" alt="Course icon" />
+                                    <i *ngIf="!course.avatarLink" class="fa-solid fa-graduation-cap"></i>
                                 </div>
 
                                 <div class="course__information">
@@ -196,8 +205,8 @@
                         <div class="courses">
                             <div class="card course">
                                 <div class="course__image">
-                                    <!-- <img src="" alt="Course icon" /> -->
-                                    <i class="fa-solid fa-graduation-cap"></i>
+                                    <img *ngIf="course.avatarLink" src="course.avatarLink" alt="Course icon" />
+                                    <i *ngIf="!course.avatarLink" class="fa-solid fa-graduation-cap"></i>
                                 </div>
 
                                 <div class="course__information">
@@ -240,19 +249,19 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
                     <div *ngIf="panelNumber == 3" class="panel">
                         <div class="courses">
-                            <div class="card course">
+                            <div *ngFor="let course of coursesByCategory" class="card course">
                                 <div class="course__image">
-                                    <!-- <img src="" alt="Course icon" /> -->
-                                    <i class="fa-solid fa-graduation-cap"></i>
+                                    <img *ngIf="course.avatarLink" [src]="course.avatarLink" alt="Course icon" />
+                                    <i *ngIf="!course.avatarLink" class="fa-solid fa-graduation-cap"></i>
                                 </div>
 
                                 <div class="course__information">
-                                    <span class="course__name">JavaScript</span>
-                                    <span class="course__author">by John Doe</span>
+                                    <span class="course__name">{{ course.name }}</span>
+                                    <span class="course__author">by {{ course.author.name }} {{ course.author.surname }}</span>
                                 </div>
 
                                 <div class="course__right-side">
@@ -260,49 +269,23 @@
                                 </div>
                             </div>
 
-                            <div class="card course">
-                                <div class="course__image">
-                                    <i class="fa-solid fa-graduation-cap"></i>
-                                </div>
-
-                                <div class="course__information">
-                                    <span class="course__name">JavaScript</span>
-                                    <span class="course__author">by John Doe</span>
-                                </div>
-
-                                <div class="course__right-side">
-                                    <button class="button button_theme_primary course__button">View course</button>
-                                </div>
-                            </div>
-
-                            <div class="card course">
-                                <div class="course__image">
-                                    <i class="fa-solid fa-graduation-cap"></i>
-                                </div>
-
-                                <div class="course__information">
-                                    <span class="course__name">JavaScript</span>
-                                    <span class="course__author">by John Doe</span>
-                                </div>
-
-                                <div class="course__right-side">
-                                    <button class="button button_theme_primary course__button">View course</button>
-                                </div>
+                            <div *ngIf="coursesByCategory.length == 0" class="no-courses">
+                                <span class="no-courses__text">No courses found for this category</span>
                             </div>
                         </div>
                     </div>
 
                     <div *ngIf="panelNumber == 4" class="panel">
                         <div class="courses">
-                            <div class="card course">
+                            <div *ngFor="let course of coursesBySkills" class="card course">
                                 <div class="course__image">
-                                    <!-- <img src="" alt="Course icon" /> -->
-                                    <i class="fa-solid fa-graduation-cap"></i>
+                                    <img *ngIf="course.avatarLink" [src]="course.avatarLink" alt="Course icon" />
+                                    <i *ngIf="!course.avatarLink" class="fa-solid fa-graduation-cap"></i>
                                 </div>
 
                                 <div class="course__information">
-                                    <span class="course__name">JavaScript</span>
-                                    <span class="course__author">by John Doe</span>
+                                    <span class="course__name">{{ course.name }}</span>
+                                    <span class="course__author">by {{ course.author.name }} {{ course.author.surname }}</span>
                                 </div>
 
                                 <div class="course__right-side">
@@ -310,34 +293,8 @@
                                 </div>
                             </div>
 
-                            <div class="card course">
-                                <div class="course__image">
-                                    <i class="fa-solid fa-graduation-cap"></i>
-                                </div>
-
-                                <div class="course__information">
-                                    <span class="course__name">JavaScript</span>
-                                    <span class="course__author">by John Doe</span>
-                                </div>
-
-                                <div class="course__right-side">
-                                    <button class="button button_theme_primary course__button">View course</button>
-                                </div>
-                            </div>
-
-                            <div class="card course">
-                                <div class="course__image">
-                                    <i class="fa-solid fa-graduation-cap"></i>
-                                </div>
-
-                                <div class="course__information">
-                                    <span class="course__name">JavaScript</span>
-                                    <span class="course__author">by John Doe</span>
-                                </div>
-
-                                <div class="course__right-side">
-                                    <button class="button button_theme_primary course__button">View course</button>
-                                </div>
+                            <div *ngIf="coursesByCategory.length == 0" class="no-courses">
+                                <span class="no-courses__text">No courses found for this category</span>
                             </div>
                         </div>
                     </div>

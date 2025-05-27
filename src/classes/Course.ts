@@ -9,6 +9,7 @@ export class Course {
         name: string,
         surname: string
     };
+    avatarLink?: string;
     category!: Skill;
     name!: string;
     about!: string;
@@ -17,5 +18,6 @@ export class Course {
     estimatedTime!: number;
     enrolledCount!: number;
     rating!: number;
+    progress?: number;
     modules: Module[] = [];
 }

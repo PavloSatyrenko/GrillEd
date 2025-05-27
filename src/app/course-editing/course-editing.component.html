@@ -28,8 +28,9 @@
 
                 <div class="course__image-wrapper">
                     <div class="course__image">
-                        <i *ngIf="!coursePhotoPath" class="fa-solid fa-graduation-cap"></i>
+                        <i *ngIf="!coursePhotoPath && !course.avatarLink" class="fa-solid fa-graduation-cap"></i>
                         <img *ngIf="coursePhotoPath" [src]="coursePhotoPath" alt="Course image" />
+                        <img *ngIf="!coursePhotoPath && course.avatarLink" [src]="course.avatarLink" alt="Course image" />
                     </div>
 
                     <label class="button button_full-width button_theme_secondary-line course__image-button">
@@ -177,7 +178,7 @@
 
                 <div class="categories__list">
                     <label *ngFor="let category of categories" class="radio-wrapper category">
-                        <input class="radio" [checked]="selectedCategory.id == category.id" type="radio" (change)="selectCategory(category)" />
+                        <input class="radio" [checked]="selectedCategory?.id == category.id" type="radio" (change)="selectCategory(category)" />
                         <span class="radio-label">{{ category.name }}</span>
                     </label>
                 </div>

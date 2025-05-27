@@ -30,9 +30,12 @@ export class CourseEditingComponent implements OnInit {
     courseId: string = "";
     course: Course = new Course();
 
+    isCourseSaveErrorVisible: boolean = false;
+
     @ViewChild("coursePhotoInput") coursePhotoInput!: ElementRef<HTMLInputElement>;
     coursePhotoPath: SafeResourceUrl | null = null;
     // isSizeValid: boolean = true;
+    coursePhoto: File | null = null;
 
     initialCategories: Skill[] = [];
     categories: Skill[] = [];
@@ -131,6 +134,7 @@ export class CourseEditingComponent implements OnInit {
                 // }
 
                 this.coursePhotoPath = this.domSanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(file));
+                this.coursePhoto = file;
             }
         }
     }
@@ -640,6 +644,44 @@ export class CourseEditingComponent implements OnInit {
     }
 
     saveCourse(): void {
+        this.isCourseSaveErrorVisible = false;
 
+        if (!this.course.name.trim() || this.course.name.trim().length < 5) {
+            this.isCourseSaveErrorVisible = true;
+            return;
+        }
+
+        if (!this.course.about.trim()) {
+            this.isCourseSaveErrorVisible = true;
+            return;
+        }
+
+        if (!this.selectedCategory) {
+            this.isCourseSaveErrorVisible = true;
+            return;
+        }
+
+        const newCourse: { name: string, about: string, categoryId: string, level: "BEGINNER" | "INTERMEDIATE" | "EXPERT" } = {
+            name: this.course.name.trim(),
+            about: this.course.about.trim(),
+            categoryId: this.selectedCategory.id,
+            level: this.course.level
+        }
+
+        if (this.coursePhoto) {
+            const formData: FormData = new FormData();
+            formData.append("avatar", this.coursePhoto);
+
+            this.coursesService.updateCourse(this.course.id, newCourse).then(() => {
+                this.coursesService.updateCoursePhoto(this.course.id, formData).then(() => {
+                    this.router.navigate(["/course", this.course.id]);
+                });
+            });
+        }
+        else {
+            this.coursesService.updateCourse(this.course.id, newCourse).then(() => {
+                this.router.navigate(["/course", this.course.id]);
+            });
+        }
     }
 }   

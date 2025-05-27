@@ -99,8 +99,8 @@
 
         <div class="card course__aside aside">
             <div class="course__image">
-                <!-- <img src="" alt="Course icon" /> -->
-                <i class="fa-solid fa-graduation-cap"></i>
+                <img *ngIf="course!.avatarLink" [src]="course!.avatarLink" alt="Course icon" />
+                <i *ngIf="!course!.avatarLink" class="fa-solid fa-graduation-cap"></i>
             </div>
 
             <h3 class="aside__title">The course includes:</h3>

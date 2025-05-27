@@ -5,6 +5,9 @@ import { FormsModule } from "@angular/forms";
 import { AuthService } from "../services/auth.service";
 import { Course } from "../../classes/Course";
 import { Router } from "@angular/router";
+import { CoursesService } from "../services/courses.service";
+import { SkillsService } from "../services/skills.service";
+import { Skill } from "../../classes/Skill";
 
 @Component({
     selector: "app-home",
@@ -16,13 +19,19 @@ import { Router } from "@angular/router";
 export class HomeComponent implements OnInit {
     user: User | null = null;
 
-    panelNumber: number = 1;
+    panelNumber: number = 3;
     filterValue: string = "";
-    filters: string[] = [];
+    categoryFilters: Skill[] = [];
+    skillFilters: Skill[] = [];
 
     startedCourses!: Course[];
 
+    coursesByCategory: Course[] = [];
+    coursesBySkills: Course[] = [];
+
     private authService: AuthService = inject(AuthService);
+    private coursesService: CoursesService = inject(CoursesService);
+    private skillsService: SkillsService = inject(SkillsService);
     private router: Router = inject(Router);
 
     ngOnInit(): void {
@@ -34,7 +43,7 @@ export class HomeComponent implements OnInit {
                 id: "123",
                 name: "John",
                 surname: "Doe",
-                avatar: "https://via.placeholder.com/150"
+                avatar: "https://placehold.co/600x400"
             },
             category: {
                 id: "456",
@@ -47,93 +56,37 @@ export class HomeComponent implements OnInit {
             estimatedTime: 10,
             rating: 4.5,
             enrolledCount: 100,
-            modules: [{
-                id: "1",
-                name: "Module 1",
-                number: 1,
-                estimatedTime: 5,
-                lessons: [{
-                    id: "1",
-                    name: "Lesson 1",
-                    number: 1,
-                    type: "VIDEO",
-                    estimatedTime: 2
-                }, {
-                    id: "2",
-                    name: "Lesson 2",
-                    number: 2,
-                    type: "ARTICLE",
-                    estimatedTime: 3
-                }]
-            }, {
-                id: "2",
-                name: "Module 2",
-                number: 2,
-                estimatedTime: 20,
-                lessons: [{
-                    id: "1",
-                    name: "Lesson 1",
-                    number: 1,
-                    type: "VIDEO",
-                    estimatedTime: 2
-                }, {
-                    id: "2",
-                    name: "Lesson 2",
-                    number: 2,
-                    type: "ARTICLE",
-                    estimatedTime: 3
-                }]
-            }, {
-                id: "3",
-                name: "Module 3",
-                number: 3,
-                estimatedTime: 20,
-                lessons: [{
-                    id: "1",
-                    name: "Lesson 1",
-                    number: 1,
-                    type: "VIDEO",
-                    estimatedTime: 2
-                }, {
-                    id: "2",
-                    name: "Lesson 2",
-                    number: 2,
-                    type: "ARTICLE",
-                    estimatedTime: 3
-                }]
-            }, {
-                id: "4",
-                name: "Module 4",
-                number: 4,
-                estimatedTime: 20,
-                lessons: [{
-                    id: "1",
-                    name: "Lesson 1",
-                    number: 1,
-                    type: "VIDEO",
-                    estimatedTime: 2
-                }, {
-                    id: "2",
-                    name: "Lesson 2",
-                    number: 2,
-                    type: "ARTICLE",
-                    estimatedTime: 3
-                }]
-            }],
-        }]
+            progress: 50,
+            avatarLink: "https://placehold.co/600x400",
+            modules: []
+        }];
+
+        this.coursesService.getAllCourses({ pageSize: 6 }).then((response: { data: Course[], pagination: any }) => {
+            this.coursesByCategory = response.data;
+            this.coursesBySkills = response.data;
+        });
+
+        this.skillsService.getRootCategories().then((response: { categories: Skill[] }) => {
+            this.categoryFilters = response.categories;
+            this.categoryFilters.unshift({
+                id: "",
+                name: "All"
+            });
+        });
+
+        this.skillsService.getSkills(1, "", 1000000).then((response: { data: Skill[], pagination: any }) => {
+            this.skillFilters = response.data;
+            this.skillFilters.unshift({
+                id: "",
+                name: "All"
+            });
+        });
     }
 
     choosePanel(panelNumber: number): void {
         this.panelNumber = panelNumber;
 
-        if (this.panelNumber == 3) {
-            this.filters = ["All", "Software Development", "Programming", "Design", "Marketing", "Business"];
-            this.filterValue = "All";
-        }
-        else if (this.panelNumber == 4) {
-            this.filters = ["All", "Java", "Python", "JavaScript", "C++", "C#", "PHP", "Ruby"];
-            this.filterValue = "All";
-        }
+        this.filterValue = "";
     }
 
     openCourse(course: Course): void {
