@@ -220,29 +220,32 @@ export class TeacherComponent implements OnInit {
                 surname: this.user!.surname.trim(),
             }).then(() => {
                 this.profileService.updateTeacherProfile({
-                    aboutMe: this.user!.teacher!.aboutMe.trim(),
-                    workplace: this.user!.teacher!.workplace.trim(),
-                    position: this.user!.teacher!.position.trim(),
+                    aboutMe: this.user!.teacher!.aboutMe?.trim(),
+                    workplace: this.user!.teacher!.workplace?.trim(),
+                    position: this.user!.teacher!.position?.trim(),
                 }).then(() => {
                     if (this.profilePhoto) {
                         const formData: FormData = new FormData();
                         formData.append("avatar", this.profilePhoto);
 
                         this.profileService.updateUserPhoto(formData).then(() => {
-                            this.authService.me().then((user: User) => {
-                                this.user = user;
-                            });
+                            this.updateUser();
                         });
                     }
                     else {
-                        this.authService.me().then((user: User) => {
-                            this.user = user;
-                        });
+                        this.updateUser();
                     }
                 });
             });
         } else {
             this.isFormValid = false;
         }
+    }
+
+    updateUser(): void {
+        this.authService.me().then((user: User) => {
+            this.user = user;
+            window.location.reload();
+        });
     }
 }

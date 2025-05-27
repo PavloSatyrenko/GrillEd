@@ -40,13 +40,11 @@ export class CoursesService {
         durationMax?: number;
         ratingMin?: number;
         ratingMax?: number;
-    }
-    ): Promise<any> {
+    }): Promise<any> {
         let params: HttpParams = new HttpParams()
             .set("page", page)
             .set("pageSize", pageSize)
             .set("search", search);
-
 
         if (categoryId.length > 0) {
             params = params.set("categoryId[in]", categoryId.join(","));
@@ -208,5 +206,43 @@ export class CoursesService {
 
     enrollCourse(courseId: string): Promise<any> {
         return firstValueFrom(this.http.post(`${this.api}v1/courses/${courseId}/enroll`, {}));
+    }
+
+    getStudentCourses({
+        page = 1,
+        pageSize = 5,
+        search = "",
+        categoryId = [],
+        skillsId = [],
+        status = [],
+        orderBy = "lastProgressAt:asc"
+    }: {
+        page?: number;
+        pageSize?: number;
+        search?: string;
+        categoryId?: string[];
+        skillsId?: string[];
+        status?: ("ACTIVE" | "ARCHIVED")[];
+        orderBy?: string;
+    }): Promise<any> {
+        let params: HttpParams = new HttpParams()
+            .set("page", page)
+            .set("pageSize", pageSize)
+            .set("search", search)
+            .set("orderBy", orderBy);
+
+        if (categoryId.length > 0) {
+            params = params.set("categoryId[in]", categoryId.join(","));
+        }
+
+        if (skillsId.length > 0) {
+            params = params.set("skillsId[in]", skillsId.join(","));
+        }
+
+        if (status.length > 0) {
+            params = params.set("status[in]", status.join(","));
+        }
+
+        return firstValueFrom(this.http.get(`${this.api}v1/users/me/courses`, { params }));
     }
 }

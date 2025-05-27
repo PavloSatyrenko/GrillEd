@@ -163,11 +163,17 @@ export class StudentComponent implements OnInit {
                 name: this.user!.name.trim(),
                 surname: this.user!.surname.trim(),
             }).then(() => {
+                let categoriesUploaded: boolean = false;
+                let skillsUploaded: boolean = false;
+                let photoUploaded: boolean = false;
+
                 if (this.selectedCategories.length > 0) {
                     const categoriesIds: string[] = this.selectedCategories.map((category: Skill) => category.id);
 
                     this.skillsService.followCategories(categoriesIds).then(() => {
-                        this.updateUser();
+                        categoriesUploaded = true;
+
+                        this.updateUser(categoriesUploaded, skillsUploaded, photoUploaded);
                     });
                 }
 
@@ -175,7 +181,9 @@ export class StudentComponent implements OnInit {
                     const skillsIds: string[] = this.selectedSkills.map((skill: Skill) => skill.id);
 
                     this.skillsService.followSkills(skillsIds).then(() => {
-                        this.updateUser();
+                        skillsUploaded = true;
+
+                        this.updateUser(categoriesUploaded, skillsUploaded, photoUploaded);
                     });
                 }
 
@@ -184,22 +192,35 @@ export class StudentComponent implements OnInit {
                     formData.append("avatar", this.profilePhoto);
 
                     this.profileService.updateUserPhoto(formData).then(() => {
-                        this.updateUser();
+                        photoUploaded = true;
+
+                        this.updateUser(categoriesUploaded, skillsUploaded, photoUploaded);
                     });
                 }
 
-                if (!this.profilePhoto && !this.selectedSkills.length && !this.selectedCategories.length) {
-                    this.updateUser();
-                }
+                this.updateUser(categoriesUploaded, skillsUploaded, photoUploaded);
             });
         } else {
             this.isFormValid = false;
         }
     }
 
-    updateUser(): void {
+    updateUser(categoriesUploaded: boolean, skillsUploaded: boolean, photoUploaded: boolean): void {
+        if (this.selectedCategories.length > 0 && !categoriesUploaded) {
+            return;
+        }
+
+        if (this.selectedSkills.length > 0 && !skillsUploaded) {
+            return;
+        }
+
+        if (this.profilePhoto && !photoUploaded) {
+            return;
+        }
+
         this.authService.me().then((user: User) => {
             this.user = user;
+            window.location.reload();
         });
     }
 }

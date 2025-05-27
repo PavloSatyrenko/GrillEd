@@ -22,7 +22,7 @@
                 </div>
 
                 <div class="course__right-side">
-                    <button class="button button_theme_primary course__button" (click)="openCourse(course)">Continue</button>
+                    <a class="button button_theme_primary course__button" [routerLink]="'/course/' + course.id + '/flow'">Continue</a>
                 </div>
             </div>
         </div>

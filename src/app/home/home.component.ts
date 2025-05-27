@@ -4,7 +4,7 @@ import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { AuthService } from "../services/auth.service";
 import { Course } from "../../classes/Course";
-import { Router } from "@angular/router";
+import { RouterModule } from "@angular/router";
 import { CoursesService } from "../services/courses.service";
 import { SkillsService } from "../services/skills.service";
 import { Skill } from "../../classes/Skill";
@@ -12,7 +12,7 @@ import { Skill } from "../../classes/Skill";
 @Component({
     selector: "app-home",
     standalone: true,
-    imports: [CommonModule, FormsModule],
+    imports: [CommonModule, FormsModule, RouterModule],
     templateUrl: "./home.component.html",
     styleUrl: "./home.component.css"
 })
@@ -34,13 +34,19 @@ export class HomeComponent implements OnInit {
     private authService: AuthService = inject(AuthService);
     private coursesService: CoursesService = inject(CoursesService);
     private skillsService: SkillsService = inject(SkillsService);
-    private router: Router = inject(Router);
 
     ngOnInit(): void {
         this.user = this.authService.user;
 
         if (this.user!.role == "TEACHER") {
             this.panelNumber = 1;
+        }
+
+        if (this.user!.role == "STUDENT") {
+            this.coursesService.getStudentCourses({}).then((response: { data: Course[] }) => {
+                console.log(response.data);
+                this.startedCourses = response.data;
+            });
         }
 
         this.startedCourses = [{
@@ -94,9 +100,5 @@ export class HomeComponent implements OnInit {
         this.panelNumber = panelNumber;
 
         this.filterValue = "";
-    }
-
-    openCourse(course: Course): void {
-        this.router.navigate([`/course/${course.id}`]);
     }
 }
