@@ -26,8 +26,7 @@ export class CoursesService {
         durationMin = 0,
         durationMax = 0,
         ratingMin = 0,
-        ratingMax = 0,
-        my = null
+        ratingMax = 0
     }: {
         page?: number;
         pageSize?: number;
@@ -40,7 +39,6 @@ export class CoursesService {
         durationMax?: number;
         ratingMin?: number;
         ratingMax?: number;
-        my?: boolean | null;
     }
     ): Promise<any> {
         let params: HttpParams = new HttpParams()
@@ -79,10 +77,6 @@ export class CoursesService {
 
         if (ratingMax > 0) {
             params = params.set("rating[max]", ratingMax);
-        }
-
-        if (my !== null) {
-            params = params.set("my", my);
         }
 
         return firstValueFrom(this.http.get(`${this.api}v1/courses`, { params }));
@@ -189,6 +183,14 @@ export class CoursesService {
 
     publsihCourse(courseId: string): Promise<any> {
         return firstValueFrom(this.http.post(`${this.api}v1/courses/${courseId}/publish`, {}));
+    }
+
+    completeLesson(courseId: string, lessonId: string): Promise<any> {
+        return firstValueFrom(this.http.post(`${this.api}v1/courses/${courseId}/lessons/${lessonId}/complete`, {}));
+    }
+
+    isCourseEditable(courseId: string): Promise<any> {
+        return firstValueFrom(this.http.get(`${this.api}v1/courses/${courseId}/editable`));
     }
 
     enrollCourse(courseId: string): Promise<any> {

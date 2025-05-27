@@ -39,6 +39,10 @@ export class HomeComponent implements OnInit {
     ngOnInit(): void {
         this.user = this.authService.user;
 
+        if (this.user!.role == "TEACHER") {
+            this.panelNumber = 1;
+        }
+
         this.startedCourses = [{
             id: "1",
             author: {

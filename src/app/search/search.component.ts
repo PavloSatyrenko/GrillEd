@@ -16,12 +16,28 @@ import { Course } from "../../classes/Course";
 export class SearchComponent implements OnInit {
     courses: Course[] = [];
 
+    searchOptions: {
+        page?: number;
+        pageSize?: number;
+        search?: string;
+        categoryId?: string[];
+        authorId?: string[];
+        level?: ("BEGINNER" | "INTERMEDIATE" | "EXPERT")[];
+        status?: ("DRAFT" | "PUBLISHED" | "ARCHIVED")[];
+        durationMin?: number;
+        durationMax?: number;
+        ratingMin?: number;
+        ratingMax?: number;
+    } = {};
+
     initialCategories: Skill[] = [];
     categories: Skill[] = [];
     selectedCategories: Skill[] = [];
 
     skills: Skill[] = [];
     selectedSkills: Skill[] = [];
+
+    selectedLevels: ("BEGINNER" | "INTERMEDIATE" | "EXPERT")[] = [];
 
     page: number = 1;
     totalPages: number = 1;
@@ -48,7 +64,9 @@ export class SearchComponent implements OnInit {
                     if (categoryId) {
                         this.selectedCategories = this.initialCategories.filter((tempCategory: Skill) => tempCategory.id == categoryId);
 
-                        this.coursesService.getAllCourses({ categoryId: [this.selectedCategories[0].id] }).then((response: { data: Course[], pagination: any }) => {
+                        this.searchOptions.categoryId = [categoryId];
+
+                        this.coursesService.getAllCourses(this.searchOptions).then((response: { data: Course[], pagination: any }) => {
                             this.courses = response.data;
                         });
                     }
@@ -121,16 +139,43 @@ export class SearchComponent implements OnInit {
     }
 
     toggleCategory(category: Skill): void {
-        if (!this.isSkillSelected(category)) {
+        if (!this.isCategorySelected(category)) {
             this.selectedCategories.push(category);
         }
         else {
             this.selectedCategories = this.selectedCategories.filter((selectedCategory: Skill) => selectedCategory.id != category.id);
         }
+
+        this.searchOptions.categoryId = this.selectedCategories.map((selectedCategory: Skill) => selectedCategory.id);
+
+        this.coursesService.getAllCourses(this.searchOptions)
+            .then((response: { data: Course[], pagination: any }) => {
+                this.courses = response.data;
+            });
     }
 
     isCategorySelected(category: Skill): boolean {
         return this.selectedCategories.some((selectedCategory: Skill) => selectedCategory.id == category.id);
+    }
+
+    toggleLevel(level: "BEGINNER" | "INTERMEDIATE" | "EXPERT"): void {
+        if (!this.isLevelSelected(level)) {
+            this.selectedLevels.push(level);
+        }
+        else {
+            this.selectedLevels = this.selectedLevels.filter((selectedLevel: "BEGINNER" | "INTERMEDIATE" | "EXPERT") => selectedLevel != level);
+        }
+
+        this.searchOptions.level = [...this.selectedLevels];
+
+        this.coursesService.getAllCourses(this.searchOptions)
+            .then((response: { data: Course[], pagination: any }) => {
+                this.courses = response.data;
+            });
+    }
+
+    isLevelSelected(level: "BEGINNER" | "INTERMEDIATE" | "EXPERT"): boolean {
+        return this.selectedLevels.some((selectedLevel: "BEGINNER" | "INTERMEDIATE" | "EXPERT") => selectedLevel == level);
     }
 
     filterSkills(target: EventTarget | null): void {

@@ -40,7 +40,7 @@ export class StudentComponent implements OnInit {
     ngOnInit(): void {
         this.user = this.authService.user;
 
-        this.coursesService.getAllCourses({ my: true }).then((response: { data: Course[], pagination: any }) => {
+        this.coursesService.getAllCourses({}).then((response: { data: Course[], pagination: any }) => {
             this.courses = response.data;
         });
     }

@@ -175,13 +175,14 @@
             <div class="aside__buttons">
                 <button *ngIf="user?.role == 'STUDENT'" class="button button_theme_primary aside__button" (click)="enroll()">Enroll</button>
 
-                <a
+                <button
                     *ngIf="isCourseEditButtonVisible()"
                     class="button button_theme_primary-line aside__button"
+                    [disabled]="!isCourseEditable"
                     [routerLink]="'/course/' + course?.id + '/edit'"
                 >
                     Edit
-                </a>
+                </button>
 
                 <button *ngIf="isCoursePublishButtonVisible()" class="button button_theme_primary-line aside__button" (click)="publishCourse()">
                     Publish

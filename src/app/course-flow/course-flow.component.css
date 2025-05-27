@@ -1,0 +1,234 @@
+.course {
+    padding-top: 48px;
+}
+
+.course__container {
+    display: flex;
+    gap: 24px;
+}
+
+.course__main {
+    position: sticky;
+    top: calc(var(--header-height) + 24px);
+    flex-grow: 1;
+    height: max-content;
+    max-height: calc(100dvh - var(--header-height) - 90px);
+}
+
+.course__information {
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    gap: 24px;
+    width: 400px;
+}
+
+.course__image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 234px;
+    overflow: hidden;
+    background-color: var(--border-color);
+    border-radius: 8px;
+}
+
+.course__image i {
+    font-size: 64px;
+}
+
+.course__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.course__title {
+    padding-left: 6px;
+    margin-top: 8px;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--primary-text-color);
+    text-align: center;
+}
+
+.progress {
+    position: relative;
+    width: 300px;
+    height: 100px;
+    margin: 0 auto;
+}
+
+.progress__image {
+    position: absolute;
+    top: -48px;
+    left: -40px;
+    height: 220px;
+    pointer-events: none;
+    user-select: none;
+    object-fit: cover;
+    transform: rotateZ(-10deg);
+}
+
+.progress__value {
+    position: absolute;
+    bottom: 0;
+    left: 230px;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--secondary-color);
+}
+
+.information__content {
+    padding: 0;
+}
+
+.module__header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+    cursor: pointer;
+    border-radius: 16px;
+}
+
+.module__header-content {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.module__title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--primary-text-color);
+    white-space: nowrap;
+}
+
+.module__information {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.information__item {
+    display: flex;
+    flex-shrink: 0;
+    gap: 6px;
+    align-items: center;
+    padding: 0 8px;
+    border-right: 1px solid var(--secondary-color);
+}
+
+.information__item:last-child {
+    border-right: none;
+}
+
+.information__icon {
+    font-size: 15px;
+    color: var(--secondary-color);
+}
+
+.information__text {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--primary-text-color);
+}
+
+.module__arrow {
+    font-size: 24px;
+    color: var(--secondary-color);
+}
+
+.module__list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+    padding-top: 0;
+}
+
+.module__lesson {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0 8px 16px;
+    cursor: pointer;
+    outline: 2px solid transparent;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.lesson_completed {
+    background-color: var(--input-background-hover-color);
+    border-color: var(--secondary-color);
+}
+
+.lesson_selected {
+    outline: 2px solid var(--secondary-color);
+}
+
+.lesson__name {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    overflow: hidden;
+}
+
+.lesson__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    font-size: 20px;
+    color: var(--secondary-color);
+}
+
+.lesson__title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--primary-text-color);
+    white-space: nowrap;
+}
+
+.lesson__time {
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--primary-text-color);
+}
+
+.main__title {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--primary-text-color);
+    text-align: center;
+}
+
+.main__content {
+    margin-top: 24px;
+    overflow: auto;
+}
+
+.main__article ul {
+    padding: revert;
+}
+
+.main__video {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background-color: var(--border-color);
+    border-radius: 8px;
+}
+
+.main__button {
+    margin-top: 24px;
+    margin-left: auto;
+}

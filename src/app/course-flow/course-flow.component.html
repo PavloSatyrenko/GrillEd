@@ -1,1 +1,111 @@
-<p>course-flow works!</p>
+<div class="course">
+    <div class="container course__container">
+        <div class="course__information">
+            <div class="card information__header">
+                <div class="course__image">
+                    <img *ngIf="course?.avatarLink" [src]="course?.avatarLink" alt="Course icon" />
+                    <i *ngIf="!course?.avatarLink" class="fa-solid fa-graduation-cap"></i>
+                </div>
+
+                <h2 class="course__title">{{ course?.name }}</h2>
+
+                <div class="progress">
+                    <img class="progress__image" [src]="'/assets/animation/frame' + animationFrame + '.png'" alt="Progress image" />
+
+                    <span class="progress__value">{{ course?.progress }}%</span>
+                </div>
+            </div>
+
+            <div *ngFor="let module of course?.modules" class="card information__content">
+                <div class="module__header" (click)="toggleModule(module)">
+                    <div class="module__header-content">
+                        <span *ngIf="!module.isOpened" class="module__arrow"><i class="fa-solid fa-chevron-down"></i></span>
+                        <span *ngIf="module.isOpened" class="module__arrow"><i class="fa-solid fa-chevron-up"></i></span>
+
+                        <h3 class="module__title">{{ module.name }}</h3>
+                    </div>
+
+                    <div class="module__information">
+                        <div *ngIf="getModuleLessonAmount(module, 'ARTICLE')" class="information__item">
+                            <span class="information__icon"><i class="fa-solid fa-file-lines"></i></span>
+                            <span class="information__text">
+                                {{ getModuleLessonAmount(module, "ARTICLE") }}
+                                article<span *ngIf="getModuleLessonAmount(module, 'ARTICLE') > 1">s</span>
+                            </span>
+                        </div>
+
+                        <div *ngIf="getModuleLessonAmount(module, 'VIDEO')" class="information__item">
+                            <span class="information__icon"><i class="fa-solid fa-circle-play"></i></span>
+                            <span class="information__text">
+                                {{ getModuleLessonAmount(module, "VIDEO") }}
+                                video<span *ngIf="getModuleLessonAmount(module, 'VIDEO') > 1">s</span>
+                            </span>
+                        </div>
+
+                        <div *ngIf="getModuleLessonAmount(module, 'TEST')" class="information__item">
+                            <span class="information__icon"><i class="fa-solid fa-question-circle"></i></span>
+                            <span class="information__text">
+                                {{ getModuleLessonAmount(module, "TEST") }}
+                                test<span *ngIf="getModuleLessonAmount(module, 'TEST') > 1">s</span>
+                            </span>
+                        </div>
+
+                        <div class="information__item">
+                            <span class="information__icon"><i class="fa-solid fa-clock"></i></span>
+                            <span class="information__text">{{ getTimeString(module.estimatedTime) }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="module.isOpened" class="module__list">
+                    <div
+                        *ngFor="let lesson of module.lessons"
+                        class="module__lesson lesson"
+                        [ngClass]="{ lesson_completed: lesson.completed, lesson_selected: lesson.id == activeLesson?.id }"
+                        (click)="selectLesson(lesson)"
+                    >
+                        <div class="lesson__name">
+                            <span *ngIf="lesson.type == 'ARTICLE'" class="lesson__icon"><i class="fa-regular fa-file-lines"></i></span>
+                            <span *ngIf="lesson.type == 'VIDEO'" class="lesson__icon"><i class="fa-regular fa-circle-play"></i></span>
+                            <span *ngIf="lesson.type == 'TEST'" class="lesson__icon"><i class="fa-regular fa-question-circle"></i></span>
+
+                            <span class="lesson__title">{{ lesson.name }}</span>
+                        </div>
+
+                        <div class="information__item">
+                            <span class="information__icon"><i class="fa-solid fa-clock"></i></span>
+                            <span class="information__text">{{ getTimeString(lesson.estimatedTime) }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card course__main">
+            <h2 class="main__title">{{ activeLesson?.name }}</h2>
+
+            <div class="main__content">
+                @if (activeLesson?.type == "ARTICLE") {
+                <div class="main__article ql-editor" [innerHTML]="activeLesson?.safeArticle"></div>
+                } @else if (activeLesson?.type == "VIDEO") {
+                <video class="main__video" [src]="activeLesson?.videoLink" controls></video>
+                } @else if (activeLesson?.type == "TEST") {
+                <div class="main__test">
+                    <div *ngFor="let question of activeLesson?.test?.questions" class="test__question">
+                        <h4 class="question__title">{{ question.text }}</h4>
+
+                        <div class="question__answers">
+                            <label *ngFor="let answer of question.answers" class="radio-wrapper">
+                                <input type="radio" name="{{ question.id }}" [checked]="answer.id" (change)="onAnswerSelected(question, answer)" />
+                                <span class="radio-label">{{ answer.text }}</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                }
+            </div>
+
+            <button class="button button_theme_primary main__button" (click)="completeLesson()">Next lesson</button>
+        </div>
+    </div>
+</div>

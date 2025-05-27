@@ -21,6 +21,7 @@ export class CourseComponent implements OnInit {
     user: User | null = null;
 
     course: Course | null = null;
+    isCourseEditable: boolean = true;
 
     private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
     private router: Router = inject(Router);
@@ -34,6 +35,10 @@ export class CourseComponent implements OnInit {
             this.coursesService.getCourse(this.courseId).then((course: Course) => {
                 this.course = course;
                 this.user = this.authService.user;
+
+                this.coursesService.isCourseEditable(this.courseId).then((response: { isEditable: boolean }) => {
+                    this.isCourseEditable = response.isEditable;
+                });
             }).catch((error: any) => {
                 console.error("Error fetching course:", error);
                 this.router.navigate(["/home"]);
@@ -60,7 +65,6 @@ export class CourseComponent implements OnInit {
 
         return status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
     }
-
 
     getModuleLessonAmount(module: Module, type: "ARTICLE" | "VIDEO" | "TEST"): number {
         return module.lessons.filter((lesson: Lesson) => lesson.type == type).length;

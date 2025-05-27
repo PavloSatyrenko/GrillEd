@@ -66,7 +66,7 @@ export class TeacherComponent implements OnInit {
             this.categories = this.initialCategories;
         });
 
-        this.courseService.getAllCourses({ my: true }).then((response: { data: Course[], pagination: any }) => {
+        this.courseService.getAllCourses({}).then((response: { data: Course[], pagination: any }) => {
             this.courses = response.data;
         });
     }

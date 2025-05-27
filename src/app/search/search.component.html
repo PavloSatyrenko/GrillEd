@@ -38,17 +38,17 @@
 
                 <div class="option__list">
                     <label class="checkbox-wrapper">
-                        <input class="checkbox" type="checkbox" />
+                        <input class="checkbox" type="checkbox" (change)="toggleLevel('BEGINNER')" />
                         <span class="checkbox-label">Beginner</span>
                     </label>
 
                     <label class="checkbox-wrapper">
-                        <input class="checkbox" type="checkbox" />
+                        <input class="checkbox" type="checkbox" (change)="toggleLevel('INTERMEDIATE')" />
                         <span class="checkbox-label">Intermediate</span>
                     </label>
 
                     <label class="checkbox-wrapper">
-                        <input class="checkbox" type="checkbox" />
+                        <input class="checkbox" type="checkbox" (change)="toggleLevel('EXPERT')" />
                         <span class="checkbox-label">Expert</span>
                     </label>
                 </div>

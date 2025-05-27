@@ -77,10 +77,20 @@
                         <button class="panels__button" [ngClass]="{ panels__button_active: panelNumber == 2 }" (click)="choosePanel(2)">
                             Newest
                         </button>
-                        <button class="panels__button" [ngClass]="{ panels__button_active: panelNumber == 3 }" (click)="choosePanel(3)">
+                        <button
+                            *ngIf="user?.role == 'STUDENT'"
+                            class="panels__button"
+                            [ngClass]="{ panels__button_active: panelNumber == 3 }"
+                            (click)="choosePanel(3)"
+                        >
                             By categories
                         </button>
-                        <button class="panels__button" [ngClass]="{ panels__button_active: panelNumber == 4 }" (click)="choosePanel(4)">
+                        <button
+                            *ngIf="user?.role == 'STUDENT'"
+                            class="panels__button"
+                            [ngClass]="{ panels__button_active: panelNumber == 4 }"
+                            (click)="choosePanel(4)"
+                        >
                             By skills
                         </button>
                     </div>

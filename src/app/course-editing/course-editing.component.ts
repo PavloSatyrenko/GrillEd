@@ -268,6 +268,7 @@ export class CourseEditingComponent implements OnInit {
         this.isLessonCreated = true;
         this.initialModule = module;
         this.lesson = JSON.parse(JSON.stringify(newLesson));
+        this.initialLesson = this.lesson;
         this.isLessonPopupVisible = true;
         document.body.style.overflow = "hidden";
 
@@ -358,8 +359,6 @@ export class CourseEditingComponent implements OnInit {
                                 answer.isCommentaryVisible = !!answer.commentary;
                             });
                         });
-
-                        console.log(this.lesson.questions);
 
                         this.isLessonPopupVisible = true;
                         document.body.style.overflow = "hidden";
@@ -598,6 +597,7 @@ export class CourseEditingComponent implements OnInit {
                     else {
                         this.initialModule.lessons.push(response);
 
+                        this.isLessonSaved = false;
                         this.isLessonPopupVisible = false;
                         document.body.style.overflow = "";
                     }
