@@ -49,6 +49,8 @@ export class TeacherComponent implements OnInit {
 
     panelNumber: number = 1;
 
+    courses: Course[] = [];
+
     private domSanitizer: DomSanitizer = inject(DomSanitizer);
     private router: Router = inject(Router);
     private authService: AuthService = inject(AuthService);
@@ -62,6 +64,11 @@ export class TeacherComponent implements OnInit {
             this.initialCategories = response.categories;
 
             this.categories = this.initialCategories;
+        });
+
+        this.courseService.getAllCourses({ my: true }).then((response: { data: Course[], pagination: any }) => {
+            console.log(response);
+            this.courses = response.data;
         });
     }
 
@@ -196,6 +203,10 @@ export class TeacherComponent implements OnInit {
 
     choosePanel(panelNumber: number): void {
         this.panelNumber = panelNumber;
+    }
+
+    getCourses(status: "DRAFT" | "PUBLISHED" | "ARCHIVED"): Course[] {
+        return this.courses.filter((course: Course) => course.status == status);
     }
 
     onSubmit(form: NgForm): void {

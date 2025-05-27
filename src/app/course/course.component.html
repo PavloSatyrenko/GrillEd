@@ -8,6 +8,12 @@
                     <span class="course__author">by {{ course!.author!.name }} {{ course!.author!.surname }}</span>
 
                     <div class="course__skills">
+                        <div class="course__skills-text">Category:</div>
+
+                        <span class="course__skill">{{ course!.category.name }}</span>
+                    </div>
+
+                    <div class="course__skills">
                         <div class="course__skills-text">Skills:</div>
 
                         <span class="course__skill">JavaScript</span>

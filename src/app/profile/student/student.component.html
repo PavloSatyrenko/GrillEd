@@ -127,117 +127,21 @@
                 <div class="panels__list">
                     <div *ngIf="panelNumber == 1" class="panel">
                         <div class="courses">
-                            <div class="card course">
+                            <div *ngFor="let course of courses" class="card course">
                                 <div class="course__image">
-                                    <!-- <img src="" alt="Course icon" /> -->
-                                    <i class="fa-solid fa-graduation-cap"></i>
+                                    <img *ngIf="course.avatarLink" [src]="course.avatarLink" alt="Course icon" />
+                                    <i *ngIf="!course.avatarLink" class="fa-solid fa-graduation-cap"></i>
                                 </div>
 
                                 <div class="course__information">
-                                    <span class="course__name">JavaScript</span>
-                                    <span class="course__author">by John Doe</span>
+                                    <span class="course__name">{{ course.name }}</span>
+                                    <span class="course__author">by {{ course.author.name }} {{ course.author.surname }}</span>
                                 </div>
 
                                 <div class="progress">
                                     <img class="progress__image" src="/assets/animation/frame2.png" alt="Progress image" />
 
-                                    <span class="progress__value">85%</span>
-                                </div>
-
-                                <button class="button button_theme_primary course__button">View course</button>
-                            </div>
-
-                            <div class="card course">
-                                <div class="course__image">
-                                    <i class="fa-solid fa-graduation-cap"></i>
-                                </div>
-
-                                <div class="course__information">
-                                    <span class="course__name">JavaScript</span>
-                                    <span class="course__author">by John Doe</span>
-                                </div>
-
-                                <div class="progress">
-                                    <img class="progress__image" src="/assets/animation/frame10.png" alt="Progress image" />
-
-                                    <span class="progress__value">85%</span>
-                                </div>
-
-                                <button class="button button_theme_primary course__button">View course</button>
-                            </div>
-
-                            <div class="card course">
-                                <div class="course__image">
-                                    <i class="fa-solid fa-graduation-cap"></i>
-                                </div>
-
-                                <div class="course__information">
-                                    <span class="course__name">JavaScript</span>
-                                    <span class="course__author">by John Doe</span>
-                                </div>
-
-                                <div class="progress">
-                                    <img class="progress__image" src="/assets/animation/frame1.png" alt="Progress image" />
-
-                                    <span class="progress__value">85%</span>
-                                </div>
-
-                                <button class="button button_theme_primary course__button">View course</button>
-                            </div>
-
-                            <div class="card course">
-                                <div class="course__image">
-                                    <!-- <img src="" alt="Course icon" /> -->
-                                    <i class="fa-solid fa-graduation-cap"></i>
-                                </div>
-
-                                <div class="course__information">
-                                    <span class="course__name">JavaScript</span>
-                                    <span class="course__author">by John Doe</span>
-                                </div>
-
-                                <div class="progress">
-                                    <img class="progress__image" src="/assets/animation/frame4.png" alt="Progress image" />
-
-                                    <span class="progress__value">85%</span>
-                                </div>
-
-                                <button class="button button_theme_primary course__button">View course</button>
-                            </div>
-
-                            <div class="card course">
-                                <div class="course__image">
-                                    <i class="fa-solid fa-graduation-cap"></i>
-                                </div>
-
-                                <div class="course__information">
-                                    <span class="course__name">JavaScript</span>
-                                    <span class="course__author">by John Doe</span>
-                                </div>
-
-                                <div class="progress">
-                                    <img class="progress__image" src="/assets/animation/frame8.png" alt="Progress image" />
-
-                                    <span class="progress__value">85%</span>
-                                </div>
-
-                                <button class="button button_theme_primary course__button">View course</button>
-                            </div>
-
-                            <div class="card course">
-                                <div class="course__image">
-                                    <i class="fa-solid fa-graduation-cap"></i>
-                                </div>
-
-                                <div class="course__information">
-                                    <span class="course__name">JavaScript</span>
-                                    <span class="course__author">by John Doe</span>
-                                </div>
-
-                                <div class="progress">
-                                    <img class="progress__image" src="/assets/animation/frame6.png" alt="Progress image" />
-
-                                    <span class="progress__value">85%</span>
+                                    <span class="progress__value">{{ course.progress }}%</span>
                                 </div>
 
                                 <button class="button button_theme_primary course__button">View course</button>

@@ -146,8 +146,10 @@
 }
 
 .course {
+    position: relative;
     flex-basis: calc(100% / 4 - 12px);
     gap: 8px;
+    padding-bottom: 80px;
     border: 1px solid var(--border-color);
 }
 
@@ -202,7 +204,9 @@
 }
 
 .course__button {
-    margin-top: 8px;
+    position: absolute;
+    bottom: 24px;
+    width: calc(100% - 24px * 2);
 }
 
 .certificates {

@@ -61,6 +61,7 @@ export class HomeComponent implements OnInit {
             modules: []
         }];
 
+        // status: ["PUBLISHED"],
         this.coursesService.getAllCourses({ pageSize: 6 }).then((response: { data: Course[], pagination: any }) => {
             this.coursesByCategory = response.data;
             this.coursesBySkills = response.data;

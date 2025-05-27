@@ -170,63 +170,90 @@
                 <div class="panels__list">
                     <div *ngIf="panelNumber == 1" class="panel">
                         <div class="courses">
-                            <div class="card course">
+                            <div *ngFor="let course of getCourses('PUBLISHED')" class="card course">
                                 <div class="course__image">
-                                    <!-- <img src="" alt="Course icon" /> -->
-                                    <i class="fa-solid fa-graduation-cap"></i>
+                                    <img *ngIf="course.avatarLink" [src]="course.avatarLink" alt="Course icon" />
+                                    <i *ngIf="!course.avatarLink" class="fa-solid fa-graduation-cap"></i>
                                 </div>
 
-                                <span class="course__name">JavaScript</span>
+                                <span class="course__name">{{ course.name }}</span>
 
                                 <div class="course__information">
-                                    <span class="course__students">Active students: <span class="course__value">3</span></span>
-                                    <span class="course__students">Total students: <span class="course__value">2222</span></span>
-                                    <span class="course__rating"><i class="fa-solid fa-star"></i> <span class="course__value"> 4.5</span></span>
+                                    <span class="course__students">
+                                        Total students: <span class="course__value">{{ course.enrolledCount }}</span>
+                                    </span>
+                                    <span class="course__rating">
+                                        <i class="fa-solid fa-star"></i> <span class="course__value"> {{ course.rating }}</span>
+                                    </span>
                                 </div>
 
-                                <button class="button button_theme_primary button_full-width course__button">View course</button>
+                                <a class="button button_theme_primary button_full-width course__button" [routerLink]="'/course/' + course.id">
+                                    View course
+                                </a>
+                            </div>
+
+                            <div *ngIf="getCourses('PUBLISHED').length == 0" class="no-courses">
+                                <span class="no-courses__text">No courses found for this category</span>
                             </div>
                         </div>
                     </div>
 
                     <div *ngIf="panelNumber == 2" class="panel">
                         <div class="courses">
-                            <div class="card course">
+                            <div *ngFor="let course of getCourses('DRAFT')" class="card course">
                                 <div class="course__image">
-                                    <!-- <img src="" alt="Course icon" /> -->
-                                    <i class="fa-solid fa-graduation-cap"></i>
+                                    <img *ngIf="course.avatarLink" [src]="course.avatarLink" alt="Course icon" />
+                                    <i *ngIf="!course.avatarLink" class="fa-solid fa-graduation-cap"></i>
                                 </div>
 
-                                <span class="course__name">JavaScript</span>
+                                <span class="course__name">{{ course.name }}</span>
 
                                 <div class="course__information">
-                                    <span class="course__students">Active students: <span class="course__value">3</span></span>
-                                    <span class="course__students">Total students: <span class="course__value">2222</span></span>
-                                    <span class="course__rating"><i class="fa-solid fa-star"></i> <span class="course__value"> 4.5</span></span>
+                                    <span class="course__students">
+                                        Total students: <span class="course__value">{{ course.enrolledCount }}</span>
+                                    </span>
+                                    <span class="course__rating">
+                                        <i class="fa-solid fa-star"></i> <span class="course__value"> {{ course.rating }}</span>
+                                    </span>
                                 </div>
 
-                                <button class="button button_theme_primary button_full-width course__button">View course</button>
+                                <a class="button button_theme_primary button_full-width course__button" [routerLink]="'/course/' + course.id">
+                                    View course
+                                </a>
+                            </div>
+
+                            <div *ngIf="getCourses('DRAFT').length == 0" class="no-courses">
+                                <span class="no-courses__text">No courses found for this category</span>
                             </div>
                         </div>
                     </div>
 
                     <div *ngIf="panelNumber == 3" class="panel">
                         <div class="courses">
-                            <div class="card course">
+                            <div *ngFor="let course of getCourses('ARCHIVED')" class="card course">
                                 <div class="course__image">
-                                    <!-- <img src="" alt="Course icon" /> -->
-                                    <i class="fa-solid fa-graduation-cap"></i>
+                                    <img *ngIf="course.avatarLink" [src]="course.avatarLink" alt="Course icon" />
+                                    <i *ngIf="!course.avatarLink" class="fa-solid fa-graduation-cap"></i>
                                 </div>
 
-                                <span class="course__name">JavaScript</span>
+                                <span class="course__name">{{ course.name }}</span>
 
                                 <div class="course__information">
-                                    <span class="course__students">Active students: <span class="course__value">3</span></span>
-                                    <span class="course__students">Total students: <span class="course__value">2222</span></span>
-                                    <span class="course__rating"><i class="fa-solid fa-star"></i> <span class="course__value"> 4.5</span></span>
+                                    <span class="course__students">
+                                        Total students: <span class="course__value">{{ course.enrolledCount }}</span>
+                                    </span>
+                                    <span class="course__rating">
+                                        <i class="fa-solid fa-star"></i> <span class="course__value"> {{ course.rating }}</span>
+                                    </span>
                                 </div>
 
-                                <button class="button button_theme_primary button_full-width course__button">View course</button>
+                                <a class="button button_theme_primary button_full-width course__button" [routerLink]="'/course/' + course.id">
+                                    View course
+                                </a>
+                            </div>
+
+                            <div *ngIf="getCourses('ARCHIVED').length == 0" class="no-courses">
+                                <span class="no-courses__text">No courses found for this category</span>
                             </div>
                         </div>
                     </div>

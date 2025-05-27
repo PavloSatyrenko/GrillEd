@@ -15,7 +15,7 @@ export class CoursesService {
 
     getAllCourses({
         page = 1,
-        pageSize = 21,
+        pageSize = 18,
         search = "",
         categoryId = [],
         authorId = [],

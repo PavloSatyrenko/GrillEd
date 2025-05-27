@@ -51,6 +51,7 @@
     padding: 8px 16px;
     font-size: 18px;
     font-weight: 500;
+    line-height: 1;
     color: var(--secondary-color);
     border: 2px solid var(--secondary-color);
     border-radius: 16px;

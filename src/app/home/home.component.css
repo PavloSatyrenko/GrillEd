@@ -80,6 +80,7 @@
     justify-content: center;
     width: 60px;
     height: 40px;
+    overflow: hidden;
     background-color: var(--border-color);
     border-radius: 8px;
 }

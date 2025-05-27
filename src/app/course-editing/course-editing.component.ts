@@ -173,6 +173,10 @@ export class CourseEditingComponent implements OnInit {
     }
 
     toggleModule(module: Module): void {
+        if (module.isEditing) {
+            return;
+        }
+
         module.isOpened = !module.isOpened;
 
         module.newLessonName = "";
@@ -180,9 +184,7 @@ export class CourseEditingComponent implements OnInit {
         module.isLessonNameErrorVisible = false;
     }
 
-    editModule(event: MouseEvent, module: Module): void {
-        event.stopPropagation();
-
+    editModule(module: Module): void {
         this.moduleName = module.name;
         module.isEditing = true;
 
@@ -192,11 +194,7 @@ export class CourseEditingComponent implements OnInit {
         }, 0);
     }
 
-    removeModule(event: MouseEvent, module: Module): void {
-        event.stopPropagation();
-
-        console.log(module)
-
+    removeModule(module: Module): void {
         this.coursesService.deleteModule(this.courseId, module.id).then(() => {
             const index: number = this.course.modules.indexOf(module);
 
@@ -211,8 +209,6 @@ export class CourseEditingComponent implements OnInit {
     }
 
     cancelModuleEditing(event: MouseEvent, module: Module): void {
-        event.stopPropagation();
-
         module.isEditing = false;
 
         if (module.isNewModule) {
@@ -224,9 +220,7 @@ export class CourseEditingComponent implements OnInit {
         }
     }
 
-    saveModule(event: MouseEvent, module: Module): void {
-        event.stopPropagation();
-
+    saveModule(module: Module): void {
         if (!this.moduleName.trim() || this.moduleName.trim().length < 5) {
             this.isModuleNameErrorVisible = true;
             return;
@@ -236,10 +230,9 @@ export class CourseEditingComponent implements OnInit {
 
         module.name = this.moduleName.trim();
 
-        module.isEditing = false;
-
         if (module.isNewModule) {
             this.coursesService.createModule(this.courseId, module.name).then((response: Module) => {
+                module.isEditing = false;
                 module.isNewModule = false;
                 module.id = response.id;
                 module.number = response.number;
@@ -286,6 +279,7 @@ export class CourseEditingComponent implements OnInit {
     editLesson(lesson: Lesson, module: Module): void {
         this.initialLesson = lesson;
         this.markdown = "";
+        this.isLessonCreated = false;
 
         this.coursesService.getLesson(this.courseId, lesson.id).then((response: Lesson) => {
             this.lesson = response;

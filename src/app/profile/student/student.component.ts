@@ -6,6 +6,8 @@ import { FormsModule, NgForm } from "@angular/forms";
 import { Skill } from '../../../classes/Skill';
 import { SkillPickerComponent } from '../../skill-picker/skill-picker.component';
 import { AuthService } from '../../services/auth.service';
+import { CoursesService } from '../../services/courses.service';
+import { Course } from '../../../classes/Course';
 
 @Component({
     selector: "app-student",
@@ -29,11 +31,18 @@ export class StudentComponent implements OnInit {
 
     panelNumber: number = 1;
 
+    courses: Course[] = [];
+
     private domSanitizer = inject(DomSanitizer);
     private authService: AuthService = inject(AuthService);
+    private coursesService: CoursesService = inject(CoursesService);
 
     ngOnInit(): void {
         this.user = this.authService.user;
+
+        this.coursesService.getAllCourses({ my: true }).then((response: { data: Course[], pagination: any }) => {
+            this.courses = response.data;
+        });
     }
 
     onPhotoUpload(event: EventTarget | null): void {

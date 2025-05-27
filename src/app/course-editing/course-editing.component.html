@@ -79,7 +79,7 @@
                                     *ngIf="!module.isEditing"
                                     class="button button_theme_primary-line module__button"
                                     [disabled]="isEditModuleButtonDisabled()"
-                                    (click)="editModule($event, module)"
+                                    (click)="editModule(module)"
                                 >
                                     Edit
                                 </button>
@@ -87,7 +87,7 @@
                                 <button
                                     *ngIf="module.isEditing"
                                     class="button button_theme_primary-line module__button"
-                                    (click)="cancelModuleEditing($event, module)"
+                                    (click)="cancelModuleEditing(module)"
                                 >
                                     Cancel
                                 </button>
@@ -95,7 +95,7 @@
                                 <button
                                     *ngIf="module.isEditing"
                                     class="button button_theme_primary module__button"
-                                    (click)="saveModule($event, module)"
+                                    (click)="saveModule(module)"
                                 >
                                     Save
                                 </button>
@@ -103,7 +103,7 @@
                                 <button
                                     class="button button_theme_primary-line button_icon-only module__button"
                                     [disabled]="module.isNewModule"
-                                    (click)="removeModule($event, module)"
+                                    (click)="removeModule(module)"
                                 >
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
