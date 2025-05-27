@@ -106,6 +106,10 @@ export class CoursesService {
         return firstValueFrom(this.http.post(`${this.api}v1/courses/${courseId}/modules`, { name: moduleName }));
     }
 
+    updateModule(courseId: string, moduleId: string, moduleName: string, order: number): Promise<any> {
+        return firstValueFrom(this.http.patch(`${this.api}v1/courses/${courseId}/modules/${moduleId}`, { name: moduleName, order }));
+    }
+
     deleteModule(courseId: string, moduleId: string): Promise<any> {
         return firstValueFrom(this.http.delete(`${this.api}v1/courses/${courseId}/modules/${moduleId}`));
     }

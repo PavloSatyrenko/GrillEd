@@ -208,7 +208,7 @@ export class CourseEditingComponent implements OnInit {
         return this.course.modules.some((module: Module) => module.isEditing);
     }
 
-    cancelModuleEditing(event: MouseEvent, module: Module): void {
+    cancelModuleEditing(module: Module): void {
         module.isEditing = false;
 
         if (module.isNewModule) {
@@ -236,6 +236,11 @@ export class CourseEditingComponent implements OnInit {
                 module.isNewModule = false;
                 module.id = response.id;
                 module.number = response.number;
+            });
+        }
+        else {
+            this.coursesService.updateModule(this.courseId, module.id, module.name, module.number).then(() => {
+                module.isEditing = false;
             });
         }
     }

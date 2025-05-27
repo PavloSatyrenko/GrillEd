@@ -67,7 +67,6 @@ export class TeacherComponent implements OnInit {
         });
 
         this.courseService.getAllCourses({ my: true }).then((response: { data: Course[], pagination: any }) => {
-            console.log(response);
             this.courses = response.data;
         });
     }

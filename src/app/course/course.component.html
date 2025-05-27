@@ -3,14 +3,14 @@
         <div class="course__main">
             <div class="course__information">
                 <div class="card">
-                    <h1 class="course__title">{{ course!.name }}</h1>
+                    <h1 class="course__title">{{ course?.name }}</h1>
 
-                    <span class="course__author">by {{ course!.author!.name }} {{ course!.author!.surname }}</span>
+                    <span class="course__author">by {{ course?.author?.name }} {{ course?.author?.surname }}</span>
 
                     <div class="course__skills">
                         <div class="course__skills-text">Category:</div>
 
-                        <span class="course__skill">{{ course!.category.name }}</span>
+                        <span class="course__skill">{{ course?.category?.name }}</span>
                     </div>
 
                     <div class="course__skills">
@@ -21,12 +21,20 @@
                         <span class="course__skill">CSS</span>
                         <span class="course__skill">React</span>
                     </div>
+
+                    <span class="course__level">
+                        Level: <span class="level__value">{{ getLevelString(course!.level) }}</span>
+                    </span>
+
+                    <span class="course__rating">
+                        Rating: <span class="rating__value">{{ course?.rating }} </span> <i class="fa-solid fa-star"></i>
+                    </span>
                 </div>
 
                 <div class="card">
                     <h2 class="course__subtitle">About</h2>
 
-                    <p class="course__description">{{ course!.about }}</p>
+                    <p class="course__description">{{ course?.about }}</p>
                 </div>
             </div>
 
@@ -38,7 +46,7 @@
                         <div class="information__item">
                             <span class="information__icon"><i class="fa-solid fa-book-open-reader"></i></span>
                             <span class="information__text">
-                                {{ course!.modules.length }} module<span *ngIf="course!.modules.length > 1">s</span>
+                                {{ course?.modules?.length }} module<span *ngIf="course!.modules.length > 1">s</span>
                             </span>
                         </div>
 
@@ -50,7 +58,7 @@
                 </div>
 
                 <div class="modules__list">
-                    <div *ngFor="let module of course!.modules" class="module module_active" [ngClass]="{ module_active: module.isOpened }">
+                    <div *ngFor="let module of course?.modules" class="module module_active" [ngClass]="{ module_active: module.isOpened }">
                         <button class="module__header" (click)="toggleModule(module)">
                             <h2 class="module__title">{{ module.name }}</h2>
 
@@ -105,25 +113,25 @@
 
         <div class="card course__aside aside">
             <div class="course__image">
-                <img *ngIf="course!.avatarLink" [src]="course!.avatarLink" alt="Course icon" />
-                <i *ngIf="!course!.avatarLink" class="fa-solid fa-graduation-cap"></i>
+                <img *ngIf="course?.avatarLink" [src]="course?.avatarLink" alt="Course icon" />
+                <i *ngIf="!course?.avatarLink" class="fa-solid fa-graduation-cap"></i>
             </div>
 
             <h3 class="aside__title">The course includes:</h3>
 
             <div class="aside__features features">
                 <div class="feature">
-                    <span class="feature__icon"><i class="fa-solid fa-video"></i></span>
-                    <span class="feature__name">{{ course!.modules.length }} module<span *ngIf="course!.modules.length > 1">s</span></span>
+                    <span class="feature__icon"><i class="fa-solid fa-book-open-reader"></i></span>
+                    <span class="feature__name">{{ course?.modules?.length }} module<span *ngIf="course!.modules.length > 1">s</span></span>
                 </div>
 
                 <div class="feature">
-                    <span class="feature__icon"><i class="fa-solid fa-video"></i></span>
+                    <span class="feature__icon"><i class="fa-solid fa-person-chalkboard"></i></span>
                     <span class="feature__name">{{ getTotalLessonAmount() }} lesson<span *ngIf="getTotalLessonAmount() > 1">s</span></span>
                 </div>
 
                 <div *ngIf="getTotalLessonAmount('ARTICLE')" class="feature">
-                    <span class="feature__icon"><i class="fa-solid fa-video"></i></span>
+                    <span class="feature__icon"><i class="fa-solid fa-file-lines"></i></span>
                     <span class="feature__name">
                         {{ getTotalLessonAmount("ARTICLE") }}
                         article<span *ngIf="getTotalLessonAmount('ARTICLE') > 1">s</span>
@@ -131,7 +139,7 @@
                 </div>
 
                 <div *ngIf="getTotalLessonAmount('VIDEO')" class="feature">
-                    <span class="feature__icon"><i class="fa-solid fa-video"></i></span>
+                    <span class="feature__icon"><i class="fa-solid fa-play-circle"></i></span>
                     <span class="feature__name">
                         {{ getTotalLessonAmount("VIDEO") }}
                         video<span *ngIf="getTotalLessonAmount('VIDEO') > 1">s</span>
@@ -139,7 +147,7 @@
                 </div>
 
                 <div *ngIf="getTotalLessonAmount('TEST')" class="feature">
-                    <span class="feature__icon"><i class="fa-solid fa-video"></i></span>
+                    <span class="feature__icon"><i class="fa-solid fa-question-circle"></i></span>
                     <span class="feature__name">
                         {{ getTotalLessonAmount("TEST") }}
                         test<span *ngIf="getTotalLessonAmount('TEST') > 1">s</span>
@@ -147,12 +155,22 @@
                 </div>
 
                 <div class="feature">
-                    <span class="feature__icon"><i class="fa-solid fa-video"></i></span>
+                    <span class="feature__icon"><i class="fa-solid fa-certificate"></i></span>
                     <span class="feature__name">Certificate</span>
                 </div>
             </div>
 
-            <button class="button button_theme_primary aside__button" (click)="enroll()">Enroll</button>
+            <div class="aside__buttons">
+                <button class="button button_theme_primary aside__button" (click)="enroll()">Enroll</button>
+
+                <a
+                    *ngIf="course!.author.id == user?.id"
+                    class="button button_theme_primary-line aside__button"
+                    [routerLink]="'/course/' + course!.id + '/edit'"
+                >
+                    Edit
+                </a>
+            </div>
         </div>
     </div>
 </div>
