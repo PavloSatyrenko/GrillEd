@@ -12,6 +12,6 @@ export class User {
     teacher!: {
         workplace: string;
         position: string;
-        description: string
+        aboutMe: string
     } | null
 }

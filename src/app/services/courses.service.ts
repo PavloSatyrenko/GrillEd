@@ -11,7 +11,6 @@ import { Answer } from "../../classes/Answer";
     providedIn: "root"
 })
 export class CoursesService {
-
     private http: HttpClient = inject(HttpClient);
     private readonly api = "https://apidev.khokhotva.me/";
 
@@ -96,6 +95,14 @@ export class CoursesService {
 
     updateCoursePhoto(courseId: string, formData: FormData): Promise<any> {
         return firstValueFrom(this.http.patch(`${this.api}v1/courses/${courseId}/avatar`, formData));
+    }
+
+    attachSkills(courseId: string, skillsIds: string[]): Promise<any> {
+        return firstValueFrom(this.http.post(`${this.api}v1/courses/${courseId}/skills`, { ids: skillsIds }));
+    }
+
+    detachSkills(courseId: string, skillsIds: string[]): Promise<any> {
+        return firstValueFrom(this.http.delete(`${this.api}v1/courses/${courseId}/skills`, { body: { ids: skillsIds } }));
     }
 
     createModule(courseId: string, moduleName: string): Promise<any> {

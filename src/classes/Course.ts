@@ -11,6 +11,7 @@ export class Course {
     };
     avatarLink?: string;
     category!: Skill;
+    skills?: Skill[];
     name!: string;
     about!: string;
     level: "BEGINNER" | "INTERMEDIATE" | "EXPERT" = "BEGINNER";
@@ -19,5 +20,6 @@ export class Course {
     enrolledCount!: number;
     rating!: number;
     progress?: number;
+    animationFrame?: number;
     modules: Module[] = [];
 }

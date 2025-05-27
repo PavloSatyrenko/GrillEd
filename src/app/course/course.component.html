@@ -13,13 +13,10 @@
                         <span class="course__skill">{{ course?.category?.name }}</span>
                     </div>
 
-                    <div class="course__skills">
+                    <div *ngIf="course?.skills?.length" class="course__skills">
                         <div class="course__skills-text">Skills:</div>
 
-                        <span class="course__skill">JavaScript</span>
-                        <span class="course__skill">HTML</span>
-                        <span class="course__skill">CSS</span>
-                        <span class="course__skill">React</span>
+                        <span *ngFor="let skill of course?.skills" class="course__skill">{{ skill.name }}</span>
                     </div>
 
                     <span class="course__level">

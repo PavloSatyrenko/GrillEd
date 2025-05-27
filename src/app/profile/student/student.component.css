@@ -142,7 +142,15 @@
 .course {
     flex-basis: calc(100% / 4 - 12px);
     gap: 8px;
+    justify-content: space-between;
     border: 1px solid var(--border-color);
+}
+
+.course__upper,
+.course__lower {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .course__image {
@@ -192,7 +200,7 @@
 
 .progress__image {
     position: absolute;
-    top: -48px;
+    top: -26px;
     left: -40px;
     height: 160px;
     pointer-events: none;
@@ -208,10 +216,6 @@
     font-size: 28px;
     font-weight: 700;
     color: var(--secondary-color);
-}
-
-.course__button {
-    width: 100%;
 }
 
 .skills .modal__container {

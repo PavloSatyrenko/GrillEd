@@ -8,6 +8,7 @@ import { SkillPickerComponent } from '../../skill-picker/skill-picker.component'
 import { AuthService } from '../../services/auth.service';
 import { CoursesService } from '../../services/courses.service';
 import { Course } from '../../../classes/Course';
+import { ProfileService } from '../../services/profile.service';
 
 @Component({
     selector: "app-student",
@@ -23,6 +24,7 @@ export class StudentComponent implements OnInit {
 
     @ViewChild("profilePhotoInput") profilePhotoInput!: ElementRef<HTMLInputElement>;
     profilePhotoPath: SafeResourceUrl | null = null;
+    profilePhoto: File | null = null;
     // isSizeValid: boolean = true;
 
     isSkillsPopupVisible: boolean = false;
@@ -36,12 +38,25 @@ export class StudentComponent implements OnInit {
     private domSanitizer = inject(DomSanitizer);
     private authService: AuthService = inject(AuthService);
     private coursesService: CoursesService = inject(CoursesService);
+    private profileService: ProfileService = inject(ProfileService);
 
     ngOnInit(): void {
         this.user = this.authService.user;
 
         this.coursesService.getAllCourses({}).then((response: { data: Course[], pagination: any }) => {
             this.courses = response.data;
+
+            this.courses.forEach((course: Course) => {
+                if (course.progress) {
+                    course.animationFrame = Math.ceil(course.progress! / 10);
+                    if (course.animationFrame == 0) {
+                        course.animationFrame = 1;
+                    }
+                }
+                else {
+                    course.animationFrame = 1;
+                }
+            });
         });
     }
 
@@ -57,12 +72,14 @@ export class StudentComponent implements OnInit {
                 // }
 
                 this.profilePhotoPath = this.domSanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(file));
+                this.profilePhoto = file;
             }
         }
     }
 
     removePhoto(): void {
         this.profilePhotoPath = null;
+        this.profilePhoto = null;
         this.profilePhotoInput.nativeElement.value = "";
     }
 
@@ -91,6 +108,29 @@ export class StudentComponent implements OnInit {
     }
 
     onSubmit(form: NgForm): void {
+        if (form.valid) {
+            this.profileService.updateUserProfile({
+                name: this.user!.name.trim(),
+                surname: this.user!.surname.trim(),
+            }).then(() => {
+                if (this.profilePhoto) {
+                    const formData: FormData = new FormData();
+                    formData.append("avatar", this.profilePhoto);
 
+                    this.profileService.updateUserPhoto(formData).then(() => {
+                        this.authService.me().then((user: User) => {
+                            this.user = user;
+                        });
+                    });
+                }
+                else {
+                    this.authService.me().then((user: User) => {
+                        this.user = user;
+                    });
+                }
+            });
+        } else {
+            this.isFormValid = false;
+        }
     }
 }

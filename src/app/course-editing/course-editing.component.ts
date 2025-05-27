@@ -76,6 +76,7 @@ export class CourseEditingComponent implements OnInit {
 
     isSkillsPopupVisible: boolean = false;
     selectedSkills: Skill[] = [];
+    initialSkills: Skill[] = [];
 
     private domSanitizer: DomSanitizer = inject(DomSanitizer);
     private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
@@ -110,6 +111,8 @@ export class CourseEditingComponent implements OnInit {
                 });
 
                 this.selectedCategory = this.course.category;
+                this.selectedSkills = this.course.skills || [];
+                this.initialSkills = JSON.parse(JSON.stringify(this.selectedSkills));
 
                 console.log(this.course);
             }).catch((error: any) => {
@@ -144,6 +147,7 @@ export class CourseEditingComponent implements OnInit {
 
     removePhoto(): void {
         this.coursePhotoPath = null;
+        this.coursePhoto = null;
         this.coursePhotoInput.nativeElement.value = "";
     }
 
@@ -671,6 +675,8 @@ export class CourseEditingComponent implements OnInit {
     }
 
     saveSkills(): void {
+        this.course.skills = this.selectedSkills;
+
         this.isSkillsPopupVisible = false;
         document.body.style.overflow = "";
     }
@@ -700,20 +706,72 @@ export class CourseEditingComponent implements OnInit {
             level: this.course.level
         }
 
-        if (this.coursePhoto) {
-            const formData: FormData = new FormData();
-            formData.append("avatar", this.coursePhoto);
+        this.coursesService.updateCourse(this.course.id, newCourse).then(() => {
+            let skillsUploaded: boolean = false;
+            let photoUploaded: boolean = false;
 
-            this.coursesService.updateCourse(this.course.id, newCourse).then(() => {
-                this.coursesService.updateCoursePhoto(this.course.id, formData).then(() => {
-                    this.router.navigate(["/course", this.course.id]);
+            if (this.initialSkills.length) {
+                const skillsIds: string[] = this.initialSkills.map((skill: Skill) => skill.id);
+
+                this.coursesService.detachSkills(this.course.id, skillsIds).then(() => {
+                    if (this.course.skills && this.course.skills.length > 0) {
+                        const skillsIds: string[] = this.course.skills.map((skill: Skill) => skill.id);
+
+                        this.coursesService.attachSkills(this.course.id, skillsIds).then(() => {
+                            skillsUploaded = true;
+
+                            if (this.coursePhoto && photoUploaded) {
+                                this.router.navigate(["/course", this.course.id]);
+                            }
+                            else {
+                                this.router.navigate(["/course", this.course.id]);
+                            }
+                        });
+                    }
+                    else {
+                        if (this.coursePhoto && photoUploaded) {
+                            this.router.navigate(["/course", this.course.id]);
+                        }
+                        else {
+                            this.router.navigate(["/course", this.course.id]);
+                        }
+                    }
                 });
-            });
-        }
-        else {
-            this.coursesService.updateCourse(this.course.id, newCourse).then(() => {
+            }
+            else if (this.course.skills && this.course.skills.length > 0) {
+                const skillsIds: string[] = this.course.skills.map((skill: Skill) => skill.id);
+
+                this.coursesService.attachSkills(this.course.id, skillsIds).then(() => {
+                    skillsUploaded = true;
+
+                    if (this.coursePhoto && photoUploaded) {
+                        this.router.navigate(["/course", this.course.id]);
+                    }
+                    else {
+                        this.router.navigate(["/course", this.course.id]);
+                    }
+                });
+            }
+
+            if (this.coursePhoto) {
+                const formData: FormData = new FormData();
+                formData.append("avatar", this.coursePhoto!);
+
+                this.coursesService.updateCoursePhoto(this.course.id, formData).then(() => {
+                    photoUploaded = true;
+
+                    if (this.course.skills && this.course.skills.length > 0 && skillsUploaded) {
+                        this.router.navigate(["/course", this.course.id]);
+                    }
+                    else {
+                        this.router.navigate(["/course", this.course.id]);
+                    }
+                });
+            }
+
+            if (!this.coursePhoto && !this.initialSkills.length && !(this.course.skills && this.course.skills.length > 0)) {
                 this.router.navigate(["/course", this.course.id]);
-            });
-        }
+            }
+        });
     }
 }   

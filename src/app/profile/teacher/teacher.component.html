@@ -2,8 +2,9 @@
     <div class="container">
         <div class="pofile__card card">
             <div class="profile__avatar">
-                <img *ngIf="!profilePhotoPath" class="avatar__image" src="/assets/client-avatar.png" alt="Avatar" />
+                <img *ngIf="!profilePhotoPath && !user!.avatar" class="avatar__image" src="/assets/client-avatar.png" alt="Avatar" />
                 <img *ngIf="profilePhotoPath" class="avatar__image" [src]="profilePhotoPath" alt="Avatar" />
+                <img *ngIf="!profilePhotoPath && user!.avatar" class="avatar__image" [src]="user!.avatar" alt="Avatar" />
 
                 <label class="button button_full-width button_theme_secondary-line avatar__button">
                     Add photo
@@ -68,41 +69,21 @@
 
                 <label class="input-wrapper input-wrapper_with-label">
                     <span class="input-label">Workplace:</span>
-                    <input
-                        class="input"
-                        [(ngModel)]="user!.teacher!.workplace"
-                        type="text"
-                        name="workplace"
-                        #workplace="ngModel"
-                        placeholder="Workplace"
-                    />
+                    <input class="input" [(ngModel)]="user!.teacher!.workplace" type="text" name="workplace" placeholder="Workplace" />
                 </label>
 
                 <label class="input-wrapper input-wrapper_with-label">
                     <span class="input-label">Position:</span>
-                    <input
-                        class="input"
-                        [(ngModel)]="user!.teacher!.position"
-                        type="text"
-                        name="position"
-                        #position="ngModel"
-                        placeholder="Position"
-                    />
+                    <input class="input" [(ngModel)]="user!.teacher!.position" type="text" name="position" placeholder="Position" />
                 </label>
 
                 <label class="profile__description input-wrapper input-wrapper_with-label">
                     <span class="input-label">Description:</span>
-                    <textarea
-                        class="input"
-                        [(ngModel)]="user!.teacher!.description"
-                        name="description"
-                        #description="ngModel"
-                        placeholder="Description"
-                    ></textarea>
+                    <textarea class="input" [(ngModel)]="user!.teacher!.aboutMe" name="aboutMe" placeholder="Description"></textarea>
                 </label>
             </form>
 
-            <button class="button button_full-width button_theme_primary-line profile__button" type="submit">Save</button>
+            <button class="button button_full-width button_theme_primary-line profile__button" type="submit" (click)="onSubmit(form)">Save</button>
         </div>
 
         <div class="statistics">

@@ -11,6 +11,7 @@ import { CoursesService } from '../../services/courses.service';
 import { Course } from '../../../classes/Course';
 import { Skill } from '../../../classes/Skill';
 import { SkillsService } from '../../services/skills.service';
+import { ProfileService } from '../../services/profile.service';
 
 @Component({
     selector: "app-teacher",
@@ -26,6 +27,7 @@ export class TeacherComponent implements OnInit {
 
     @ViewChild("profilePhotoInput") profilePhotoInput!: ElementRef<HTMLInputElement>;
     profilePhotoPath: SafeResourceUrl | null = null;
+    profilePhoto: File | null = null;
     // isSizeValid: boolean = true;
 
     isCertificatePopupVisible: boolean = false;
@@ -56,6 +58,7 @@ export class TeacherComponent implements OnInit {
     private authService: AuthService = inject(AuthService);
     private courseService: CoursesService = inject(CoursesService);
     private skillsService: SkillsService = inject(SkillsService);
+    private profileService: ProfileService = inject(ProfileService);
 
     ngOnInit(): void {
         this.user = this.authService.user;
@@ -83,12 +86,14 @@ export class TeacherComponent implements OnInit {
                 // }
 
                 this.profilePhotoPath = this.domSanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(file));
+                this.profilePhoto = file;
             }
         }
     }
 
     removePhoto(): void {
         this.profilePhotoPath = null;
+        this.profilePhoto = null;
         this.profilePhotoInput.nativeElement.value = "";
     }
 
@@ -209,6 +214,35 @@ export class TeacherComponent implements OnInit {
     }
 
     onSubmit(form: NgForm): void {
+        if (form.valid) {
+            this.profileService.updateUserProfile({
+                name: this.user!.name.trim(),
+                surname: this.user!.surname.trim(),
+            }).then(() => {
+                this.profileService.updateTeacherProfile({
+                    aboutMe: this.user!.teacher!.aboutMe.trim(),
+                    workplace: this.user!.teacher!.workplace.trim(),
+                    position: this.user!.teacher!.position.trim(),
+                }).then(() => {
+                    if (this.profilePhoto) {
+                        const formData: FormData = new FormData();
+                        formData.append("avatar", this.profilePhoto);
 
+                        this.profileService.updateUserPhoto(formData).then(() => {
+                            this.authService.me().then((user: User) => {
+                                this.user = user;
+                            });
+                        });
+                    }
+                    else {
+                        this.authService.me().then((user: User) => {
+                            this.user = user;
+                        });
+                    }
+                });
+            });
+        } else {
+            this.isFormValid = false;
+        }
     }
 }

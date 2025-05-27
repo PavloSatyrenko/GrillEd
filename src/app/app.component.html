@@ -46,14 +46,16 @@
         @if (isUserAuthorized) {
         <div class="header__user user">
             <button class="user__button" (click)="toggleUserMenu()">
-                <img class="user__avatar" src="/assets/client-avatar.png" alt="Client" />
+                <img *ngIf="!user?.avatar" class="user__avatar" src="/assets/client-avatar.png" alt="Client" />
+                <img *ngIf="user?.avatar" class="user__avatar" [src]="user!.avatar" alt="Client" />
             </button>
 
             <div *ngIf="isUserMenuVisible" #userMenu class="user__menu menu">
                 <div class="menu__arrow"></div>
 
                 <div class="menu__profile">
-                    <img class="menu__avatar" src="/assets/client-avatar.png" alt="Client" />
+                    <img *ngIf="!user?.avatar" class="menu__avatar" src="/assets/client-avatar.png" alt="Client" />
+                    <img *ngIf="user?.avatar" class="menu__avatar" [src]="user!.avatar" alt="Client" />
 
                     <div class="menu__text">
                         <span class="menu__name">{{ user!.name }} {{ user!.surname }}</span>
