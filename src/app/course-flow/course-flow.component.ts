@@ -238,4 +238,8 @@ export class CourseFlowComponent {
             });
         });
     }
+
+    submitTest(): void {
+
+    }
 }
