@@ -21,6 +21,7 @@ export class SearchComponent implements OnInit {
         pageSize?: number;
         search?: string;
         categoryId?: string[];
+        skillsId?: string[];
         authorId?: string[];
         level?: ("BEGINNER" | "INTERMEDIATE" | "EXPERT")[];
         status?: ("DRAFT" | "PUBLISHED" | "ARCHIVED")[];
@@ -132,6 +133,13 @@ export class SearchComponent implements OnInit {
         else {
             this.selectedSkills = this.selectedSkills.filter((selectedSkill: Skill) => selectedSkill.id != skill.id);
         }
+
+        this.searchOptions.skillsId = this.selectedSkills.map((selectedSkill: Skill) => selectedSkill.id);
+
+        this.coursesService.getAllCourses(this.searchOptions)
+            .then((response: { data: Course[], pagination: any }) => {
+                this.courses = response.data;
+            });
     }
 
     isSkillSelected(skill: Skill): boolean {

@@ -19,6 +19,7 @@ export class CoursesService {
         pageSize = 18,
         search = "",
         categoryId = [],
+        skillsId = [],
         authorId = [],
         level = [],
         status = [],
@@ -31,6 +32,7 @@ export class CoursesService {
         pageSize?: number;
         search?: string;
         categoryId?: string[];
+        skillsId?: string[];
         authorId?: string[];
         level?: ("BEGINNER" | "INTERMEDIATE" | "EXPERT")[];
         status?: ("DRAFT" | "PUBLISHED" | "ARCHIVED")[];
@@ -48,6 +50,10 @@ export class CoursesService {
 
         if (categoryId.length > 0) {
             params = params.set("categoryId[in]", categoryId.join(","));
+        }
+
+        if (skillsId.length > 0) {
+            params = params.set("skillsId[in]", skillsId.join(","));
         }
 
         if (authorId.length > 0) {

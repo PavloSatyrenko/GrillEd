@@ -24,7 +24,7 @@
                 <button class="button button_full-width button_theme_secondary-line" (click)="openLinkPopup()">Add/edit links</button>
             </div>
 
-            <form class="profile__form" #form="ngForm" method="POST" action="about:blank" autocomplete="off" (ngSubmit)="onSubmit(form)">
+            <form class="profile__form" #form="ngForm" method="POST" action="about:blank" autocomplete="off">
                 <label class="input-wrapper input-wrapper_with-label" [ngClass]="{ 'input-wrapper_error': name.invalid && !isFormValid }">
                     <span class="input-label">Name:</span>
                     <input

@@ -78,6 +78,8 @@ export class CourseEditingComponent implements OnInit {
     selectedSkills: Skill[] = [];
     initialSkills: Skill[] = [];
 
+    initialCourseSkills: Skill[] = [];
+
     private domSanitizer: DomSanitizer = inject(DomSanitizer);
     private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
     private router: Router = inject(Router);
@@ -112,7 +114,7 @@ export class CourseEditingComponent implements OnInit {
 
                 this.selectedCategory = this.course.category;
                 this.selectedSkills = this.course.skills || [];
-                this.initialSkills = JSON.parse(JSON.stringify(this.selectedSkills));
+                this.initialCourseSkills = JSON.parse(JSON.stringify(this.selectedSkills));
 
                 console.log(this.course);
             }).catch((error: any) => {
@@ -665,11 +667,13 @@ export class CourseEditingComponent implements OnInit {
     }
 
     openSkillsPopup(): void {
+        this.initialSkills = JSON.parse(JSON.stringify(this.selectedSkills));
         this.isSkillsPopupVisible = true;
         document.body.style.overflow = "hidden";
     }
 
     closeSkillsPopup(): void {
+        this.selectedSkills = JSON.parse(JSON.stringify(this.initialSkills));
         this.isSkillsPopupVisible = false;
         document.body.style.overflow = "";
     }
@@ -710,8 +714,8 @@ export class CourseEditingComponent implements OnInit {
             let skillsUploaded: boolean = false;
             let photoUploaded: boolean = false;
 
-            if (this.initialSkills.length) {
-                const skillsIds: string[] = this.initialSkills.map((skill: Skill) => skill.id);
+            if (this.initialCourseSkills.length) {
+                const skillsIds: string[] = this.initialCourseSkills.map((skill: Skill) => skill.id);
 
                 this.coursesService.detachSkills(this.course.id, skillsIds).then(() => {
                     if (this.course.skills && this.course.skills.length > 0) {
@@ -769,7 +773,7 @@ export class CourseEditingComponent implements OnInit {
                 });
             }
 
-            if (!this.coursePhoto && !this.initialSkills.length && !(this.course.skills && this.course.skills.length > 0)) {
+            if (!this.coursePhoto && !this.initialCourseSkills.length && !(this.course.skills && this.course.skills.length > 0)) {
                 this.router.navigate(["/course", this.course.id]);
             }
         });

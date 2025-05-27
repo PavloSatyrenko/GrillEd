@@ -23,4 +23,20 @@ export class SkillsService {
             params: { page, pageSize, search }
         }));
     }
+
+    followSkills(skillIds: string[]): Promise<any> {
+        return firstValueFrom(this.http.post(`${this.api}v1/skills/follow`, { ids: skillIds }));
+    }
+
+    unfollowSkills(skillIds: string[]): Promise<any> {
+        return firstValueFrom(this.http.post(`${this.api}v1/skills/unfollow`, { ids: skillIds }));
+    }
+
+    followCategories(categoryIds: string[]): Promise<any> {
+        return firstValueFrom(this.http.post(`${this.api}v1/courseCategories/follow`, { ids: categoryIds }));
+    }
+
+    unfollowCategories(categoryIds: string[]): Promise<any> {
+        return firstValueFrom(this.http.post(`${this.api}v1/courseCategories/unfollow`, { ids: categoryIds }));
+    }
 }

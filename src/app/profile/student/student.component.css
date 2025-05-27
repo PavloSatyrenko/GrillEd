@@ -6,7 +6,7 @@
     display: grid;
     grid-template:
         "image form" 200px
-        "image controls" 96px
+        "image controls" 104px
         "button button" 40px
         / 300px 1fr;
     gap: 8px 32px;
@@ -47,8 +47,11 @@
     gap: 8px;
 }
 
-.form__button {
-    margin-top: 12px;
+.form__buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 13px;
 }
 
 .profile__button {
@@ -226,7 +229,38 @@
     justify-content: space-between;
 }
 
-.skills__button_previous {
-    margin-right: 8px;
-    margin-left: auto;
+.categories .modal__container {
+    max-width: 400px;
+    height: 600px;
+}
+
+.categories .modal__content {
+    height: 398px;
+}
+
+.categories__content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    height: 100%;
+    overflow: hidden;
+}
+
+.categories__filter {
+    padding-right: 4px;
+}
+
+.categories__list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-right: 4px;
+    overflow: auto;
+}
+
+.category {
+    padding: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    transition: 0.3s;
 }

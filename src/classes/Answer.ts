@@ -5,5 +5,6 @@ export class Answer {
     answer?: string;
     commentary?: string;
     correct: boolean = false;
+    isChecked?: boolean = false;
     isCommentaryVisible?: boolean = false;
 }

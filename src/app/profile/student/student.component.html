@@ -20,7 +20,7 @@
                 </button>
             </div>
 
-            <form class="profile__form" #form="ngForm" method="POST" action="about:blank" autocomplete="off" (ngSubmit)="onSubmit(form)">
+            <form class="profile__form" #form="ngForm" method="POST" action="about:blank" autocomplete="off">
                 <label class="input-wrapper input-wrapper_with-label" [ngClass]="{ 'input-wrapper_error': name.invalid && !isFormValid }">
                     <span class="input-label">Name:</span>
                     <input
@@ -63,9 +63,15 @@
                     />
                 </label>
 
-                <button class="button button_full-width button_theme_secondary-line form__button" (click)="openSkillsPopup()">
-                    Add/edit interests
-                </button>
+                <div class="form__buttons">
+                    <button class="button button_full-width button_theme_secondary-line form__button" (click)="openSkillsPopup()">
+                        Add/edit skills
+                    </button>
+
+                    <button class="button button_full-width button_theme_secondary-line form__button" (click)="openCategoriesPopup()">
+                        Add/edit categories
+                    </button>
+                </div>
             </form>
 
             <button class="button button_full-width button_theme_primary-line profile__button" type="submit" (click)="onSubmit(form)">Save</button>
@@ -213,7 +219,7 @@
 <div class="modal skills" *ngIf="isSkillsPopupVisible">
     <div class="modal__container">
         <div class="modal__header">
-            <h2 class="modal__title">Choose the areas and skills you are interested in</h2>
+            <h2 class="modal__title">Choose the skills you are interested in</h2>
 
             <button class="modal__close" (click)="closeSkillsPopup()">
                 <i class="fa-solid fa-xmark"></i>
@@ -230,11 +236,42 @@
 
         <div class="modal__footer">
             <button class="button button_theme_primary-line" (click)="closeSkillsPopup()">Cancel</button>
-            <button *ngIf="studentSkillStep == 2" class="button button_theme_primary-line skills__button_previous" (click)="goToPreviousSkillStep()">
-                Previous
+            <button class="button button_theme_primary" (click)="saveSkills()">Save</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal categories" *ngIf="isCategoriesPopupVisible">
+    <div class="modal__container">
+        <div class="modal__header">
+            <h2 class="modal__title">Choose the categories you are interested in</h2>
+
+            <button class="modal__close" (click)="closeCategoriesPopup()">
+                <i class="fa-solid fa-xmark"></i>
             </button>
-            <button *ngIf="studentSkillStep == 1" class="button button_theme_primary" (click)="goToNextSkillStep()">Continue</button>
-            <button *ngIf="studentSkillStep == 2" class="button button_theme_primary" (click)="saveSkills()">Save</button>
+        </div>
+
+        <div class="modal__content">
+            <div class="categories__content">
+                <div class="categories__filter">
+                    <label class="input-wrapper input-wrapper_with-icon categories__filter-input">
+                        <input class="input" type="text" placeholder="Search..." (input)="filterCategories($event.target)" />
+                        <span class="input-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    </label>
+                </div>
+
+                <div class="categories__list">
+                    <label *ngFor="let category of categories" class="checkbox-wrapper category">
+                        <input class="checkbox" [checked]="isCategorySelected(category)" type="checkbox" (change)="selectCategory(category)" />
+                        <span class="checkbox-label">{{ category.name }}</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal__footer">
+            <button class="button button_theme_primary-line" (click)="closeCategoriesPopup()">Cancel</button>
+            <button class="button button_theme_primary" (click)="saveCategories()">Save</button>
         </div>
     </div>
 </div>

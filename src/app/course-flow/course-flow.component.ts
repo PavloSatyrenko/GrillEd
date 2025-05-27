@@ -9,6 +9,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { FormsModule } from "@angular/forms";
 import { Question } from "../../classes/Question";
 import { Answer } from "../../classes/Answer";
+import { Test } from "../../classes/Test";
 
 @Component({
     selector: "app-course-flow",
@@ -73,55 +74,8 @@ export class CourseFlowComponent {
                         });
                     }
                     else if (this.activeLesson.type == "TEST") {
-                        console.log(this.activeLesson);
-
-                        // this.coursesService.getTestQuestions(this.courseId, this.activeLesson.test!.id).then((test: Test) => {
-                        //     this.lesson.questions = test.questions;
-
-                        //     this.lesson.questions.forEach((question: Question) => {
-                        //         question.answers.forEach((answer: Answer) => {
-                        //             if (question.type == "CHOICE") {
-                        //                 answer.correct = question.rightAnswer == answer.id;
-                        //             }
-                        //             else if (question.type == "MULTICHOICE") {
-                        //                 answer.correct = (question.rightAnswers as string[]).includes(answer.id);
-                        //             }
-
-                        //             answer.text = answer.answer!;
-                        //             answer.isCommentaryVisible = !!answer.commentary;
-                        //         });
-                        //     });
-
-                        //     this.isLessonPopupVisible = true;
-                        //     document.body.style.overflow = "hidden";
-                        // });
-
-                        this.coursesService.getTestQuestions(this.courseId, this.activeLesson.id).then((questions: Question[]) => {
-                            this.activeLesson!.questions = questions.map((question: Question) => {
-                                if (question.type == "CHOICE") {
-                                    question.rightAnswer = question.answers!.indexOf(question.answers!.find((answer: Answer) => answer.correct)!);
-                                }
-                                else if (question.type == "MULTICHOICE") {
-                                    question.rightAnswers = question.answers!.reduce((correctAnswerIndices: number[], answer: Answer, index: number) => {
-                                        if (answer.correct) {
-                                            correctAnswerIndices.push(index);
-                                        }
-                                        return correctAnswerIndices;
-                                    }, []);
-                                }
-
-                                question.answers = question.answers!.map((answer: Answer) => {
-                                    if (answer.isCommentaryVisible) {
-                                        answer.commentary = answer.commentary;
-                                    }
-                                    else {
-                                        answer.commentary = undefined;
-                                    }
-                                    return answer;
-                                });
-
-                                return question;
-                            });
+                        this.coursesService.getTestQuestions(this.courseId, this.activeLesson.test!.id).then((test: Test) => {
+                            this.activeLesson!.questions = test.questions;
                         });
                     }
                 });
@@ -195,55 +149,8 @@ export class CourseFlowComponent {
                 });
             }
             else if (this.activeLesson.type == "TEST") {
-                console.log(this.activeLesson);
-
-                // this.coursesService.getTestQuestions(this.courseId, this.activeLesson.test!.id).then((test: Test) => {
-                //     this.lesson.questions = test.questions;
-
-                //     this.lesson.questions.forEach((question: Question) => {
-                //         question.answers.forEach((answer: Answer) => {
-                //             if (question.type == "CHOICE") {
-                //                 answer.correct = question.rightAnswer == answer.id;
-                //             }
-                //             else if (question.type == "MULTICHOICE") {
-                //                 answer.correct = (question.rightAnswers as string[]).includes(answer.id);
-                //             }
-
-                //             answer.text = answer.answer!;
-                //             answer.isCommentaryVisible = !!answer.commentary;
-                //         });
-                //     });
-
-                //     this.isLessonPopupVisible = true;
-                //     document.body.style.overflow = "hidden";
-                // });
-
-                this.coursesService.getTestQuestions(this.courseId, this.activeLesson.id).then((questions: Question[]) => {
-                    this.activeLesson!.questions = questions.map((question: Question) => {
-                        if (question.type == "CHOICE") {
-                            question.rightAnswer = question.answers!.indexOf(question.answers!.find((answer: Answer) => answer.correct)!);
-                        }
-                        else if (question.type == "MULTICHOICE") {
-                            question.rightAnswers = question.answers!.reduce((correctAnswerIndices: number[], answer: Answer, index: number) => {
-                                if (answer.correct) {
-                                    correctAnswerIndices.push(index);
-                                }
-                                return correctAnswerIndices;
-                            }, []);
-                        }
-
-                        question.answers = question.answers!.map((answer: Answer) => {
-                            if (answer.isCommentaryVisible) {
-                                answer.commentary = answer.commentary;
-                            }
-                            else {
-                                answer.commentary = undefined;
-                            }
-                            return answer;
-                        });
-
-                        return question;
-                    });
+                this.coursesService.getTestQuestions(this.courseId, this.activeLesson.test!.id).then((test: Test) => {
+                    this.activeLesson!.questions = test.questions;
                 });
             }
         }).catch((error: any) => {
@@ -267,9 +174,9 @@ export class CourseFlowComponent {
 
     onAnswerSelected(question: Question, answer: Answer): void {
         if (question.type == "CHOICE") {
-            question.answers.forEach((answer: Answer) => answer.correct = false);
+            question.answers.forEach((answer: Answer) => answer.isChecked = false);
         }
-        answer.correct = !answer.correct;
+        answer.isChecked = !answer.isChecked;
     }
 
     completeLesson(): void {
@@ -321,6 +228,11 @@ export class CourseFlowComponent {
                         const parsedText: string = text.replaceAll("&nbsp;", " ");
 
                         this.activeLesson!.safeArticle = this.sanitizer.bypassSecurityTrustHtml(parsedText);
+                    });
+                }
+                else if (this.activeLesson.type == "TEST") {
+                    this.coursesService.getTestQuestions(this.courseId, this.activeLesson.test!.id).then((test: Test) => {
+                        this.activeLesson!.questions = test.questions;
                     });
                 }
             });

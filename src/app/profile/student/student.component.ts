@@ -9,6 +9,7 @@ import { AuthService } from '../../services/auth.service';
 import { CoursesService } from '../../services/courses.service';
 import { Course } from '../../../classes/Course';
 import { ProfileService } from '../../services/profile.service';
+import { SkillsService } from '../../services/skills.service';
 
 @Component({
     selector: "app-student",
@@ -28,8 +29,14 @@ export class StudentComponent implements OnInit {
     // isSizeValid: boolean = true;
 
     isSkillsPopupVisible: boolean = false;
-    studentSkillStep: number = 1;
     selectedSkills: Skill[] = [];
+    initialSkills: Skill[] = [];
+
+    isCategoriesPopupVisible: boolean = false;
+    categories: Skill[] = [];
+    initialCategories: Skill[] = [];
+    selectedCategories: Skill[] = [];
+    initialSelectedCategories: Skill[] = [];
 
     panelNumber: number = 1;
 
@@ -39,6 +46,7 @@ export class StudentComponent implements OnInit {
     private authService: AuthService = inject(AuthService);
     private coursesService: CoursesService = inject(CoursesService);
     private profileService: ProfileService = inject(ProfileService);
+    private skillsService: SkillsService = inject(SkillsService);
 
     ngOnInit(): void {
         this.user = this.authService.user;
@@ -58,6 +66,12 @@ export class StudentComponent implements OnInit {
                 }
             });
         });
+
+        this.skillsService.getRootCategories()
+            .then((response: { categories: Skill[] }) => {
+                this.initialCategories = response.categories;
+                this.categories = this.initialCategories.slice();
+            });
     }
 
     onPhotoUpload(event: EventTarget | null): void {
@@ -84,23 +98,59 @@ export class StudentComponent implements OnInit {
     }
 
     openSkillsPopup(): void {
+        this.initialSkills = JSON.parse(JSON.stringify(this.selectedSkills));
         this.isSkillsPopupVisible = true;
     }
 
     closeSkillsPopup(): void {
+        this.selectedSkills = JSON.parse(JSON.stringify(this.initialSkills));
         this.isSkillsPopupVisible = false;
     }
 
-    goToNextSkillStep(): void {
-        this.studentSkillStep = 2;
-    }
-
-    goToPreviousSkillStep(): void {
-        this.studentSkillStep = 1;
-    }
-
     saveSkills(): void {
+        this.isSkillsPopupVisible = false;
+    }
 
+    openCategoriesPopup(): void {
+        this.initialSelectedCategories = JSON.parse(JSON.stringify(this.selectedCategories));
+        this.isCategoriesPopupVisible = true;
+    }
+
+    closeCategoriesPopup(): void {
+        this.selectedCategories = JSON.parse(JSON.stringify(this.initialSelectedCategories));
+        this.isCategoriesPopupVisible = false;
+    }
+
+    filterCategories(target: EventTarget | null): void {
+        if (!target || !(target instanceof HTMLInputElement)) {
+            return;
+        }
+
+        const filter: string = target.value.toLowerCase();
+
+        if (filter) {
+            this.categories = this.initialCategories.filter((category: Skill) => category.name.toLowerCase().includes(filter));
+        }
+        else {
+            this.categories = this.initialCategories;
+        }
+    }
+
+    selectCategory(category: Skill): void {
+        if (this.isCategorySelected(category)) {
+            this.selectedCategories = this.selectedCategories.filter((selectedCategory: Skill) => selectedCategory.id !== category.id);
+        }
+        else {
+            this.selectedCategories.push(category);
+        }
+    }
+
+    isCategorySelected(category: Skill): boolean {
+        return this.selectedCategories.some((selectedCategory: Skill) => selectedCategory.id === category.id);
+    }
+
+    saveCategories(): void {
+        this.isCategoriesPopupVisible = false;
     }
 
     choosePanel(panelNumber: number): void {
@@ -113,24 +163,43 @@ export class StudentComponent implements OnInit {
                 name: this.user!.name.trim(),
                 surname: this.user!.surname.trim(),
             }).then(() => {
+                if (this.selectedCategories.length > 0) {
+                    const categoriesIds: string[] = this.selectedCategories.map((category: Skill) => category.id);
+
+                    this.skillsService.followCategories(categoriesIds).then(() => {
+                        this.updateUser();
+                    });
+                }
+
+                if (this.selectedSkills.length > 0) {
+                    const skillsIds: string[] = this.selectedSkills.map((skill: Skill) => skill.id);
+
+                    this.skillsService.followSkills(skillsIds).then(() => {
+                        this.updateUser();
+                    });
+                }
+
                 if (this.profilePhoto) {
                     const formData: FormData = new FormData();
                     formData.append("avatar", this.profilePhoto);
 
                     this.profileService.updateUserPhoto(formData).then(() => {
-                        this.authService.me().then((user: User) => {
-                            this.user = user;
-                        });
+                        this.updateUser();
                     });
                 }
-                else {
-                    this.authService.me().then((user: User) => {
-                        this.user = user;
-                    });
+
+                if (!this.profilePhoto && !this.selectedSkills.length && !this.selectedCategories.length) {
+                    this.updateUser();
                 }
             });
         } else {
             this.isFormValid = false;
         }
+    }
+
+    updateUser(): void {
+        this.authService.me().then((user: User) => {
+            this.user = user;
+        });
     }
 }

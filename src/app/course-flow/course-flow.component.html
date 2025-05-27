@@ -91,14 +91,26 @@
                 <video class="main__video" [src]="activeLesson?.videoLink" controls></video>
                 } @else if (activeLesson?.type == "TEST") {
                 <div class="main__test">
-                    <div *ngFor="let question of activeLesson?.test?.questions" class="test__question">
+                    <div *ngFor="let question of activeLesson?.questions" class="test__question">
                         <h4 class="question__title">{{ question.text }}</h4>
 
                         <div class="question__answers">
-                            <label *ngFor="let answer of question.answers" class="radio-wrapper">
-                                <input type="radio" name="{{ question.id }}" [checked]="answer.id" (change)="onAnswerSelected(question, answer)" />
-                                <span class="radio-label">{{ answer.text }}</span>
-                            </label>
+                            <div *ngFor="let answer of question.answers" class="question__answer">
+                                <label *ngIf="question.type == 'CHOICE'" class="radio-wrapper">
+                                    <input class="radio" [checked]="answer.isChecked" type="radio" (change)="onAnswerSelected(question, answer)" />
+                                    <span class="radio-label">{{ answer.answer }}</span>
+                                </label>
+
+                                <label *ngIf="question.type == 'MULTICHOICE'" class="checkbox-wrapper">
+                                    <input
+                                        class="checkbox"
+                                        type="checkbox"
+                                        [checked]="answer.isChecked"
+                                        (change)="onAnswerSelected(question, answer)"
+                                    />
+                                    <span class="radio-label">{{ answer.answer }}</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
