@@ -6,4 +6,6 @@ export class Question {
     text!: string;
     type: "CHOICE" | "MULTICHOICE" = "CHOICE";
     answers: Answer[] = [];
+    rightAnswer?: number;
+    rightAnswers?: number[];
 }

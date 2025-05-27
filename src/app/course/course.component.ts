@@ -28,14 +28,13 @@ export class CourseComponent implements OnInit {
     private authService: AuthService = inject(AuthService);
 
     ngOnInit(): void {
-        this.user = this.authService.user;
 
         this.activatedRoute.paramMap.subscribe((params: ParamMap) => {
             this.courseId = params.get("id")!;
 
             this.coursesService.getCourse(this.courseId).then((course: Course) => {
                 this.course = course;
-                console.log(this.course)
+                this.user = this.authService.user;
             }).catch((error: any) => {
                 console.error("Error fetching course:", error);
                 this.router.navigate(["/home"]);
@@ -47,7 +46,11 @@ export class CourseComponent implements OnInit {
         module.isOpened = !module.isOpened;
     }
 
-    getLevelString(level: "BEGINNER" | "INTERMEDIATE" | "EXPERT"): string {
+    getLevelString(level: "BEGINNER" | "INTERMEDIATE" | "EXPERT" | undefined): string {
+        if (!level) {
+            return "Unknown";
+        }
+
         return level.slice(0, 1).toUpperCase() + level.slice(1).toLowerCase();
     }
 
@@ -56,6 +59,10 @@ export class CourseComponent implements OnInit {
     }
 
     getTotalLessonAmount(type?: "ARTICLE" | "VIDEO" | "TEST"): number {
+        if (!this.isModulesLoaded(this.course?.modules)) {
+            return 0;
+        }
+
         if (!type) {
             return this.course!.modules.reduce((total: number, module: Module) => {
                 return total + module.lessons.length;
@@ -67,7 +74,11 @@ export class CourseComponent implements OnInit {
         }, 0);
     }
 
-    getTimeString(minutes: number): string {
+    getTimeString(minutes: number | undefined): string {
+        if (minutes === undefined || minutes < 0) {
+            return "Unknown";
+        }
+
         const hours: number = Math.floor(minutes / 60);
         const mins: number = minutes % 60;
 
@@ -77,6 +88,14 @@ export class CourseComponent implements OnInit {
         else {
             return `${mins} min`;
         }
+    }
+
+    isModulesLoaded(modules: Module[] | undefined): boolean {
+        return !!modules && Array.isArray(modules) && modules.length > 0;
+    }
+
+    isCourseEditButtonVisible(): boolean {
+        return this.user?.id === this.course?.author.id;
     }
 
     enroll(): void {

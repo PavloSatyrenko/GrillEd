@@ -92,11 +92,7 @@
                                     Cancel
                                 </button>
 
-                                <button
-                                    *ngIf="module.isEditing"
-                                    class="button button_theme_primary module__button"
-                                    (click)="saveModule(module)"
-                                >
+                                <button *ngIf="module.isEditing" class="button button_theme_primary module__button" (click)="saveModule(module)">
                                     Save
                                 </button>
 
@@ -145,9 +141,7 @@
                                     <span class="lesson__title">{{ lesson.name }}</span>
 
                                     <div class="lesson__buttons">
-                                        <button class="button button_theme_primary-line lesson__button" (click)="editLesson(lesson, module)">
-                                            Edit
-                                        </button>
+                                        <button class="button button_theme_primary-line lesson__button" (click)="editLesson(lesson)">Edit</button>
                                         <button
                                             class="button button_theme_primary-line button_icon-only lesson__button"
                                             (click)="removeLesson(lesson, module)"
@@ -345,7 +339,9 @@
 
         <div class="modal__footer">
             <button class="button button_theme_primary-line" (click)="closeLessonPopup()">Cancel</button>
-            <button class="button button_theme_primary" [disabled]="isSaveLessonButtonDisabled()" (click)="saveLesson()">Save</button>
+            <button class="button button_theme_primary" [disabled]="isSaveLessonButtonDisabled() || isLessonSaved" (click)="saveLesson()">
+                Save
+            </button>
         </div>
     </div>
 </div>

@@ -71,6 +71,8 @@ export class CourseEditingComponent implements OnInit {
     lessonVideoPreviewPath: string | null = null;
     video: File | null = null;
 
+    isLessonSaved: boolean = false;
+
     isSkillsPopupVisible: boolean = false;
     selectedSkills: Skill[] = [];
 
@@ -261,6 +263,7 @@ export class CourseEditingComponent implements OnInit {
             estimatedTime: 1
         }
 
+        this.markdown = "";
         this.isLessonCreated = true;
         this.initialModule = module;
         this.lesson = JSON.parse(JSON.stringify(newLesson));
@@ -281,7 +284,7 @@ export class CourseEditingComponent implements OnInit {
         });
     }
 
-    editLesson(lesson: Lesson, module: Module): void {
+    editLesson(lesson: Lesson): void {
         this.initialLesson = lesson;
         this.markdown = "";
         this.isLessonCreated = false;
@@ -470,7 +473,6 @@ export class CourseEditingComponent implements OnInit {
             id: "",
             question_id: question.id,
             text: "",
-            commentary: "",
             correct: false,
             isCommentaryVisible: false
         }
@@ -557,6 +559,14 @@ export class CourseEditingComponent implements OnInit {
 
             this.initialLesson.questions = this.lesson.questions;
         }
+        console.log(this.isLessonSaved);
+
+        if (this.isLessonSaved) {
+            return;
+        }
+
+        this.isLessonSaved = true;
+        console.log(this.isLessonSaved);
 
         if (this.isLessonCreated) {
             this.coursesService.createLesson(this.courseId, this.initialModule.id, this.initialLesson)
@@ -571,7 +581,7 @@ export class CourseEditingComponent implements OnInit {
 
                                 this.isLessonPopupVisible = false;
                                 document.body.style.overflow = "";
-                            });
+                            }).finally(() => this.isLessonSaved = false);
                     }
                     else {
                         this.initialModule.lessons.push(response);
@@ -579,6 +589,9 @@ export class CourseEditingComponent implements OnInit {
                         this.isLessonPopupVisible = false;
                         document.body.style.overflow = "";
                     }
+                }).catch((error: any) => {
+                    console.error("Error creating lesson:", error);
+                    this.isLessonSaved = false;
                 });
         }
         else {
@@ -593,7 +606,7 @@ export class CourseEditingComponent implements OnInit {
 
                             this.isLessonPopupVisible = false;
                             document.body.style.overflow = "";
-                        });
+                        }).finally(() => this.isLessonSaved = false);
                     }
                     else if (this.lesson.type == "ARTICLE") {
                         this.coursesService.updateLessonArticle(this.courseId, response.id, this.initialLesson.article!)
@@ -602,8 +615,11 @@ export class CourseEditingComponent implements OnInit {
 
                                 this.isLessonPopupVisible = false;
                                 document.body.style.overflow = "";
-                            });
+                            }).finally(() => this.isLessonSaved = false);
                     }
+                }).catch((error: any) => {
+                    console.error("Error creating lesson:", error);
+                    this.isLessonSaved = false;
                 });
         }
     }

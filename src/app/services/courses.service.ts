@@ -4,6 +4,8 @@ import { firstValueFrom } from "rxjs";
 import { Module } from "../../classes/Module";
 import { Course } from "../../classes/Course";
 import { Lesson } from "../../classes/Lesson";
+import { Question } from "../../classes/Question";
+import { Answer } from "../../classes/Answer";
 
 @Injectable({
     providedIn: "root"
@@ -115,6 +117,23 @@ export class CoursesService {
     }
 
     createLesson(courseId: string, moduleId: string, lesson: Lesson): Promise<any> {
+        if (lesson.type == "TEST") {
+            lesson.questions!.map((question: Question) => {
+                if (question.type == "CHOICE") {
+                    question.rightAnswer = question.answers!.indexOf(question.answers.find((answer: Answer) => answer.correct)!);
+                }
+                else if (question.type == "MULTICHOICE") {
+                    question.rightAnswers = question.answers!.reduce((correctAnswerIndices: number[], answer: Answer, index: number) => {
+                        if (answer.correct) {
+                            correctAnswerIndices.push(index);
+                        }
+
+                        return correctAnswerIndices;
+                    }, []);
+                }
+            });
+        }
+
         return firstValueFrom(this.http.post(`${this.api}v1/courses/${courseId}/modules/${moduleId}/lessons`, { lesson }));
     }
 
@@ -151,6 +170,10 @@ export class CoursesService {
 
     getLessonArticle(articleLink: string): Promise<any> {
         return fetch(articleLink);
+    }
+
+    getTestQuestions(courseId: string, testId: string): Promise<any> {
+        return firstValueFrom(this.http.get(`${this.api}v1/courses/${courseId}/tests/${testId}`));
     }
 
     enrollCourse(courseId: string): Promise<any> {

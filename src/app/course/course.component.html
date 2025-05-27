@@ -23,7 +23,7 @@
                     </div>
 
                     <span class="course__level">
-                        Level: <span class="level__value">{{ getLevelString(course!.level) }}</span>
+                        Level: <span class="level__value">{{ getLevelString(course?.level) }}</span>
                     </span>
 
                     <span class="course__rating">
@@ -46,13 +46,15 @@
                         <div class="information__item">
                             <span class="information__icon"><i class="fa-solid fa-book-open-reader"></i></span>
                             <span class="information__text">
-                                {{ course?.modules?.length }} module<span *ngIf="course!.modules.length > 1">s</span>
+                                {{ course?.modules?.length }} module<span *ngIf="isModulesLoaded(course?.modules) && course!.modules!.length > 1"
+                                    >s</span
+                                >
                             </span>
                         </div>
 
                         <div class="information__item">
                             <span class="information__icon"><i class="fa-solid fa-clock"></i></span>
-                            <span class="information__text">{{ getTimeString(course!.estimatedTime) }}</span>
+                            <span class="information__text">{{ getTimeString(course?.estimatedTime) }}</span>
                         </div>
                     </div>
                 </div>
@@ -122,7 +124,9 @@
             <div class="aside__features features">
                 <div class="feature">
                     <span class="feature__icon"><i class="fa-solid fa-book-open-reader"></i></span>
-                    <span class="feature__name">{{ course?.modules?.length }} module<span *ngIf="course!.modules.length > 1">s</span></span>
+                    <span class="feature__name"
+                        >{{ course?.modules?.length }} module<span *ngIf="course?.modules && course!.modules!.length > 1">s</span></span
+                    >
                 </div>
 
                 <div class="feature">
@@ -161,12 +165,12 @@
             </div>
 
             <div class="aside__buttons">
-                <button class="button button_theme_primary aside__button" (click)="enroll()">Enroll</button>
+                <button *ngIf="user?.role == 'STUDENT'" class="button button_theme_primary aside__button" (click)="enroll()">Enroll</button>
 
                 <a
-                    *ngIf="course!.author.id == user?.id"
+                    *ngIf="isCourseEditButtonVisible()"
                     class="button button_theme_primary-line aside__button"
-                    [routerLink]="'/course/' + course!.id + '/edit'"
+                    [routerLink]="'/course/' + course?.id + '/edit'"
                 >
                     Edit
                 </a>
