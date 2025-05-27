@@ -6,10 +6,7 @@
 
             @if (user.role == 'STUDENT') {
             <h4 class="authorization__text">Choose the areas and skills you are interested in</h4>
-            <app-skill-picker
-                class="authorization__skills"
-                (selectedSkillsChange)="selectedSkills = $event"
-            ></app-skill-picker>
+            <app-skill-picker class="authorization__skills" (selectedSkillsChange)="selectedSkills = $event"></app-skill-picker>
             } @else if (user.role == 'TEACHER') {
             <h4 class="authorization__text">Add some information to start creating courses</h4>
 
@@ -33,21 +30,15 @@
                 </div>
 
                 <label class="input-wrapper">
-                    <input class="input" [(ngModel)]="user.teacher!.workplace" type="text" name="workplace" #workplace="ngModel" placeholder="Workplace" />
+                    <input class="input" [(ngModel)]="user.teacher!.workplace" type="text" name="workplace" placeholder="Workplace" />
                 </label>
 
                 <label class="input-wrapper">
-                    <input class="input" [(ngModel)]="user.teacher!.position" type="text" name="position" #position="ngModel" placeholder="Position" />
+                    <input class="input" [(ngModel)]="user.teacher!.position" type="text" name="position" placeholder="Position" />
                 </label>
 
                 <label class="teacher__description input-wrapper">
-                    <textarea
-                        class="input"
-                        [(ngModel)]="user.teacher!.description"
-                        name="description"
-                        #description="ngModel"
-                        placeholder="Description"
-                    ></textarea>
+                    <textarea class="input" [(ngModel)]="user.teacher!.aboutMe" name="aboutMe" placeholder="Description"></textarea>
                 </label>
 
                 <button class="button button_full-width button_theme_secondary-line" (click)="openCertificatePopup()">Add/edit certificates</button>
