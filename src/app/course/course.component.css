@@ -59,7 +59,9 @@
 }
 
 .course__level,
-.course__rating {
+.course__rating,
+.course__status,
+.course__enrolled {
     margin-top: 16px;
     font-size: 18px;
     font-weight: 500;
@@ -67,7 +69,9 @@
 }
 
 .level__value,
-.rating__value {
+.rating__value,
+.status__value,
+.enrolled__value {
     font-size: 18px;
     font-weight: 600;
     color: var(--secondary-color);

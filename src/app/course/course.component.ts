@@ -28,7 +28,6 @@ export class CourseComponent implements OnInit {
     private authService: AuthService = inject(AuthService);
 
     ngOnInit(): void {
-
         this.activatedRoute.paramMap.subscribe((params: ParamMap) => {
             this.courseId = params.get("id")!;
 
@@ -51,8 +50,17 @@ export class CourseComponent implements OnInit {
             return "Unknown";
         }
 
-        return level.slice(0, 1).toUpperCase() + level.slice(1).toLowerCase();
+        return level.charAt(0).toUpperCase() + level.slice(1).toLowerCase();
     }
+
+    getStatusString(status: "PUBLISHED" | "DRAFT" | "ARCHIVED" | undefined): string {
+        if (!status) {
+            return "Unknown";
+        }
+
+        return status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
+    }
+
 
     getModuleLessonAmount(module: Module, type: "ARTICLE" | "VIDEO" | "TEST"): number {
         return module.lessons.filter((lesson: Lesson) => lesson.type == type).length;
@@ -98,7 +106,15 @@ export class CourseComponent implements OnInit {
         return this.user?.id === this.course?.author.id;
     }
 
+    isCoursePublishButtonVisible(): boolean {
+        return this.isCourseEditButtonVisible() && this.course?.status === "DRAFT";
+    }
+
     enroll(): void {
-        this.coursesService.enrollCourse(this.courseId);
+        this.coursesService.enrollCourse(this.courseId).then(() => this.router.navigate(["/course", this.courseId, "flow"]));
+    }
+
+    publishCourse(): void {
+        this.coursesService.publsihCourse(this.course!.id).then(() => this.course!.status = "PUBLISHED");
     }
 }

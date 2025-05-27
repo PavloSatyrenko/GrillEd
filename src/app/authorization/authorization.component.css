@@ -14,7 +14,11 @@
 
 .authorization__image {
     width: 100%;
-    background-color: gray;
+    background-color: var(--section-background-color);
+    background-image: url('/assets/authorization.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
 }
 
 .authorization__teacher {

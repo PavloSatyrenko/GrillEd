@@ -13,14 +13,15 @@ import { Answer } from "../../classes/Answer";
 import { Question } from "../../classes/Question";
 import Quill from "quill";
 import { CoursesService } from "../services/courses.service";
-import { ActivatedRoute, ParamMap, Router } from "@angular/router";
+import { ActivatedRoute, ParamMap, Router, RouterLink } from "@angular/router";
 import { SkillPickerComponent } from "../skill-picker/skill-picker.component";
 import { SkillsService } from "../services/skills.service";
+import { Test } from "../../classes/Test";
 
 @Component({
     selector: "app-course-editing",
     standalone: true,
-    imports: [CommonModule, FormsModule, QuillModule, SkillPickerComponent],
+    imports: [CommonModule, FormsModule, QuillModule, SkillPickerComponent, RouterLink],
     templateUrl: "./course-editing.component.html",
     styleUrl: "./course-editing.component.css"
 })
@@ -39,7 +40,7 @@ export class CourseEditingComponent implements OnInit {
 
     initialCategories: Skill[] = [];
     categories: Skill[] = [];
-    selectedCategory!: Skill;
+    selectedCategory: Skill | null = null;
 
     moduleName: string = "";
     isModuleNameErrorVisible: boolean = false;
@@ -288,6 +289,7 @@ export class CourseEditingComponent implements OnInit {
         this.initialLesson = lesson;
         this.markdown = "";
         this.isLessonCreated = false;
+        this.isLessonSaveErrorVisible = false;
 
         this.coursesService.getLesson(this.courseId, lesson.id).then((response: Lesson) => {
             this.lesson = response;
@@ -338,19 +340,31 @@ export class CourseEditingComponent implements OnInit {
                     });
                 }
             }
-            else if (lesson.type == "TEST") {
-                this.lesson.questions = lesson.questions || [];
+            else if (this.lesson.type == "TEST") {
+                if (this.lesson.test) {
+                    this.coursesService.getTestQuestions(this.courseId, this.lesson.test!.id).then((test: Test) => {
+                        this.lesson.questions = test.questions;
 
-                this.lesson.questions.forEach((question: Question) => {
-                    question.answers.forEach((answer: Answer) => {
-                        answer.isCommentaryVisible = !!answer.commentary;
+                        this.lesson.questions.forEach((question: Question) => {
+                            question.answers.forEach((answer: Answer) => {
+                                if (question.type == "CHOICE") {
+                                    answer.correct = question.rightAnswer == answer.id;
+                                }
+                                else if (question.type == "MULTICHOICE") {
+                                    answer.correct = (question.rightAnswers as string[]).includes(answer.id);
+                                }
+
+                                answer.text = answer.answer!;
+                                answer.isCommentaryVisible = !!answer.commentary;
+                            });
+                        });
+
+                        console.log(this.lesson.questions);
+
+                        this.isLessonPopupVisible = true;
+                        document.body.style.overflow = "hidden";
                     });
-                });
-
-                this.isLessonSaveErrorVisible = false;
-
-                this.isLessonPopupVisible = true;
-                document.body.style.overflow = "hidden";
+                }
             }
         });
     }
@@ -559,14 +573,12 @@ export class CourseEditingComponent implements OnInit {
 
             this.initialLesson.questions = this.lesson.questions;
         }
-        console.log(this.isLessonSaved);
 
         if (this.isLessonSaved) {
             return;
         }
 
         this.isLessonSaved = true;
-        console.log(this.isLessonSaved);
 
         if (this.isLessonCreated) {
             this.coursesService.createLesson(this.courseId, this.initialModule.id, this.initialLesson)
@@ -616,6 +628,11 @@ export class CourseEditingComponent implements OnInit {
                                 this.isLessonPopupVisible = false;
                                 document.body.style.overflow = "";
                             }).finally(() => this.isLessonSaved = false);
+                    }
+                    else {
+                        this.isLessonPopupVisible = false;
+                        document.body.style.overflow = "";
+                        this.isLessonSaved = false;
                     }
                 }).catch((error: any) => {
                     console.error("Error creating lesson:", error);

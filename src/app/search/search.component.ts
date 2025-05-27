@@ -70,6 +70,14 @@ export class SearchComponent implements OnInit {
             });
     }
 
+    getLevelString(level: "BEGINNER" | "INTERMEDIATE" | "EXPERT" | undefined): string {
+        if (!level) {
+            return "Unknown";
+        }
+
+        return level.charAt(0).toUpperCase() + level.slice(1).toLowerCase();
+    }
+
     onSkillsScroll(): void {
         if (this.page < this.totalPages) {
             const threshold: number = 50;

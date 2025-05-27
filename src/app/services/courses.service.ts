@@ -131,6 +131,17 @@ export class CoursesService {
                         return correctAnswerIndices;
                     }, []);
                 }
+
+                question.answers = question.answers!.map((answer: Answer) => {
+                    if (answer.isCommentaryVisible) {
+                        answer.commentary = answer.commentary;
+                    }
+                    else {
+                        answer.commentary = undefined;
+                    }
+
+                    return answer;
+                });
             });
         }
 
@@ -174,6 +185,10 @@ export class CoursesService {
 
     getTestQuestions(courseId: string, testId: string): Promise<any> {
         return firstValueFrom(this.http.get(`${this.api}v1/courses/${courseId}/tests/${testId}`));
+    }
+
+    publsihCourse(courseId: string): Promise<any> {
+        return firstValueFrom(this.http.post(`${this.api}v1/courses/${courseId}/publish`, {}));
     }
 
     enrollCourse(courseId: string): Promise<any> {

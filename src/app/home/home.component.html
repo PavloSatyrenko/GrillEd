@@ -33,7 +33,7 @@
 
                 <div class="statistic__feature">
                     <span class="feature__name">Started courses:</span>
-                    <span class="feature__value">1111</span>
+                    <span class="feature__value">0</span>
                 </div>
             </div>
 
@@ -42,7 +42,7 @@
 
                 <div class="statistic__feature">
                     <span class="feature__name">Completed courses:</span>
-                    <span class="feature__value">2222</span>
+                    <span class="feature__value">0</span>
                 </div>
             </div>
 
@@ -51,7 +51,7 @@
 
                 <div class="statistic__feature">
                     <span class="feature__name">In progress:</span>
-                    <span class="feature__value">3</span>
+                    <span class="feature__value">0</span>
                 </div>
             </div>
 
@@ -60,7 +60,7 @@
 
                 <div class="statistic__feature">
                     <span class="feature__name">Hours spent:</span>
-                    <span class="feature__value">31232</span>
+                    <span class="feature__value">0</span>
                 </div>
             </div>
         </div>
@@ -71,12 +71,12 @@
             <div class="panels__card card">
                 <div class="panels__header">
                     <div class="panels__buttons">
-                        <!-- <button class="panels__button" [ngClass]="{ panels__button_active: panelNumber == 1 }" (click)="choosePanel(1)">
+                        <button class="panels__button" [ngClass]="{ panels__button_active: panelNumber == 1 }" (click)="choosePanel(1)">
                             Popular
                         </button>
                         <button class="panels__button" [ngClass]="{ panels__button_active: panelNumber == 2 }" (click)="choosePanel(2)">
                             Newest
-                        </button> -->
+                        </button>
                         <button class="panels__button" [ngClass]="{ panels__button_active: panelNumber == 3 }" (click)="choosePanel(3)">
                             By categories
                         </button>
@@ -105,17 +105,17 @@
                 </div>
 
                 <div class="panels__list">
-                    <!-- <div *ngIf="panelNumber == 1" class="panel">
+                    <div *ngIf="panelNumber == 1" class="panel">
                         <div class="courses">
-                            <div class="card course">
+                            <div *ngFor="let course of courses" class="card course">
                                 <div class="course__image">
-                                    <img *ngIf="course.avatarLink" src="course.avatarLink" alt="Course icon" />
+                                    <img *ngIf="course.avatarLink" [src]="course.avatarLink" alt="Course icon" />
                                     <i *ngIf="!course.avatarLink" class="fa-solid fa-graduation-cap"></i>
                                 </div>
 
                                 <div class="course__information">
-                                    <span class="course__name">JavaScript</span>
-                                    <span class="course__author">by John Doe</span>
+                                    <span class="course__name">{{ course.name }}</span>
+                                    <span class="course__author">by {{ course.author.name }} {{ course.author.surname }}</span>
                                 </div>
 
                                 <div class="course__right-side">
@@ -123,95 +123,23 @@
                                 </div>
                             </div>
 
-                            <div class="card course">
-                                <div class="course__image">
-                                    <i class="fa-solid fa-graduation-cap"></i>
-                                </div>
-
-                                <div class="course__information">
-                                    <span class="course__name">JavaScript</span>
-                                    <span class="course__author">by John Doe</span>
-                                </div>
-
-                                <div class="course__right-side">
-                                    <button class="button button_theme_primary course__button">View course</button>
-                                </div>
-                            </div>
-
-                            <div class="card course">
-                                <div class="course__image">
-                                    <i class="fa-solid fa-graduation-cap"></i>
-                                </div>
-
-                                <div class="course__information">
-                                    <span class="course__name">JavaScript</span>
-                                    <span class="course__author">by John Doe</span>
-                                </div>
-
-                                <div class="course__right-side">
-                                    <button class="button button_theme_primary course__button">View course</button>
-                                </div>
-                            </div>
-
-                            <div class="card course">
-                                <div class="course__image">
-                                    <img *ngIf="course.avatarLink" src="course.avatarLink" alt="Course icon" />
-                                    <i *ngIf="!course.avatarLink" class="fa-solid fa-graduation-cap"></i>
-                                </div>
-
-                                <div class="course__information">
-                                    <span class="course__name">JavaScript</span>
-                                    <span class="course__author">by John Doe</span>
-                                </div>
-
-                                <div class="course__right-side">
-                                    <button class="button button_theme_primary course__button">View course</button>
-                                </div>
-                            </div>
-
-                            <div class="card course">
-                                <div class="course__image">
-                                    <i class="fa-solid fa-graduation-cap"></i>
-                                </div>
-
-                                <div class="course__information">
-                                    <span class="course__name">JavaScript</span>
-                                    <span class="course__author">by John Doe</span>
-                                </div>
-
-                                <div class="course__right-side">
-                                    <button class="button button_theme_primary course__button">View course</button>
-                                </div>
-                            </div>
-
-                            <div class="card course">
-                                <div class="course__image">
-                                    <i class="fa-solid fa-graduation-cap"></i>
-                                </div>
-
-                                <div class="course__information">
-                                    <span class="course__name">JavaScript</span>
-                                    <span class="course__author">by John Doe</span>
-                                </div>
-
-                                <div class="course__right-side">
-                                    <button class="button button_theme_primary course__button">View course</button>
-                                </div>
+                            <div *ngIf="courses.length == 0" class="no-courses">
+                                <span class="no-courses__text">No courses found for this category</span>
                             </div>
                         </div>
                     </div>
 
                     <div *ngIf="panelNumber == 2" class="panel">
                         <div class="courses">
-                            <div class="card course">
+                            <div *ngFor="let course of courses" class="card course">
                                 <div class="course__image">
-                                    <img *ngIf="course.avatarLink" src="course.avatarLink" alt="Course icon" />
+                                    <img *ngIf="course.avatarLink" [src]="course.avatarLink" alt="Course icon" />
                                     <i *ngIf="!course.avatarLink" class="fa-solid fa-graduation-cap"></i>
                                 </div>
 
                                 <div class="course__information">
-                                    <span class="course__name">JavaScript</span>
-                                    <span class="course__author">by John Doe</span>
+                                    <span class="course__name">{{ course.name }}</span>
+                                    <span class="course__author">by {{ course.author.name }} {{ course.author.surname }}</span>
                                 </div>
 
                                 <div class="course__right-side">
@@ -219,37 +147,11 @@
                                 </div>
                             </div>
 
-                            <div class="card course">
-                                <div class="course__image">
-                                    <i class="fa-solid fa-graduation-cap"></i>
-                                </div>
-
-                                <div class="course__information">
-                                    <span class="course__name">JavaScript</span>
-                                    <span class="course__author">by John Doe</span>
-                                </div>
-
-                                <div class="course__right-side">
-                                    <button class="button button_theme_primary course__button">View course</button>
-                                </div>
-                            </div>
-
-                            <div class="card course">
-                                <div class="course__image">
-                                    <i class="fa-solid fa-graduation-cap"></i>
-                                </div>
-
-                                <div class="course__information">
-                                    <span class="course__name">JavaScript</span>
-                                    <span class="course__author">by John Doe</span>
-                                </div>
-
-                                <div class="course__right-side">
-                                    <button class="button button_theme_primary course__button">View course</button>
-                                </div>
+                            <div *ngIf="courses.length == 0" class="no-courses">
+                                <span class="no-courses__text">No courses found for this category</span>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
 
                     <div *ngIf="panelNumber == 3" class="panel">
                         <div class="courses">

@@ -172,7 +172,7 @@
 
                 <div class="categories__list">
                     <label *ngFor="let category of categories" class="radio-wrapper category">
-                        <input class="radio" [checked]="selectedCategory?.id == category.id" type="radio" (change)="selectCategory(category)" />
+                        <input class="radio" [checked]="selectedCategory?.id == category?.id" type="radio" (change)="selectCategory(category)" />
                         <span class="radio-label">{{ category.name }}</span>
                     </label>
                 </div>
@@ -182,7 +182,7 @@
         </div>
 
         <div class="course__buttons">
-            <button class="button button_theme_primary-line course__button">Cancel</button>
+            <a class="button button_theme_primary-line course__button" [routerLink]="'/course/' + course.id">Cancel</a>
             <button class="button button_theme_primary course__button" (click)="saveCourse()">Save</button>
         </div>
     </div>

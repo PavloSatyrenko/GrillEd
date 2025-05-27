@@ -26,8 +26,16 @@
                         Level: <span class="level__value">{{ getLevelString(course?.level) }}</span>
                     </span>
 
+                    <span class="course__enrolled">
+                        Enrolled students: <span class="enrolled__value">{{ course?.enrolledCount }}</span>
+                    </span>
+
                     <span class="course__rating">
                         Rating: <span class="rating__value">{{ course?.rating }} </span> <i class="fa-solid fa-star"></i>
+                    </span>
+
+                    <span *ngIf="isCourseEditButtonVisible()" class="course__status">
+                        Status: <span class="status__value">{{ getStatusString(course?.status) }} </span>
                     </span>
                 </div>
 
@@ -174,6 +182,10 @@
                 >
                     Edit
                 </a>
+
+                <button *ngIf="isCoursePublishButtonVisible()" class="button button_theme_primary-line aside__button" (click)="publishCourse()">
+                    Publish
+                </button>
             </div>
         </div>
     </div>
