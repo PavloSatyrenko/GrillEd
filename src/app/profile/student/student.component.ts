@@ -54,7 +54,9 @@ export class StudentComponent implements OnInit {
         this.user = this.authService.user;
 
         this.coursesService.getStudentCourses({}).then((response: { data: Course[], pagination: any }) => {
-            this.activeCourses = response.data;
+            this.activeCourses = response.data.filter((course: Course) => course.progress != 100);
+
+            this.completedCourses = response.data.filter((course: Course) => course.progress == 100);
 
             this.activeCourses.forEach((course: Course) => {
                 if (course.progress) {
@@ -72,9 +74,9 @@ export class StudentComponent implements OnInit {
             });
         });
 
-        this.coursesService.getStudentCourses({ status: ["ARCHIVED"] }).then((response: { data: Course[], pagination: any }) => {
-            this.completedCourses = response.data;
-        });
+        // this.coursesService.getStudentCourses({ status: ["ARCHIVED"] }).then((response: { data: Course[], pagination: any }) => {
+        //     this.completedCourses = response.data;
+        // });
 
         this.skillsService.getRootCategories()
             .then((response: { categories: Skill[] }) => {

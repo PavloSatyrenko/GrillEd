@@ -251,7 +251,7 @@ export class CoursesService {
         pageSize = 5,
         search = "",
         status = [],
-        orderBy = "name:asc"
+        orderBy = "updatedAt:desc"
     }: {
         page?: number;
         pageSize?: number;
