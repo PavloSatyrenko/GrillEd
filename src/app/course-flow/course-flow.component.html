@@ -117,8 +117,12 @@
                 }
             </div>
 
-            <button *ngIf="activeLesson?.type != 'TEST'" class="button button_theme_primary main__button" (click)="completeLesson()">
+            <button *ngIf="activeLesson?.type != 'TEST' && !isLastLesson()" class="button button_theme_primary main__button" (click)="completeLesson()">
                 Next lesson
+            </button>
+
+            <button *ngIf="activeLesson?.type != 'TEST' && isLastLesson()" class="button button_theme_primary main__button" (click)="completeLesson()">
+                Complete course
             </button>
 
             <button *ngIf="activeLesson?.type == 'TEST'" class="button button_theme_primary main__button" (click)="submitTest()">Submit test</button>

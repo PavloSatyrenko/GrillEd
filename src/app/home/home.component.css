@@ -113,6 +113,7 @@
 }
 
 .course__right-side {
+    flex-shrink: 0;
     margin-right: 16px;
     margin-left: auto;
 }

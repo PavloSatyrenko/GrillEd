@@ -159,11 +159,16 @@ export class CourseFlowComponent {
         });
     }
 
-    getNextLessonId(): string {
+    getLessons(): Lesson[] {
         return this.course!.modules
             .map((module: Module) => module.lessons.map((lesson: Lesson) => lesson))
-            .flat()
-            .find((lesson: Lesson) => lesson.completed === false)?.id || this.course!.modules[0].lessons[0].id;
+            .flat();
+    }
+
+    getNextLessonId(): string {
+        return this.getLessons().find((lesson: Lesson) => lesson.completed === false)?.id
+            || this.getLessons()[this.getLessons().findIndex((lesson: Lesson) => lesson.id == this.activeLessonId) + 1]!.id
+            || this.getLessons()[this.getLessons().length - 1]!.id;
     }
 
     openActiveModule(): void {
@@ -177,6 +182,12 @@ export class CourseFlowComponent {
             question.answers.forEach((answer: Answer) => answer.isChecked = false);
         }
         answer.isChecked = !answer.isChecked;
+    }
+
+    isLastLesson(): boolean {
+        const lessonIds: string[] = this.getLessons().map((lesson: Lesson) => lesson.id);
+        const lastLessonId: string = lessonIds[lessonIds.length - 1];
+        return this.activeLessonId == lastLessonId;
     }
 
     completeLesson(): void {
@@ -201,6 +212,14 @@ export class CourseFlowComponent {
 
             this.course!.progress = +((completedLessons / totalLessons) * 100).toFixed(1);
             this.animationFrame = Math.ceil(this.course!.progress / 10);
+
+            const lessonIds: string[] = this.getLessons().map((lesson: Lesson) => lesson.id);
+
+            const lastLessonId: string = lessonIds[lessonIds.length - 1];
+
+            if (this.course!.progress == 100 && this.activeLessonId == lastLessonId) {
+                this.router.navigate(["/profile/student"]);
+            }
 
             this.activeLessonId = this.getNextLessonId();
 

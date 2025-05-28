@@ -125,7 +125,7 @@
                 </div>
 
                 <div class="panels__list">
-                    <div *ngIf="panelNumber == 1" class="panel">
+                    <div *ngIf="panelNumber == 1" #panel class="panel" (scroll)="onPanelScroll()">
                         <div class="courses">
                             <div *ngFor="let course of courses" class="card course">
                                 <div class="course__image">
@@ -151,7 +151,7 @@
                         </div>
                     </div>
 
-                    <div *ngIf="panelNumber == 2" class="panel">
+                    <div *ngIf="panelNumber == 2" #panel class="panel" (scroll)="onPanelScroll()">
                         <div class="courses">
                             <div *ngFor="let course of courses" class="card course">
                                 <div class="course__image">
@@ -177,7 +177,7 @@
                         </div>
                     </div>
 
-                    <div *ngIf="panelNumber == 3" class="panel">
+                    <div *ngIf="panelNumber == 3" #panel class="panel" (scroll)="onPanelScroll()">
                         <div class="courses">
                             <div *ngFor="let course of coursesByCategory" class="card course">
                                 <div class="course__image">
@@ -203,7 +203,7 @@
                         </div>
                     </div>
 
-                    <div *ngIf="panelNumber == 4" class="panel">
+                    <div *ngIf="panelNumber == 4" #panel class="panel" (scroll)="onPanelScroll()">
                         <div class="courses">
                             <div *ngFor="let course of coursesBySkills" class="card course">
                                 <div class="course__image">

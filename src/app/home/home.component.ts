@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from "@angular/core";
+import { Component, ElementRef, inject, OnInit, ViewChild } from "@angular/core";
 import { User } from "../../classes/User";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
@@ -24,12 +24,19 @@ export class HomeComponent implements OnInit {
     categoryFilters: Skill[] = [];
     skillFilters: Skill[] = [];
 
+    page: number = 1;
+    totalPages: number = 1;
+
     startedCourses!: Course[];
 
     courses: Course[] = [];
 
     coursesByCategory: Course[] = [];
     coursesBySkills: Course[] = [];
+
+    @ViewChild("panel") panel!: ElementRef<HTMLDivElement>;
+
+    scrollTimeout: ReturnType<typeof setTimeout> | null = null;
 
     private authService: AuthService = inject(AuthService);
     private coursesService: CoursesService = inject(CoursesService);
@@ -77,6 +84,8 @@ export class HomeComponent implements OnInit {
             this.coursesByCategory = response.data;
             this.coursesBySkills = response.data;
             this.courses = response.data;
+
+            this.totalPages = response.pagination.total.pages;
         });
     }
 
@@ -85,11 +94,47 @@ export class HomeComponent implements OnInit {
 
         this.filterValue = "";
 
+        this.page = 1;
+
         this.coursesService.getAllCourses({ pageSize: 6 }).then((response: { data: Course[], pagination: any }) => {
             this.coursesByCategory = response.data;
             this.coursesBySkills = response.data;
             this.courses = response.data;
+
+            this.totalPages = response.pagination.total.pages;
         });
+    }
+
+    onPanelScroll(): void {
+        if (this.page < this.totalPages) {
+            const threshold: number = 75;
+
+            if (this.panel && this.panel.nativeElement) {
+                const scrollTop: number = this.panel.nativeElement.scrollTop;
+                const scrollHeight: number = this.panel.nativeElement.scrollHeight;
+                const clientHeight: number = this.panel.nativeElement.clientHeight;
+
+                if (scrollHeight - scrollTop - clientHeight <= threshold) {
+                    if (this.scrollTimeout) {
+                        clearTimeout(this.scrollTimeout);
+                    }
+
+                    this.scrollTimeout = setTimeout(() => {
+                        this.coursesService.getAllCourses({ page: this.page++, pageSize: 6 }).then((response: { data: Course[], pagination: any }) => {
+                            if (this.panelNumber == 1 || this.panelNumber == 2) {
+                                this.courses.push(...response.data);
+                            }
+                            else if (this.panelNumber == 3) {
+                                this.coursesByCategory.push(...response.data);
+                            }
+                            else if (this.panelNumber == 4) {
+                                this.coursesBySkills.push(...response.data);
+                            }
+                        });
+                    }, 100);
+                }
+            }
+        }
     }
 
     filterCoursesByCategory(): void {
