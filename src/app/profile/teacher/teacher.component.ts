@@ -69,7 +69,7 @@ export class TeacherComponent implements OnInit {
             this.categories = this.initialCategories;
         });
 
-        this.courseService.getAllCourses({}).then((response: { data: Course[], pagination: any }) => {
+        this.courseService.getTeacherCourses({ status: ["PUBLISHED"] }).then((response: { data: Course[], pagination: any }) => {
             this.courses = response.data;
         });
     }
@@ -207,6 +207,12 @@ export class TeacherComponent implements OnInit {
 
     choosePanel(panelNumber: number): void {
         this.panelNumber = panelNumber;
+
+        const status: "DRAFT" | "PUBLISHED" | "ARCHIVED" = panelNumber == 1 ? "PUBLISHED" : panelNumber == 2 ? "DRAFT" : "ARCHIVED";
+
+        this.courseService.getTeacherCourses({ status: [status] }).then((response: { data: Course[], pagination: any }) => {
+            this.courses = response.data;
+        });
     }
 
     getCourses(status: "DRAFT" | "PUBLISHED" | "ARCHIVED"): Course[] {

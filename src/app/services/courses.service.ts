@@ -19,7 +19,7 @@ export class CoursesService {
         pageSize = 18,
         search = "",
         categoryId = [],
-        skillsId = [],
+        skillId = [],
         authorId = [],
         level = [],
         status = [],
@@ -32,7 +32,7 @@ export class CoursesService {
         pageSize?: number;
         search?: string;
         categoryId?: string[];
-        skillsId?: string[];
+        skillId?: string[];
         authorId?: string[];
         level?: ("BEGINNER" | "INTERMEDIATE" | "EXPERT")[];
         status?: ("DRAFT" | "PUBLISHED" | "ARCHIVED")[];
@@ -50,8 +50,8 @@ export class CoursesService {
             params = params.set("categoryId[in]", categoryId.join(","));
         }
 
-        if (skillsId.length > 0) {
-            params = params.set("skillsId[in]", skillsId.join(","));
+        if (skillId.length > 0) {
+            params = params.set("skillId[in]", skillId.join(","));
         }
 
         if (authorId.length > 0) {
@@ -244,5 +244,31 @@ export class CoursesService {
         }
 
         return firstValueFrom(this.http.get(`${this.api}v1/users/me/courses`, { params }));
+    }
+
+    getTeacherCourses({
+        page = 1,
+        pageSize = 5,
+        search = "",
+        status = [],
+        orderBy = "name:asc"
+    }: {
+        page?: number;
+        pageSize?: number;
+        search?: string;
+        status?: ("DRAFT" | "ARCHIVED" | "PUBLISHED")[];
+        orderBy?: string;
+    }): Promise<any> {
+        let params: HttpParams = new HttpParams()
+            .set("page", page)
+            .set("pageSize", pageSize)
+            .set("search", search)
+            .set("orderBy", orderBy);
+
+        if (status.length > 0) {
+            params = params.set("status[in]", status.join(","));
+        }
+
+        return firstValueFrom(this.http.get(`${this.api}v1/teachers/me/courses`, { params }));
     }
 }

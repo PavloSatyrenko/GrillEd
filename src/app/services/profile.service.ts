@@ -20,4 +20,12 @@ export class ProfileService {
     updateTeacherProfile(newData: { workplace: string, position: string, aboutMe: string }): Promise<any> {
         return firstValueFrom(this.http.patch(`${this.api}v1/teachers/me`, newData));
     }
+
+    getUserCategories(): Promise<any> {
+        return firstValueFrom(this.http.get(`${this.api}v1/users/me/courseCategories`));
+    }
+
+    getUserSkills(): Promise<any> {
+        return firstValueFrom(this.http.get(`${this.api}v1/users/me/skills`));
+    }
 }

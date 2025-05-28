@@ -22,7 +22,17 @@
                 </div>
 
                 <div class="course__right-side">
-                    <a class="button button_theme_primary course__button" [routerLink]="'/course/' + course.id + '/flow'">Continue</a>
+                    <a
+                        *ngIf="user?.role == 'STUDENT'"
+                        class="button button_theme_primary course__button"
+                        [routerLink]="'/course/' + course.id + '/flow'"
+                    >
+                        Continue
+                    </a>
+
+                    <a *ngIf="user?.role == 'TEACHER'" class="button button_theme_primary course__button" [routerLink]="'/course/' + course.id">
+                        View course
+                    </a>
                 </div>
             </div>
         </div>
@@ -97,7 +107,7 @@
 
                     <div *ngIf="panelNumber == 3" class="panels__filter">
                         <label class="input-wrapper input-wrapper_with-icon panels__input-wrapper">
-                            <select class="input" [(ngModel)]="filterValue">
+                            <select class="input" [(ngModel)]="filterValue" (ngModelChange)="filterCoursesByCategory()">
                                 <option *ngFor="let filter of categoryFilters" [value]="filter.id" class="option">{{ filter.name }}</option>
                             </select>
                             <span class="input-icon"><i class="fa-solid fa-chevron-down"></i></span>
@@ -106,7 +116,7 @@
 
                     <div *ngIf="panelNumber == 4" class="panels__filter">
                         <label class="input-wrapper input-wrapper_with-icon panels__input-wrapper">
-                            <select class="input" [(ngModel)]="filterValue">
+                            <select class="input" [(ngModel)]="filterValue" (ngModelChange)="filterCoursesBySkills()">
                                 <option *ngFor="let filter of skillFilters" [value]="filter.id" class="option">{{ filter.name }}</option>
                             </select>
                             <span class="input-icon"><i class="fa-solid fa-chevron-down"></i></span>
@@ -129,7 +139,9 @@
                                 </div>
 
                                 <div class="course__right-side">
-                                    <button class="button button_theme_primary course__button">View course</button>
+                                    <a class="button button_theme_primary button_full-width course__button" [routerLink]="'/course/' + course.id">
+                                        View course
+                                    </a>
                                 </div>
                             </div>
 
@@ -153,7 +165,9 @@
                                 </div>
 
                                 <div class="course__right-side">
-                                    <button class="button button_theme_primary course__button">View course</button>
+                                    <a class="button button_theme_primary button_full-width course__button" [routerLink]="'/course/' + course.id">
+                                        View course
+                                    </a>
                                 </div>
                             </div>
 
@@ -177,7 +191,9 @@
                                 </div>
 
                                 <div class="course__right-side">
-                                    <button class="button button_theme_primary course__button">View course</button>
+                                    <a class="button button_theme_primary button_full-width course__button" [routerLink]="'/course/' + course.id">
+                                        View course
+                                    </a>
                                 </div>
                             </div>
 
@@ -201,12 +217,14 @@
                                 </div>
 
                                 <div class="course__right-side">
-                                    <button class="button button_theme_primary course__button">View course</button>
+                                    <a class="button button_theme_primary button_full-width course__button" [routerLink]="'/course/' + course.id">
+                                        View course
+                                    </a>
                                 </div>
                             </div>
 
-                            <div *ngIf="coursesByCategory.length == 0" class="no-courses">
-                                <span class="no-courses__text">No courses found for this category</span>
+                            <div *ngIf="coursesBySkills.length == 0" class="no-courses">
+                                <span class="no-courses__text">No courses found for this skill</span>
                             </div>
                         </div>
                     </div>
